@@ -1,0 +1,15 @@
+.rowGroup {
+    background-color: #e4e1e2 !important;
+    border-bottom: 2px solid #555555 !important;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.rowGroup>td {
+    line-height: .9em;
+    font-family: var(--table-font) !important;
+}
+
+.rowGroup>td>a {
+    color: var(--accent-color);
+}

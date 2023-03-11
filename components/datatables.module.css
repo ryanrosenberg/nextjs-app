@@ -1,0 +1,17 @@
+.dataframe {
+    width: 90%;
+    border-collapse: collapse;
+}
+
+.cell {
+    border-bottom: 1px solid var(--text-color);
+}
+
+.header {
+    background-color: var(--main-color);
+    color: white;
+}
+
+.dataframe tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }

@@ -1,0 +1,21 @@
+.teamHeader {
+    font-family: var(--main-font);
+    font-size: 1.75em;
+    font-weight: 500;
+}
+
+.teamPlayerHeader {
+    line-height: 1em;
+    font-size: 1.5em;
+    font-weight: 400;
+    margin: .2em 0px;
+    scroll-margin-top: 4em;
+}
+
+.teamDetail {
+    width: 60%;
+}
+
+.teamPlayerDetail {
+    width: 60%;
+}

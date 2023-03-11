@@ -1,0 +1,64 @@
+.paginationControl {
+  font-weight: 500;
+  text-align: left;
+  font-size: 16px;
+  color: var(--text-color);
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.button {
+  background: none !important;
+  border: none !important;
+  border-radius: 0px !important;
+  color: #666;
+  display: block;
+  font-size: 1.1em;
+  font-weight: 500;
+  font-family: var(--table-font);
+  padding: .5em;
+  border-radius: 0px;
+  margin-right: 4px;
+  margin-left: 4px;
+  border-bottom: 2px dotted transparent !important;
+}
+
+.buttonLink {
+  text-decoration: none !important;
+  width: 100%;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: none !important;
+  color: var(--main-color) !important;
+  border: none !important;
+  border-bottom: 2px solid var(--line-color) !important;
+  border-radius: 0px;
+}
+
+.activeButton {
+  background: none !important;
+  border: none !important;
+  border-bottom: 2px solid var(--line-color) !important;
+  border-radius: 0px !important;
+  color: var(--main-color);
+}
+
+.inactiveButton {
+  color: var(--text-color);
+  font-weight: 400;
+}
+
+.inactiveButton:hover {
+  cursor: default !important;
+  color: var(--text-color) !important;
+  font-weight: 400;
+}
+
+.button:has(>.inactiveButton){
+  border-bottom: 2px dotted transparent !important;
+}

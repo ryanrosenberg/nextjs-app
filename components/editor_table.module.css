@@ -1,0 +1,25 @@
+.EditorTable a {
+    font-weight: 500;
+}
+
+.EditorTable {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: 2px solid var(--main-color);
+    font-size: 80%;
+}
+
+.EditorTable th {
+    position:sticky;
+    top: var(--nav-sticky);
+    background-color: var(--text-color);
+}
+
+.EditorTable tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+  }
+
+.EditorTable i {
+    font-family: var(--table-font);
+    /* font-style: normal; */
+}

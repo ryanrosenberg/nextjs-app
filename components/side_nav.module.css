@@ -1,0 +1,166 @@
+.sidenav {
+  align-self: flex-start;
+  position: sticky;
+  position: -webkit-sticky; /* For Safari */
+  top: var(--nav-height);
+  bottom: 0;
+  height: calc(100vh - var(--nav-height));
+  overflow: auto;
+  border-right: 1px dotted var(--text-color);
+  padding-bottom: 1em;
+  padding-right: 1em;
+  margin-right: .5em;
+  min-width: 20rem;
+  font-size: 1.1em;
+}
+
+.sidenav::-webkit-scrollbar{
+    display: none;
+  }
+
+.sidenav ul {
+    flex-direction: column;
+    align-items: flex-start;
+    list-style-type: none;
+    padding-left: 1em;
+    margin-top: 0px;
+}
+
+.sidenav>ul li {
+    line-height: 1.2em;
+}
+
+.sidenav>ul>li {
+    margin-bottom: .3em;
+}
+
+.sidenav>ul>li>a {
+    color: var(--text-color);
+    font-family: var(--main-font);
+    font-size: 1em !important;
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: .25em;
+}
+
+.sidenav>ul>li>a:hover {
+    color: var(--main-color) !important;
+    font-weight: 500;
+    font-size: .8em;
+    text-decoration-color: var(--line-color);
+    /* text-decoration: none !important; */
+}
+
+.sidenav>ul>li>ul {
+    display: none;
+    font-size: 1.2em;
+    padding-left: 0px;
+}
+
+.sidenav>ul>li.activeLink>ul {
+    display: flex !important;
+}
+
+.sidenav>ul>li>ul:has(>.activeLink) {
+    display: flex !important;
+}
+
+.sidenav>ul>li>ul:has(>li>ul>.activeLink) {
+    display: flex !important;
+}
+
+.sidenav>ul>li>ul>li>a {
+    color: var(--text-color);
+    font-family: var(--main-font);
+    font-weight: 400;
+    font-size: .8em;
+    padding-left: 1em;
+    border-left: 1px solid transparent;
+}
+
+.sidenav>ul>li>ul>li:has(>ul)>a{
+    text-decoration: underline;
+    text-underline-offset: .25em;
+}
+
+.sidenav>ul>li>ul>li>a:hover {
+    color: var(--main-color) !important;
+    font-weight: 500;
+    font-size: .8em;
+    padding-left: 1em;
+    text-decoration: underline !important;
+    text-decoration-color: black !important;
+}
+
+.sidenav>ul>li>ul>li>ul {
+    display: none;
+    padding-left: .25em;
+}
+
+.sidenav>ul>li>ul>li.activeLink>ul {
+    display: flex !important;
+}
+
+.sidenav>ul>li>ul>li>ul:has(>.activeLink) {
+    display: flex !important;
+}
+
+.sidenav>ul>li>ul>li:has(>ul>.activeLink)>a {
+    color: var(--main-color);
+    font-weight: 500;
+}
+
+.sidenav>ul>li>ul>li>ul>li>a {
+    color: var(--text-color);
+    font-family: var(--main-font);
+    font-weight: 400;
+    font-size: .8em;
+    padding-left: 1em;
+    border-left: 1px solid transparent;
+}
+
+.sidenav>ul>li>ul>li>ul>li>a:hover {
+    color: var(--main-color) !important;
+    font-weight: 500;
+    font-size: .8em;
+    padding-left: 1em;
+    text-decoration: underline !important;
+    text-decoration-color: black !important;
+}
+
+.activeLink > a {
+    color: var(--main-color) !important;
+    font-weight: 500 !important;
+    text-decoration: underline solid !important;
+    text-underline-offset: .25em;
+}
+
+.sublist {
+    display: flex;
+    flex-direction: column;
+    column-gap: 2em;
+    padding: 0px;
+    display: none;
+}
+
+.sublist > li {
+    display: inline-block;
+}
+
+.sublist a {
+    color: var(--text-color) !important;
+    font-weight: 400;
+    font-size: 12px;
+    padding-left: 3em;
+    border-left: 1px solid transparent;
+}
+
+.sublist a:hover {
+    color: var(--main-color) !important;
+    text-decoration: none !important;
+    padding-left: 3em;
+}
+
+.test {
+    color:darkgreen;
+}

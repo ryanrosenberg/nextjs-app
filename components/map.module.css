@@ -1,0 +1,10 @@
+.markerPopup {
+    display: inline;
+    color: transparent;
+    border-color: transparent;
+}
+
+.markerPopup:hover {
+    color: black;
+    background-color: #d1d3d4;
+}
