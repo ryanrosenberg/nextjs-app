@@ -115,6 +115,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+  console.log(params.id);
   const sampleData = await fetch(
     "http://127.0.0.1:5000/games/" + params.id
   ).then((response) => response.json());
