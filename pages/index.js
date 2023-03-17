@@ -25,10 +25,10 @@ export default function Home({ result }) {
 
 export async function getStaticProps() {
   const tty = await fetch(
-    "http://127.0.0.1:5000/teams/thisyear"
+    "https://cqs-backend.herokuapp.com/teams/thisyear"
   ).then((response) => response.json());
   const rt = await fetch(
-    "http://127.0.0.1:5000/tournaments/recent"
+    "https://cqs-backend.herokuapp.com/tournaments/recent"
   ).then((response) => response.json());
   return {
     props: {

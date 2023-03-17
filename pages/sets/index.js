@@ -19,7 +19,7 @@ export default function Home({ result }) {
 
 export async function getStaticProps() {
   const editors = await fetch(
-    "http://127.0.0.1:5000/sets/editors"
+    "https://cqs-backend.herokuapp.com/sets/editors"
   ).then((response) => response.json());
   return {
     props: {

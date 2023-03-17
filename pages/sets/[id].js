@@ -258,7 +258,7 @@ export default function Set({ result }) {
   
   export async function getStaticPaths() {
     // Call an external API endpoint to get posts
-    const res = await fetch("http://127.0.0.1:5000/sets");
+    const res = await fetch("https://cqs-backend.herokuapp.com/sets");
     const posts = await res.json();
   
     // Get the paths we want to prerender based on posts
@@ -274,7 +274,7 @@ export default function Set({ result }) {
   
   export async function getStaticProps({ params }) {
     const sampleData = await fetch(
-      "http://127.0.0.1:5000/sets/" + params.id
+      "https://cqs-backend.herokuapp.com/sets/" + params.id
     ).then((response) => response.json());
     return {
       props: {

@@ -1451,7 +1451,7 @@ export default function Home({ result }) {
 }
 
 export async function getStaticProps() {
-  const records = await fetch("http://127.0.0.1:5000/records").then(
+  const records = await fetch("https://cqs-backend.herokuapp.com/records").then(
     (response) => response.json()
   );
 

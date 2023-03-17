@@ -38,7 +38,7 @@ export default function Home({ result }) {
 
 export async function getStaticProps() {
   const seasons = await fetch(
-    "http://127.0.0.1:5000/seasons/champions"
+    "https://cqs-backend.herokuapp.com/seasons/champions"
   ).then((response) => response.json());
   return {
     props: {

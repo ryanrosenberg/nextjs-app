@@ -171,7 +171,7 @@ export default function Circuit({ result }) {
 
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
-  const res = await fetch("http://127.0.0.1:5000/circuits");
+  const res = await fetch("https://cqs-backend.herokuapp.com/circuits");
   const posts = await res.json();
 
   // Get the paths we want to prerender based on posts
@@ -188,7 +188,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   
   const sampleData = await fetch(
-    "http://127.0.0.1:5000/circuits/" + params.id
+    "https://cqs-backend.herokuapp.com/circuits/" + params.id
   ).then((response) => response.json());
   return {
     props: {
