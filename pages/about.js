@@ -12,7 +12,7 @@ export default function Home({ result }) {
         <h1 className="page-title">About</h1>
         <h2>To-do</h2>
         <ul>
-          <li>build site</li>
+          <li>deploy site</li>
           <li>Team id mixup</li>
           <li>team result cleaning</li>
           <li>Tournament result joining</li>
