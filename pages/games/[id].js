@@ -98,7 +98,7 @@ export default function Game({ result }) {
   );
 }
 
-export async function getStaticPaths() {
+export async function getServerSidePaths() {
   // // Call an external API endpoint to get posts
   // const res = await fetch("https://cqs-backend.herokuapp.com/games");
   // const posts = await res.json();
