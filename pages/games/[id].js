@@ -99,19 +99,24 @@ export default function Game({ result }) {
 }
 
 export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/games");
-  const posts = await res.json();
+  // // Call an external API endpoint to get posts
+  // const res = await fetch("https://cqs-backend.herokuapp.com/games");
+  // const posts = await res.json();
 
-  // Get the paths we want to prerender based on posts
-  // In production environments, prerender all pages
-  // (slower builds, but faster initial page load)
-  const paths = posts.map((post) => ({
-    params: { id: post.slug },
-  }));
+  // // Get the paths we want to prerender based on posts
+  // // In production environments, prerender all pages
+  // // (slower builds, but faster initial page load)
+  // const paths = posts.map((post) => ({
+  //   params: { id: post.slug },
+  // }));
 
   // { fallback: false } means other routes should 404
-  return { paths, fallback: false };
+  // return { paths, fallback: false };
+  
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
 }
 
 export async function getStaticProps({ params }) {

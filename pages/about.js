@@ -14,6 +14,7 @@ export default function Home({ result }) {
         <ul>
           <li>build site</li>
           <li>Team id mixup</li>
+          <li>team result cleaning</li>
           <li>Tournament result joining</li>
           <li>Existing team mashups (USCs, UWs, Davis, check for more)</li>
         </ul>

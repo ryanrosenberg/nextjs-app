@@ -36,7 +36,6 @@ export default function App({ Component, pageProps }) {
           integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
           crossorigin=""
         ></script>
-        <script src="/sorttable.js"></script>
       </Head>
       <Component {...pageProps} />
     </main>

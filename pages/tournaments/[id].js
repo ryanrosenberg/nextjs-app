@@ -84,7 +84,8 @@ export default function Tournament({ result }) {
       {
         Header: "A-Value",
         accessor: "A-Value",
-        Tooltip: "A-Value is a measure of a team's performance on a set compared to all other teams that played the set. It approximates how many points a team would be expected to score against the average team playing the set."
+        Tooltip:
+          "A-Value is a measure of a team's performance on a set compared to all other teams that played the set. It approximates how many points a team would be expected to score against the average team playing the set.",
       },
     ],
     []
@@ -351,6 +352,8 @@ export default function Tournament({ result }) {
     player_lookup[k] = player_slugs[i];
   });
 
+  // console.log(teamDetailPlayers['Belmont University A']);
+
   return (
     <Layout>
       <Head>
@@ -376,6 +379,9 @@ export default function Tournament({ result }) {
           <hr />
           <h2 id="team-detail">Team Detail</h2>
           {Object.keys(teamDetailTeams).map((team) => {
+            if (team == "Belmont University A") {
+              console.log(teamDetailPlayers[team]);
+            }
             return (
               <div>
                 <h3 className={styles.teamPlayerHeader} id={slug(team)}>
@@ -387,11 +393,15 @@ export default function Tournament({ result }) {
                   className={styles.teamDetail}
                 />
                 <br></br>
-                <NormalTable
-                  columns={teamDetailPlayerColumns}
-                  data={teamDetailPlayers[team]}
-                  className={styles.teamPlayerDetail}
-                />
+                {teamDetailPlayers[team] ? (
+                  <NormalTable
+                    columns={teamDetailPlayerColumns}
+                    data={teamDetailPlayers[team]}
+                    className={styles.teamPlayerDetail}
+                  />
+                ) : (
+                  ""
+                )}
                 <br></br>
                 <hr />
               </div>

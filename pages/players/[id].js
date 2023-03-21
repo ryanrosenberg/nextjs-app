@@ -46,11 +46,11 @@ export default function Player({ result }) {
       {
         Header: "-5",
         accessor: "-5",
-        border: "right"
+        border: "right",
       },
       {
         Header: "15/G",
-        accessor: "15/G"
+        accessor: "15/G",
       },
       {
         Header: "10/G",
@@ -59,7 +59,7 @@ export default function Player({ result }) {
       {
         Header: "-5/G",
         accessor: "-5/G",
-        border: "right"
+        border: "right",
       },
       {
         Header: "PPG",
@@ -73,7 +73,7 @@ export default function Player({ result }) {
     {
       Header: "Date",
       accessor: "Date",
-      border: "right"
+      border: "right",
     },
     {
       Header: "Set",
@@ -84,7 +84,7 @@ export default function Player({ result }) {
       Header: "Site",
       accessor: "Site",
       align: "left",
-      border: "right"
+      border: "right",
     },
     {
       Header: "School",
@@ -95,12 +95,12 @@ export default function Player({ result }) {
       Header: "Team",
       accessor: "Team",
       align: "left",
-      border: "right"
+      border: "right",
     },
     {
       Header: "Finish",
       accessor: "Finish",
-      border: "right"
+      border: "right",
     },
     {
       Header: "15",
@@ -113,7 +113,7 @@ export default function Player({ result }) {
     {
       Header: "-5",
       accessor: "-5",
-      border: "right"
+      border: "right",
     },
     {
       Header: "15/G",
@@ -126,7 +126,7 @@ export default function Player({ result }) {
     {
       Header: "-5/G",
       accessor: "-5/G",
-      border: "right"
+      border: "right",
     },
     {
       Header: "P/N",
@@ -135,7 +135,7 @@ export default function Player({ result }) {
     {
       Header: "G/N",
       accessor: "G/N",
-      border: "right"
+      border: "right",
     },
     {
       Header: "PPG",
@@ -148,7 +148,7 @@ export default function Player({ result }) {
       Header: "Set",
       accessor: "Set",
       align: "left",
-      border: "right"
+      border: "right",
     },
     {
       Header: "Categories",
@@ -161,8 +161,8 @@ export default function Player({ result }) {
     .filter((v, i, a) => a.indexOf(v) == i)
     .map((school, i) => (
       <span key={i}>
-        {i > 0 && ', '}
-        <RawHtml html = {school} />
+        {i > 0 && ", "}
+        <RawHtml html={school} />
       </span>
     ));
 
@@ -211,18 +211,23 @@ export default function Player({ result }) {
 
 export async function getStaticPaths() {
   // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/players");
-  const posts = await res.json();
+  // const res = await fetch("https://cqs-backend.herokuapp.com/players");
+  // const posts = await res.json();
 
-  // Get the paths we want to prerender based on posts
-  // In production environments, prerender all pages
-  // (slower builds, but faster initial page load)
-  const paths = posts.map((post) => ({
-    params: { id: post.slug },
-  }));
+  // // Get the paths we want to prerender based on posts
+  // // In production environments, prerender all pages
+  // // (slower builds, but faster initial page load)
+  // const paths = posts.map((post) => ({
+  //   params: { id: post.slug },
+  // }));
 
   // { fallback: false } means other routes should 404
-  return { paths, fallback: false };
+  // return { paths, fallback: false };
+
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
 }
 
 export async function getStaticProps({ params }) {
