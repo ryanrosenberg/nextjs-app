@@ -230,7 +230,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   console.log(params.id);
   const sampleData = await fetch(
     "https://cqs-backend.herokuapp.com/players/" + params.id
