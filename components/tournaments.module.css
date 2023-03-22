@@ -19,3 +19,7 @@
 .teamPlayerDetail {
     width: 60%;
 }
+
+.bracketGroups {
+    border-bottom: .15em solid var(--line-color);
+}

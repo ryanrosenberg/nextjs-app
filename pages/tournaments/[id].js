@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import NormalTable from "../../components/normal_table";
 import PaginatedTable from "../../components/paginated_table";
+import StandingsTable from "../../components/standings_table";
 import { useMemo } from "react";
 import _ from "lodash";
 import styles from "../../components/tournaments.module.css";
@@ -368,7 +369,11 @@ export default function Tournament({ result }) {
           <p className="page-subtitle">{result.Summary[0]["date"]}</p>
           <hr />
           <h2 id="standings">Standings</h2>
-          <NormalTable columns={standingsColumns} data={result.Standings} />
+          <StandingsTable
+            grouping_column="bracket"
+            columns={standingsColumns}
+            data={result.Standings}
+          />
           <hr />
           <h2 id="players">Players</h2>
           <PaginatedTable
@@ -432,7 +437,7 @@ export default function Tournament({ result }) {
                             {player}
                           </Link>
                         ) : (
-                          <p style={{display: "inline"}}>{player}</p>
+                          <p style={{ display: "inline" }}>{player}</p>
                         )}
                         , {teamPlayers[player][0]["team"]}
                       </h4>
@@ -472,7 +477,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   console.log(params.id);
   const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/tournaments/" + params.id
+    "http://127.0.0.1:5000/tournaments/" + params.id
   ).then((response) => response.json());
   return {
     props: {

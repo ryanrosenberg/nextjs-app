@@ -12,11 +12,13 @@ export default function Home({ result }) {
         <h1 className="page-title">About</h1>
         <h2>To-do</h2>
         <ul>
-          <li>deploy site</li>
-          <li>Team id mixup</li>
-          <li>team result cleaning</li>
-          <li>Tournament result joining</li>
-          <li>Existing team mashups (USCs, UWs, Davis, check for more)</li>
+          <li>finish rest of tournament results</li>
+          <li>Check for teams that are 2x combined</li>
+          <li>Existing team mashups (USCs, UWs, Davis, UCF, USF, check for more)</li>
+          <li>Circuit records</li>
+          <li>mobile site</li>
+          <li>player best games?</li>
+          <li>think about how best to do ISR</li>
         </ul>
         <p>
           Welcome to College Quizbowl Stats. This site has two intended

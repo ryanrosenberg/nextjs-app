@@ -380,3 +380,7 @@ tfoot > tr > td {
   font-size: 90%;
   font-style: italic;
 }
+
+tbody:last-child {
+  border-bottom: none !important;
+}
