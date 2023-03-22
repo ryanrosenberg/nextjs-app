@@ -427,9 +427,13 @@ export default function Tournament({ result }) {
                           slug(teamPlayers[player][0]["team"])
                         }
                       >
-                        <Link href={`../players/${player_lookup[player]}`}>
-                          {player}
-                        </Link>
+                        {player_lookup[player] ? (
+                          <Link href={`../players/${player_lookup[player]}`}>
+                            {player}
+                          </Link>
+                        ) : (
+                          <p style={{display: "inline"}}>{player}</p>
+                        )}
                         , {teamPlayers[player][0]["team"]}
                       </h4>
                       <NormalTable
