@@ -13,7 +13,7 @@ export default function Home({ result }) {
         <h2>To-do</h2>
         <ul>
           <li>Check for teams that are 2x combined</li>
-          <li>Existing team mashups (USCs, UWs, Davis, UCF, USF, check for more)</li>
+          <li>Existing team mashups (USCs, UWs, Davis, UCF, USF, UNF, check for more)</li>
           <li>Circuit records</li>
           <li>mobile site</li>
           <li>player best games?</li>
