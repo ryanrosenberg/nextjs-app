@@ -12,7 +12,6 @@ export default function Home({ result }) {
         <h1 className="page-title">About</h1>
         <h2>To-do</h2>
         <ul>
-          <li>finish rest of tournament results</li>
           <li>Check for teams that are 2x combined</li>
           <li>Existing team mashups (USCs, UWs, Davis, UCF, USF, check for more)</li>
           <li>Circuit records</li>
