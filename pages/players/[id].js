@@ -4,10 +4,11 @@ import { useMemo } from "react";
 import _ from "lodash";
 import Link from "next/link";
 import { slug } from "../../lib/utils.js";
-import SideNav from "../../components/side_nav";
 import RawHtml from "../../components/rawHtml";
 import GroupedTable from "../../components/grouped_table";
 import NestedSideNav from "../../components/nested_side_nav";
+import { db } from "../../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function Player({ result }) {
   const yearsColumns = useMemo(
@@ -231,13 +232,13 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  console.log(params.id);
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/players/" + params.id
-  ).then((response) => response.json());
+  
+  const docRef = doc(db, "players", params.id);
+  const docSnap = await getDoc(docRef);
+
   return {
     props: {
-      result: sampleData,
+      result: docSnap.data(),
       revalidate: 60,
     },
   };

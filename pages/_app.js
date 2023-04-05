@@ -11,9 +11,9 @@ export default function App({ Component, pageProps }) {
           key="google-font-source-sans-pro"
         />
         <link
-          href="https://fonts.googleapis.com/css?family=Alegreya"
+          href="https://fonts.googleapis.com/css?family=Alegreya+Sans"
           rel="stylesheet"
-          key="google-font-alegreya"
+          key="google-font-alegreya-sans"
         />
         <link
           href="https://fonts.googleapis.com/css?family=Signika+Negative"
