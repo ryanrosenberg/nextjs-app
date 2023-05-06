@@ -12,12 +12,12 @@ export default function Home({ result }) {
         <h1 className="page-title">About</h1>
         <h2>To-do</h2>
         <ul>
-          <li>Check for teams that are 2x combined</li>
+          <li>Some player weirdness for Chicago B emoji</li>
           <li>Existing team mashups (USCs, UWs, Davis, UCF, USF, UNF, check for more)</li>
           <li>Circuit records</li>
           <li>mobile site</li>
           <li>player best games?</li>
-          <li>think about how best to do ISR</li>
+          <li>put everything on Firebase</li>
         </ul>
         <p>
           Welcome to College Quizbowl Stats. This site has two intended

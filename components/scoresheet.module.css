@@ -1,0 +1,39 @@
+.scoresheet {
+    width: 80%;
+    font-family: 'Source Serif Pro';
+}
+
+.playerNameTable {
+    border-collapse: collapse;
+}
+
+.playerNameTable td {
+    border: 1px dotted black;
+}
+
+.playerNameTable th {
+    padding: 0em .5em;
+}
+
+.playerRow {
+    border-bottom: 1px solid black;
+    margin: 0px;
+}
+
+.lastPlayer, .lastBonus {
+    border-right: 1px solid black !important;
+}
+
+.bonus, .lastBonus {
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.tuNumber {
+    border-right: 1px solid black !important;
+    border-left: 1px solid black !important;
+    font-weight: 600;
+    text-align: center;
+    font-size: 1.1em;
+    color: black;
+}
