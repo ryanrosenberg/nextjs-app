@@ -2,6 +2,7 @@
     border-collapse: collapse;
     line-height: 1.1em;
     overflow-x: scroll;
+    font-weight: 300;
 }
 
 div:has(>.dataframe) {
@@ -67,7 +68,7 @@ div:has(>.dataframe) {
 }
 
 .cellNumber {
-    font-family: var(--table-font) !important;
+    font-family: var(--main-font) !important;
 }
 
 .cellCenter {
@@ -76,7 +77,7 @@ div:has(>.dataframe) {
 
 .cellCenter>a {
     text-align: center;
-    font-family: var(--table-font);
+    font-family: var(--main-font);
     font-weight: 500 !important;
 }
 

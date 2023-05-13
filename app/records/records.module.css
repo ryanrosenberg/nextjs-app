@@ -41,7 +41,11 @@
     .row {
         display: flex;
         flex-direction: column;
-        /* margin-bottom: 1em; */
+        margin-bottom: 1em;
+    }
+
+    .row table {
+        padding-bottom: 0;
     }
 
     .circuitFlex {

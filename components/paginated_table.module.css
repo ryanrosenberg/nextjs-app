@@ -18,7 +18,7 @@
   display: block;
   font-size: 1.1em;
   font-weight: 500;
-  font-family: var(--table-font);
+  font-family: var(--main-font);
   padding: .5em;
   border-radius: 0px;
   margin-right: 4px;
@@ -85,7 +85,7 @@
     display: block;
     font-size: 1em;
     font-weight: 500;
-    font-family: var(--table-font);
+    font-family: var(--main-font);
     padding: .25em;
     border-radius: 0px;
     margin-right: 4px;

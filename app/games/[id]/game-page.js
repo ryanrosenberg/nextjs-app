@@ -1,12 +1,13 @@
-import Layout from "../../components/layout";
-import Head from "next/head";
+'use client'
+
 import Link from "next/link";
 import { useMemo } from "react";
 import _ from "lodash";
-import NormalTable from "../../components/normal_table";
-import styles from "../../components/games.module.css";
+import NormalTable from "../../../components/normal_table";
+import styles from "./games.module.css";
 
 export default function Game({ result }) {
+  const data = result.props.result;
   const teamColumns = useMemo(
     () => [
       {
@@ -37,30 +38,21 @@ export default function Game({ result }) {
   );
 
   
-  var player_stats = _.groupBy(result.Players, "team");
-  var team_stats = _.groupBy(result.Teams, "team");
+  var player_stats = _.groupBy(data.Players, "team");
+  var team_stats = _.groupBy(data.Teams, "team");
 
   return (
-    <Layout>
-      <Head>
-        <title>
-          {result.Summary[0]["team"] +
-            " vs. " +
-            result.Summary[1]["team"] +
-            " | College Quizbowl Stats"}
-        </title>
-      </Head>
       <div className="main-container">
         <div className="main-content">
           <h1 className="page-title">
-            {`${result.Summary[0]["round"]}: ${result.Summary[0]["team"]} vs. ${result.Summary[1]["team"]}`}
+            {`${data.Summary[0]["round"]}: ${data.Summary[0]["team"]} vs. ${data.Summary[1]["team"]}`}
           </h1>
           <p className="page-subtitle">
             <Link
               className={styles.tournamentLink}
-              href={`../tournaments/${result.Summary[0]["tournament_id"]}`}
+              href={`../tournaments/${data.Summary[0]["tournament_id"]}`}
             >
-              ← {result.Summary[0]["tournament_name"]}
+              ← {data.Summary[0]["tournament_name"]}
             </Link>
           </p>
           <hr />
@@ -94,39 +86,6 @@ export default function Game({ result }) {
           </div>
         </div>
       </div>
-    </Layout>
   );
 }
 
-export async function getStaticPaths() {
-  // // Call an external API endpoint to get posts
-  // const res = await fetch("https://cqs-backend.herokuapp.com/games");
-  // const posts = await res.json();
-
-  // // Get the paths we want to prerender based on posts
-  // // In production environments, prerender all pages
-  // // (slower builds, but faster initial page load)
-  // const paths = posts.map((post) => ({
-  //   params: { id: post.slug },
-  // }));
-
-  // { fallback: false } means other routes should 404
-  // return { paths, fallback: false };
-  
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-}
-
-export async function getStaticProps({ params }) {
-  console.log(params.id);
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/games/" + params.id
-  ).then((response) => response.json());
-  return {
-    props: {
-      result: sampleData,
-    },
-  };
-}

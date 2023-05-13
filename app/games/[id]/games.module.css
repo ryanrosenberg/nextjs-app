@@ -1,0 +1,36 @@
+.playerStatsRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+.teamDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 120%;
+}
+
+.teamName {
+    margin-bottom: 0px;
+    text-decoration: underline;
+    text-underline-offset: .25em;
+}
+
+.teamScore {
+    font-family: Inter;
+    font-weight: 500;
+    font-size: 2.5em;
+    margin-top: 0px;
+}
+
+.tournamentLink {
+    color: var(--accent-color) !important;
+}
+
+/* .tournamentLink::before {
+    content: '⬅️';
+    display: inline-block;
+    font-style: normal;
+} */

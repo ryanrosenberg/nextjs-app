@@ -1,16 +1,19 @@
-import Layout from "../../components/layout";
+'use client'
+
+import Layout from "../../../components/layout";
 import Head from "next/head";
 import Link from "next/link";
-import NormalTable from "../../components/normal_table";
-import PaginatedTable from "../../components/paginated_table";
-import StandingsTable from "../../components/standings_table";
+import NormalTable from "../../../components/normal_table";
+import PaginatedTable from "../../../components/paginated_table";
+import StandingsTable from "../../../components/standings_table";
 import { useMemo } from "react";
 import _ from "lodash";
-import styles from "../../components/tournaments.module.css";
-import { slug } from "../../lib/utils";
-import NestedSideNav from "../../components/nested_side_nav";
+import styles from "./tournaments.module.css";
+import { slug } from "../../../lib/utils";
+import NestedSideNav from "../../../components/nested_side_nav";
 
 export default function Tournament({ result }) {
+  const data = result.props.result;
   const standingsColumns = useMemo(
     () => [
       {
@@ -342,13 +345,13 @@ export default function Tournament({ result }) {
     []
   );
 
-  let teamDetailTeams = _.groupBy(result["Team Detail Teams"], "Team");
-  let teamDetailPlayers = _.groupBy(result["Team Detail Players"], "Team");
-  let playerDetail = _.groupBy(result["Player Detail"], "team");
+  let teamDetailTeams = _.groupBy(data["Team Detail Teams"], "Team");
+  let teamDetailPlayers = _.groupBy(data["Team Detail Players"], "Team");
+  let playerDetail = _.groupBy(data["Player Detail"], "team");
 
   let player_lookup = {};
-  const player_names = _.map(result.Players, "raw_player");
-  const player_slugs = _.map(result.Players, "slug");
+  const player_names = _.map(data.Players, "raw_player");
+  const player_slugs = _.map(data.Players, "slug");
   player_names.forEach((k, i) => {
     player_lookup[k] = player_slugs[i];
   });
@@ -359,15 +362,15 @@ export default function Tournament({ result }) {
     <Layout>
       <Head>
         <title>
-          {result.Summary[0]["tournament_name"] + " | College Quizbowl Stats"}
+          {data.Summary[0]["tournament_name"] + " | College Quizbowl Stats"}
         </title>
       </Head>
       <div className="main-container">
         <NestedSideNav lowestLevel={3} />
         <div className="main-content">
-          <h1 className="page-title">{result.Summary[0]["tournament_name"]}</h1>
-          <p className="page-subtitle">{result.Summary[0]["date"]}</p>
-          {result.Summary[0]["naqt_id"] ? (
+          <h1 className="page-title">{data.Summary[0]["tournament_name"]}</h1>
+          <p className="page-subtitle">{data.Summary[0]["date"]}</p>
+          {data.Summary[0]["naqt_id"] ? (
             <p className="naqt-disclaimer">
               These results are NAQT's property, provided for research purposes
               only, and are not to be posted elsewhere without NAQT's
@@ -382,21 +385,19 @@ export default function Tournament({ result }) {
           <StandingsTable
             grouping_column="bracket"
             columns={standingsColumns}
-            data={result.Standings}
+            data={data.Standings}
           />
           <hr />
           <h2 id="players">Players</h2>
           <PaginatedTable
             columns={playersColumns}
-            data={result.Players}
+            data={data.Players}
             itemsPerPage={10}
           />
           <hr />
           <h2 id="team-detail">Team Detail</h2>
           {Object.keys(teamDetailTeams).map((team) => {
-            if (team == "Belmont University A") {
-              console.log(teamDetailPlayers[team]);
-            }
+          
             return (
               <div>
                 <h3 className={styles.teamPlayerHeader} id={slug(team)}>
@@ -466,32 +467,4 @@ export default function Tournament({ result }) {
       </div>
     </Layout>
   );
-}
-
-export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/tournaments");
-  const posts = await res.json();
-
-  // Get the paths we want to prerender based on posts
-  // In production environments, prerender all pages
-  // (slower builds, but faster initial page load)
-  const paths = posts.map((post) => ({
-    params: { id: post.slug },
-  }));
-
-  // { fallback: false } means other routes should 404
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
-  console.log(params.id);
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/tournaments/" + params.id
-  ).then((response) => response.json());
-  return {
-    props: {
-      result: sampleData,
-    },
-  };
 }

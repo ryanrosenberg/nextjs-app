@@ -1,15 +1,15 @@
-import Layout from "../../components/layout";
+'use client'
+
+import Layout from "../../../components/layout";
 import Head from "next/head";
 import { useMemo } from "react";
 import _ from "lodash";
-import SideNav from "../../components/side_nav";
-import GroupedTable from "../../components/grouped_table";
-import PaginatedTable from "../../components/paginated_table";
-import GroupedPaginatedTable from "../../components/grouped_paginated_table";
-import NestedSideNav from "../../components/nested_side_nav";
-import NormalTable from "../../components/normal_table";
+import GroupedPaginatedTable from "../../../components/grouped_paginated_table";
+import NestedSideNav from "../../../components/nested_side_nav";
+import NormalTable from "../../../components/normal_table";
 
 export default function Season({ result }) {
+  const data = result.props.result;
     const championsColumns = useMemo(() => [
         {
           Header: "Tournament",
@@ -85,7 +85,7 @@ export default function Season({ result }) {
         }
       ]);
 
-    // switch(result.Summary[0].difficulty) {
+    // switch(data.Summary[0].difficulty) {
     //     case 'easy':
     //         var diffdot = "<div class = 'diffdots easy-diff'>&#x25CF;</div>";
     //         break;
@@ -103,32 +103,32 @@ export default function Season({ result }) {
     return (
       <Layout>
         <Head>
-          <title>{result.Tournaments[0].year + " Season Summary | College Quizbowl Stats"}</title>
+          <title>{data.Tournaments[0].year + " Season Summary | College Quizbowl Stats"}</title>
         </Head>
         <div className="main-container">
           <div className="side-nav">
             <NestedSideNav lowestLevel={3} />
           </div>
           <div className="main-content">
-            <p className="page-title">{result.Tournaments[0].year}</p>
+            <p className="page-title">{data.Tournaments[0].year}</p>
             <p className="page-subtitle"></p>
             <hr />
             <h2 id="editors">Champions</h2>
             <NormalTable
-            data={result.Champions}
+            data={data.Champions}
             columns = {championsColumns}
             />
             <hr />
             <h2 id="sets">Sets</h2>
             <NormalTable
               columns={setsColumns}
-              data={result.Sets}
+              data={data.Sets}
             />
             <hr />
             <h2 id="tournaments">Tournaments</h2>
             <GroupedPaginatedTable
               columns={tournamentsColumns}
-              data={result.Tournaments}
+              data={data.Tournaments}
               grouping_column = 'Date'
               itemsPerPage={10}
             />

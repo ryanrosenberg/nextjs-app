@@ -1,10 +1,12 @@
+'use client'
+
 import Head from "next/head";
 import Layout from "../../components/layout";
 import NormalTable from "../../components/normal_table";
 import { useMemo } from "react";
 
 export default function Home({ result }) {
-  
+  const data = result.props.result;
   const cols = useMemo(() => [
     {
       Header: "Season",
@@ -30,19 +32,8 @@ export default function Home({ result }) {
       </Head>
       <div>
         <h1 className="page-title">Seasons</h1>
-        <NormalTable data = {result} columns = {cols} />
+        <NormalTable data = {data} columns = {cols} />
       </div>
     </Layout>
   );
-}
-
-export async function getStaticProps() {
-  const seasons = await fetch(
-    "https://cqs-backend.herokuapp.com/seasons/champions"
-  ).then((response) => response.json());
-  return {
-    props: {
-      result: seasons
-    },
-  };
 }

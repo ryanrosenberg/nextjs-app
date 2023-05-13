@@ -1,7 +1,5 @@
 import Head from "next/head";
 import Layout from "../../components/layout";
-import NormalTable from "../../components/normal_table";
-import { useMemo } from "react";
 
 export default function Home() {
   return (

@@ -1,16 +1,17 @@
-import Layout from "../../components/layout";
+'use client'
+
+import Layout from "../../../components/layout";
 import Head from "next/head";
 import { useMemo } from "react";
 import _ from "lodash";
 import Link from "next/link";
-import { slug } from "../../lib/utils.js";
-import RawHtml from "../../components/rawHtml";
-import GroupedTable from "../../components/grouped_table";
-import NestedSideNav from "../../components/nested_side_nav";
-import { db } from "../../lib/firestore";
-import { doc, getDoc } from "firebase/firestore";
+import { slug } from "../../../lib/utils.js";
+import RawHtml from "../../../components/rawHtml";
+import GroupedTable from "../../../components/grouped_table";
+import NestedSideNav from "../../../components/nested_side_nav";
 
 export default function Player({ result }) {
+  const data = result.props.result;
   const yearsColumns = useMemo(
     () => [
       {
@@ -158,7 +159,7 @@ export default function Player({ result }) {
     },
   ]);
 
-  const subtitle = _.map(result.Years, "School")
+  const subtitle = _.map(data.Years, "School")
     .filter((v, i, a) => a.indexOf(v) == i)
     .map((school, i) => (
       <span key={i}>
@@ -170,36 +171,36 @@ export default function Player({ result }) {
   return (
     <Layout>
       <Head>
-        <title>{result.Years[0].Player + " | College Quizbowl Stats"}</title>
+        <title>{data.Years[0].Player + " | College Quizbowl Stats"}</title>
       </Head>
       <div className="main-container">
         <div className="side-nav">
           <NestedSideNav />
         </div>
         <div className="main-content">
-          <h1 className="page-title">{result.Years[0].Player}</h1>
+          <h1 className="page-title">{data.Years[0].Player}</h1>
           <p className="page-subtitle">{subtitle}</p>
           <hr />
           <h2 id="years">Years</h2>
           <GroupedTable
             columns={yearsColumns}
-            data={result.Years}
+            data={data.Years}
             grouping_column="School"
           />
           <hr />
           <h2 id="tournaments">Tournaments</h2>
           <GroupedTable
             columns={tournamentsColumns}
-            data={result.Tournaments}
+            data={data.Tournaments}
             grouping_column="Year"
           />
-          {result.Editing.length > 0 && (
+          {data.Editing.length > 0 && (
             <div>
               <hr />
               <h2 id="editing">Editing</h2>
               <GroupedTable
                 columns={editingColumns}
-                data={result.Editing}
+                data={data.Editing}
                 grouping_column="Year"
               />
             </div>
@@ -210,36 +211,3 @@ export default function Player({ result }) {
   );
 }
 
-export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  // const res = await fetch("https://cqs-backend.herokuapp.com/players");
-  // const posts = await res.json();
-
-  // // Get the paths we want to prerender based on posts
-  // // In production environments, prerender all pages
-  // // (slower builds, but faster initial page load)
-  // const paths = posts.map((post) => ({
-  //   params: { id: post.slug },
-  // }));
-
-  // { fallback: false } means other routes should 404
-  // return { paths, fallback: false };
-
-  return {
-    paths: [],
-    fallback: "blocking",
-  };
-}
-
-export async function getStaticProps({ params }) {
-  
-  const docRef = doc(db, "players", params.id);
-  const docSnap = await getDoc(docRef);
-
-  return {
-    props: {
-      result: docSnap.data(),
-      revalidate: 60,
-    },
-  };
-}

@@ -1,14 +1,16 @@
-import Layout from "../../components/layout";
+'use client'
+
+import Layout from "../../../components/layout";
 import Head from "next/head";
 import { useMemo } from "react";
 import _ from "lodash";
-import NormalTable from "../../components/normal_table";
-import GroupedPaginatedTable from "../../components/grouped_paginated_table";
-import PaginatedTable from "../../components/paginated_table";
-import NestedSideNav from "../../components/nested_side_nav";
+import GroupedPaginatedTable from "../../../components/grouped_paginated_table";
+import PaginatedTable from "../../../components/paginated_table";
+import NestedSideNav from "../../../components/nested_side_nav";
 import dynamic from "next/dynamic";
 
 export default function Circuit({ result }) {
+  const data = result.props.result;
   const schoolsColumns = useMemo(
     () => [
       {
@@ -119,7 +121,7 @@ export default function Circuit({ result }) {
     },
   ]);
 
-  const MapWithNoSSR = dynamic(() => import("../../components/leaflet-map"), {
+  const MapWithNoSSR = dynamic(() => import("./leaflet-map"), {
     ssr: false,
   });
 
@@ -127,7 +129,7 @@ export default function Circuit({ result }) {
     <Layout>
       <Head>
         <title>
-          {result.Tournaments[0]["Circuit"] + " | College Quizbowl Stats"}
+          {data.Tournaments[0]["Circuit"] + " | College Quizbowl Stats"}
         </title>
       </Head>
       <div className="main-container">
@@ -135,12 +137,12 @@ export default function Circuit({ result }) {
           <NestedSideNav />
         </div>
         <div className="main-content">
-          <h1 className="page-title">{result.Tournaments[0]["Circuit"]}</h1>
+          <h1 className="page-title">{data.Tournaments[0]["Circuit"]}</h1>
           {/* <p className="page-subtitle">{subtitle}</p> */}
           <div id="map">
             <MapWithNoSSR
-              school_markers={result.Schools}
-              host_markers={result.Sites}
+              school_markers={data.Schools}
+              host_markers={data.Sites}
             />
           </div>
           <p style={{'fontSize': '1.2em', 'textAlign': 'right'}}>
@@ -152,14 +154,14 @@ export default function Circuit({ result }) {
           <h2 id="schools">Schools</h2>
           <PaginatedTable
             columns={schoolsColumns}
-            data={result.Schools}
+            data={data.Schools}
             itemsPerPage={10}
           />
           <hr />
           <h2 id="tournaments">Tournaments</h2>
           <GroupedPaginatedTable
             columns={tournamentsColumns}
-            data={result.Tournaments}
+            data={data.Tournaments}
             grouping_column="Year"
             itemsPerPage={10}
           />
@@ -167,32 +169,4 @@ export default function Circuit({ result }) {
       </div>
     </Layout>
   );
-}
-
-export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/circuits");
-  const posts = await res.json();
-
-  // Get the paths we want to prerender based on posts
-  // In production environments, prerender all pages
-  // (slower builds, but faster initial page load)
-  const paths = posts.map((post) => ({
-    params: { id: post.slug },
-  }));
-
-  // { fallback: false } means other routes should 404
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
-  
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/circuits/" + params.id
-  ).then((response) => response.json());
-  return {
-    props: {
-      result: sampleData,
-    },
-  };
 }

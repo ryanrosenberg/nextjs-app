@@ -20,6 +20,6 @@
   }
 
 .EditorTable i {
-    font-family: var(--table-font);
+    font-family: var(--main-font);
     /* font-style: normal; */
 }

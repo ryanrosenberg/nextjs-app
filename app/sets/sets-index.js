@@ -1,9 +1,11 @@
+'use client'
+
 import Head from "next/head";
 import Layout from "../../components/layout";
 import EditorTable from "../../components/editor_table";
 
-export default function Home({ result }) {
-  
+export default function SetsIndex({ result }) {
+  const data = result.props.result;
   return (
     <Layout home>
       <Head>
@@ -11,19 +13,8 @@ export default function Home({ result }) {
       </Head>
       <div>
         <h1 className="page-title">Sets</h1>
-        <EditorTable data = {result} />
+        <EditorTable data = {data} />
       </div>
     </Layout>
   );
-}
-
-export async function getStaticProps() {
-  const editors = await fetch(
-    "https://cqs-backend.herokuapp.com/sets/editors"
-  ).then((response) => response.json());
-  return {
-    props: {
-      result: editors
-    },
-  };
 }

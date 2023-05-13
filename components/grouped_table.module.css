@@ -7,7 +7,7 @@
 
 .rowGroup>td {
     line-height: .9em;
-    font-family: var(--table-font) !important;
+    font-family: var(--main-font) !important;
 }
 
 .rowGroup>td>a {

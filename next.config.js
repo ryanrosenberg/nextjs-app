@@ -3,4 +3,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 module.exports = withBundleAnalyzer({
   // your Next.js configuration
+  experimental: {
+    appDir: true,
+  },
 })

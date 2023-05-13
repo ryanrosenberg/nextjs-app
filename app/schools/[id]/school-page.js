@@ -1,13 +1,16 @@
-import Layout from "../../components/layout";
+'use client'
+
+import Layout from "../../../components/layout";
 import Head from "next/head";
-import PaginatedTable from "../../components/paginated_table";
-import GroupedPaginatedTable from "../../components/grouped_paginated_table";
+import PaginatedTable from "../../../components/paginated_table";
+import GroupedPaginatedTable from "../../../components/grouped_paginated_table";
 import { useMemo } from "react";
 import _ from "lodash";
-import NestedSideNav from "../../components/nested_side_nav";
-import NormalTable from "../../components/normal_table";
+import NestedSideNav from "../../../components/nested_side_nav";
+import NormalTable from "../../../components/normal_table";
 
 export default function Team({ result }) {
+  const data = result.props.result;
   const tournamentsColumns = useMemo(() => [
     {
       Header: "Team",
@@ -269,49 +272,49 @@ export default function Team({ result }) {
   return (
     <Layout>
       <Head>
-        <title>{result.Summary[0].School + " | College Quizbowl Stats"}</title>
+        <title>{data.Summary[0].School + " | College Quizbowl Stats"}</title>
       </Head>
       <div className="main-container">
         <NestedSideNav lowestLevel={3} />
         <div className="main-content">
-          <h1 className="page-title">{result.Summary[0].School}</h1>
-          <p className="page-subtitle">{result.Summary[0].Circuit}</p>
+          <h1 className="page-title">{data.Summary[0].School}</h1>
+          <p className="page-subtitle">{data.Summary[0].Circuit}</p>
           <hr />
           <h2 id="years">Years</h2>
           <NormalTable
             columns={yearsColumns}
-            data={result.Summary}
+            data={data.Summary}
             itemsPerPage={10}
           />
           <hr />
           <h2 id="teams">Teams</h2>
           <PaginatedTable
             columns={teamsColumns}
-            data={result.Teams}
+            data={data.Teams}
             itemsPerPage={10}
           />
           <hr />
           <h2 id="players">Players</h2>
           <PaginatedTable
             columns={playersColumns}
-            data={result.Players}
+            data={data.Players}
             itemsPerPage={10}
           />
           <hr />
           <h2 id="tournaments">Tournaments</h2>
           <GroupedPaginatedTable
             columns={tournamentsColumns}
-            data={result.Tournaments}
+            data={data.Tournaments}
             itemsPerPage={10}
             grouping_column="Tournament"
           />
-          {result.Hosting.length > 0 && (
+          {data.Hosting.length > 0 && (
             <div>
               <hr />
               <h2 id="hosting">Hosting</h2>
               <GroupedPaginatedTable
                 columns={hostingColumns}
-                data={result.Hosting}
+                data={data.Hosting}
                 itemsPerPage={10}
                 grouping_column="Year"
               />
@@ -323,29 +326,3 @@ export default function Team({ result }) {
   );
 }
 
-export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/teams");
-  const posts = await res.json();
-
-  // Get the paths we want to prerender based on posts
-  // In production environments, prerender all pages
-  // (slower builds, but faster initial page load)
-  const paths = posts.map((post) => ({
-    params: { id: post.slug },
-  }));
-
-  // { fallback: false } means other routes should 404
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/teams/" + params.id
-  ).then((response) => response.json());
-  return {
-    props: {
-      result: sampleData,
-    },
-  };
-}
