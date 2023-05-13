@@ -1,4 +1,4 @@
-import { Inter, Signika, Signika_Negative, Source_Sans_Pro, Alegreya_Sans} from '@next/font/google';
+import { Inter, Signika, Signika_Negative, Source_Sans_Pro, Alegreya_Sans} from "next/font/google";
  
 // define your variable fonts
 const inter = Inter({
