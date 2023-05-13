@@ -15,6 +15,13 @@ export async function generateStaticParams() {
   return paths;
 }
 
+export async function generateMetadata({ params }) {
+  const pageData = await getData(params);
+  return {
+    title: `${pageData.props.result.Years[0].Player} | College Quizbowl Stats`,
+  };
+}
+
 export async function getData(params) {
   const docRef = doc(db, "players", params.id);
   const docSnap = await getDoc(docRef);

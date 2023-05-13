@@ -1,13 +1,11 @@
-import Head from "next/head";
-import Layout from "../../components/layout";
+export const metadata = {
+  title: "About | College Quizbowl Stats",
+};
 
 export default function About() {
   
   return (
-    <Layout home>
-      <Head>
-        <title>About | College Quizbowl Stats</title>
-      </Head>
+    <>
       <div>
         <h1 className="page-title">About</h1>
         <h2>To-do</h2>
@@ -57,6 +55,6 @@ export default function About() {
           <a href="collegequizbowlcalendar.com">collegequizbowlcalendar.com</a>.
         </p>
       </div>
-    </Layout>
+    </>
   );
 }

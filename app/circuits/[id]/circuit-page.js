@@ -1,7 +1,5 @@
 'use client'
 
-import Layout from "../../../components/layout";
-import Head from "next/head";
 import { useMemo } from "react";
 import _ from "lodash";
 import GroupedPaginatedTable from "../../../components/grouped_paginated_table";
@@ -126,19 +124,13 @@ export default function Circuit({ result }) {
   });
 
   return (
-    <Layout>
-      <Head>
-        <title>
-          {data.Tournaments[0]["Circuit"] + " | College Quizbowl Stats"}
-        </title>
-      </Head>
+    <>
       <div className="main-container">
         <div className="side-nav">
           <NestedSideNav />
         </div>
         <div className="main-content">
           <h1 className="page-title">{data.Tournaments[0]["Circuit"]}</h1>
-          {/* <p className="page-subtitle">{subtitle}</p> */}
           <div id="map">
             <MapWithNoSSR
               school_markers={data.Schools}
@@ -167,6 +159,6 @@ export default function Circuit({ result }) {
           />
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

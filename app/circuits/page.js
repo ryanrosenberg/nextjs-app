@@ -1,12 +1,10 @@
-import Head from "next/head";
-import Layout from "../../components/layout";
+export const metadata = {
+  title: "Circuits | College Quizbowl Stats",
+};
 
 export default function Home() {
   return (
-    <Layout home>
-      <Head>
-        <title>Seasons | College Quizbowl Stats</title>
-      </Head>
+    <>
       <div>
         <h1 className="page-title">Circuits</h1>
         <hr />
@@ -57,6 +55,6 @@ export default function Home() {
         <a href="../circuits/plains-cc">Plains CC</a>{" "}
         <i>Redlands CC, Lincoln Land, Rend Lake College…</i>
       </div>
-    </Layout>
+    </>
   );
 }

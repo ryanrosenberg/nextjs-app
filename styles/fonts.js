@@ -4,6 +4,7 @@ import { Inter, Signika, Signika_Negative, Source_Sans_Pro, Alegreya_Sans} from 
 const inter = Inter({
     subsets: ['latin'],
     display: 'swap',
+    variable: '--table-header-font',
   });
 const signika = Signika({
     subsets: ['latin'],

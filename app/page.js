@@ -1,5 +1,10 @@
 import Home from "./home-page";
 
+
+export const metadata = {
+  title: "Home | College Quizbowl Stats",
+};
+
 export async function getData() {
   const tty = await fetch(
     "https://cqs-backend.herokuapp.com/teams/thisyear"

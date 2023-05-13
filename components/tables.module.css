@@ -1,124 +1,124 @@
 .dataframe {
-    border-collapse: collapse;
-    line-height: 1.1em;
-    overflow-x: scroll;
-    font-weight: 300;
+  border-collapse: collapse;
+  line-height: 1.1em;
+  overflow-x: scroll;
+  font-weight: 300;
 }
 
-div:has(>.dataframe) {
-    overflow-x:auto;
+div:has(> .dataframe) {
+  overflow-x: auto;
 }
 
 .fullWidth {
-    width: 100%;
+  width: 100%;
 }
 
 .dataframe tr {
-    border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 
 .dataframe td {
-    padding: .3em .4em;
+  padding: 0.3em 0.4em;
 }
 
 .header {
-    background-color: var(--text-color);
-    color: white;
-    /* border-bottom: 4px solid var(--line-color); */
+  background-color: var(--text-color);
+  color: white;
+  /* border-bottom: 4px solid var(--line-color); */
 }
 
 .headerCell {
-    text-align: left;
-    padding: .25em .5em;
-    font-family: 'Inter';
-    font-weight: 400;
+  text-align: left;
+  padding: 0.25em 0.5em;
+  font-family: var(--table-header-font);
+  font-weight: 400;
 }
 
 .headerCellRight {
-    text-align: right;
-    padding: 0em .5em;
-    font-family: 'Inter';
-    font-weight: 400;
+  text-align: right;
+  padding: 0em 0.5em;
+  font-family: var(--table-header-font);
+  font-weight: 400;
 }
 
 .headerButton {
-    background-color: transparent;
-    color: white;
-    border: none;
-    font-family: 'Inter';
-    font-weight: 400;
-    font-size: 1em;
-    width: 100%;
-    padding: 0px;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-family: var(--table-header-font);
+  font-weight: 400;
+  font-size: 1em;
+  width: 100%;
+  padding: 0px;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
 }
 
 .ascending {
-    border-top: 1px solid white;
+  border-top: 1px solid white;
 }
 
 .descending {
-    border-bottom: 1px solid white;
+  border-bottom: 1px solid white;
 }
 
 .cell {
-    text-align: left;
-    font-family: var(--main-font);
+  text-align: left;
+  font-family: var(--main-font);
 }
 
 .cellNumber {
-    font-family: var(--main-font) !important;
+  font-family: var(--main-font) !important;
 }
 
 .cellCenter {
-    text-align: center;
+  text-align: center;
 }
 
-.cellCenter>a {
-    text-align: center;
-    font-family: var(--main-font);
-    font-weight: 500 !important;
+.cellCenter > a {
+  text-align: center;
+  font-family: var(--main-font);
+  font-weight: 500 !important;
 }
 
 .cellRight {
-    text-align: right;
-    font-family: var(--main-font);
-    vertical-align: bottom;
+  text-align: right;
+  font-family: var(--main-font);
+  vertical-align: bottom;
 }
 
 .noBorder {
-    border: none;
+  border: none;
 }
 
 .borderRight {
-    border-right: 1px solid #ccc;
+  border-right: 1px solid #ccc;
 }
 
 .dataframe tbody tr:nth-child(odd) {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 .Tooltip {
-    display: none;
-    position: absolute;
-    z-index: 100;
-    border: 1px;
-    background-color: white;
-    border: 1px solid #001aff;
-    padding: 3px;
-    color: green;
-    top: 20px;
-    left: 20px;
+  display: none;
+  position: absolute;
+  z-index: 100;
+  border: 1px;
+  background-color: white;
+  border: 1px solid #001aff;
+  padding: 3px;
+  color: green;
+  top: 20px;
+  left: 20px;
 }
 
 .headerRow th:hover span {
-    display: block;
-    position: inherit;
+  display: block;
+  position: inherit;
 }
 
 .tableHeader[title] button {
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: .2em;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.2em;
 }

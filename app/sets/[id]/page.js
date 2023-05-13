@@ -14,6 +14,13 @@ export async function generateStaticParams() {
   return paths;
 }
 
+export async function generateMetadata({ params }) {
+  const pageData = await getData(params);
+  return {
+    title: pageData.props.result.Summary[0].set_name + " | College Quizbowl Stats"
+  };
+}
+
 export async function getData(params) {
   const sampleData = await fetch(
     "https://cqs-backend.herokuapp.com/sets/" + params.id

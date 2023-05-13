@@ -1,7 +1,5 @@
 "use client";
 
-import Layout from "../../../components/layout";
-import Head from "next/head";
 import { useMemo } from "react";
 import _ from "lodash";
 import GroupedTable from "../../../components/grouped_table";
@@ -211,12 +209,7 @@ export default function Set({ result }) {
   }
 
   return (
-    <Layout>
-      <Head>
-        <title>
-          {data.Summary[0].set_name + " | College Quizbowl Stats"}
-        </title>
-      </Head>
+    <>
       <div className="main-container">
         <div className="side-nav">
           <NestedSideNav lowestLevel={3} />
@@ -262,6 +255,6 @@ export default function Set({ result }) {
           />
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

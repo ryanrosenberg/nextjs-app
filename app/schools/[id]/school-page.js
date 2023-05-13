@@ -1,7 +1,5 @@
 'use client'
 
-import Layout from "../../../components/layout";
-import Head from "next/head";
 import PaginatedTable from "../../../components/paginated_table";
 import GroupedPaginatedTable from "../../../components/grouped_paginated_table";
 import { useMemo } from "react";
@@ -270,10 +268,7 @@ export default function Team({ result }) {
   ]);
 
   return (
-    <Layout>
-      <Head>
-        <title>{data.Summary[0].School + " | College Quizbowl Stats"}</title>
-      </Head>
+    <>
       <div className="main-container">
         <NestedSideNav lowestLevel={3} />
         <div className="main-content">
@@ -322,7 +317,7 @@ export default function Team({ result }) {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 

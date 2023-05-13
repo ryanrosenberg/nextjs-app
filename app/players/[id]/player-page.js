@@ -1,7 +1,5 @@
 'use client'
 
-import Layout from "../../../components/layout";
-import Head from "next/head";
 import { useMemo } from "react";
 import _ from "lodash";
 import Link from "next/link";
@@ -169,10 +167,7 @@ export default function Player({ result }) {
     ));
 
   return (
-    <Layout>
-      <Head>
-        <title>{data.Years[0].Player + " | College Quizbowl Stats"}</title>
-      </Head>
+    <>
       <div className="main-container">
         <div className="side-nav">
           <NestedSideNav />
@@ -207,7 +202,7 @@ export default function Player({ result }) {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 

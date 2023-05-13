@@ -12,6 +12,11 @@ export async function getData() {
   };
 }
 
+export const metadata = {
+  title: "Records | College Quizbowl Stats",
+};
+
+
 export default async function Page() {
   // Fetch data directly in a Server Component
   const pageData = await getData();

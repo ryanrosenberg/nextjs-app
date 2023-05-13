@@ -1,7 +1,5 @@
 'use client'
 
-import Layout from "../../../components/layout";
-import Head from "next/head";
 import Link from "next/link";
 import NormalTable from "../../../components/normal_table";
 import PaginatedTable from "../../../components/paginated_table";
@@ -359,12 +357,7 @@ export default function Tournament({ result }) {
   // console.log(teamDetailPlayers['Belmont University A']);
 
   return (
-    <Layout>
-      <Head>
-        <title>
-          {data.Summary[0]["tournament_name"] + " | College Quizbowl Stats"}
-        </title>
-      </Head>
+    <>
       <div className="main-container">
         <NestedSideNav lowestLevel={3} />
         <div className="main-content">
@@ -465,6 +458,6 @@ export default function Tournament({ result }) {
           })}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

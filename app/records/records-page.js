@@ -1,7 +1,5 @@
 'use client'
 
-import Head from "next/head";
-import Layout from "../../components/layout";
 import NestedSideNav from "../../components/nested_side_nav";
 import NormalTable from "../../components/normal_table";
 import PaginatedTable from "../../components/paginated_table";
@@ -35,10 +33,7 @@ export default function Records({ result }) {
   circuits.sort();
 
   return (
-    <Layout>
-      <Head>
-        <title>{"Records | College Quizbowl Stats"}</title>
-      </Head>
+    <>
       <div
         className="main-container"
         data-bs-spy="scroll"
@@ -1449,6 +1444,6 @@ export default function Records({ result }) {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

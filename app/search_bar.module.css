@@ -1,0 +1,35 @@
+.searchBar {
+    margin: auto;
+    flex-grow: 3;
+    width: 100%;
+    float: right;
+    border: none;
+    color: var(--text-color);
+    font-family: var(--main-font);
+    font-size: 1.2em;
+}
+
+.searchBar:focus-visible {
+    outline: none !important;
+}
+
+.searchResult {
+    position: absolute;
+    top: 100%;
+    width: 30%;
+    overflow-x: hidden;
+    border: 1px solid var(--line-color);
+    border-radius: 0px;
+    background-color: white;
+    z-index: 100000;
+}
+
+.searchResultEntry {
+    padding: .25em;
+    border-bottom: 1px solid #ccc;
+}
+
+.description {
+    color: var(--text-color);
+    text-decoration: none !important;
+}
