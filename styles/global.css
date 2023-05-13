@@ -153,21 +153,6 @@ hr {
   padding-left: 2.5em;
 }
 
-.homepage-flex {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  column-gap: 2em;
-}
-
-.homepage-teams {
-  width: 60%;
-}
-
-.homepage-tournaments {
-  width: 40%;
-}
-
 nav#toc>ul {
   margin-top: 30px;
   flex-direction: column;
@@ -383,4 +368,18 @@ tfoot > tr > td {
 
 tbody:last-child {
   border-bottom: none !important;
+}
+
+@media (max-width: 1000px) {
+  .main-content {
+    padding-left: 0;
+    width: auto;
+    max-width: 100%;
+  }
+  table {
+    display: block;
+    width: auto;
+    overflow-x: scroll;
+    font-size: 12px;
+  }
 }

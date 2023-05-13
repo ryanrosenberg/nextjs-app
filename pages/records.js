@@ -50,7 +50,7 @@ export default function Home({ result }) {
             (i.e. non-hosting) records.
           </i>
           <h2 id="circuit-records">Circuit Records</h2>
-          <div className="circuit-flex">
+          <div className={styles.circuitFlex}>
             <p>
               {circuits.map((circuit) => {
                 return (

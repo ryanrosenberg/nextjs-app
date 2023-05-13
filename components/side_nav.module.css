@@ -164,3 +164,9 @@
 .test {
     color:darkgreen;
 }
+
+@media (max-width: 1000px) {
+    .sidenav {  
+        display: none;
+      }
+}

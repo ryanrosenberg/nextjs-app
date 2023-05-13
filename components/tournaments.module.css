@@ -23,3 +23,15 @@
 .bracketGroups {
     border-bottom: .15em solid var(--line-color);
 }
+
+@media (max-width: 1000px) {
+    .teamDetail {
+        width: auto;
+        max-width: 100%;
+    }
+
+    .teamPlayerDetail {
+        width: auto;
+        max-width: 100%;
+    }
+}

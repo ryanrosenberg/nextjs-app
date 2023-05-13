@@ -16,3 +16,52 @@
 .note {
     font-size: 1.2em;
 }
+
+.circuitFlex {
+    background-color: rgba(200, 200, 200, .2);
+    padding: 2em;
+}
+
+.circuitFlex>p {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    column-gap: 2em;
+    row-gap: 2em;
+}
+
+.circuitFlex>p>a {
+    border: 2px solid slategray;
+    padding: .5em;
+}
+
+@media (max-width: 1000px) {
+    .row {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1em;
+    }
+
+    .circuitFlex {
+        background-color: rgba(200, 200, 200, .2);
+        padding: .5em;
+    }
+
+    .circuitFlex>p {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        column-gap: .5em;
+        row-gap: .5em;
+    }
+
+    .circuitFlex>p>a {
+        border: 2px solid slategray;
+        padding: .35em;
+    }
+
+
+
+}
