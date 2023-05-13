@@ -1,6 +1,11 @@
 .dataframe {
     border-collapse: collapse;
     line-height: 1.1em;
+    overflow-x: scroll;
+}
+
+div:has(>.dataframe) {
+    overflow-x:auto;
 }
 
 .fullWidth {

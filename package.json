@@ -29,6 +29,7 @@
     "react-leaflet": "^4.2.1",
     "react-paginate": "^8.1.4",
     "react-scrollspy": "^3.4.3",
-    "react-search-box": "^3.0.0"
+    "react-search-box": "^3.0.0",
+    "react-select": "^5.7.2"
   }
 }
