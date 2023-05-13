@@ -1,0 +1,41 @@
+.homepageFlex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  column-gap: 2em;
+}
+
+.homepageTeams {
+  width: 60%;
+}
+
+.homepageTournaments {
+  width: 40%;
+}
+
+@media (max-width: 1000px) {
+    .homepageFlex {
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .homepageTeams {
+        width: auto;
+      }
+
+      .homepageTeams table {
+        display: block;
+        overflow-x: scroll;
+        font-size: 12px;
+      }
+      
+      .homepageTournaments {
+        width: auto;
+      }
+
+      .homepageTournaments table {
+        display: block;
+        overflow-x: scroll;
+        font-size: 12px;
+      }
+}

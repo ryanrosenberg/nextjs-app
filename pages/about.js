@@ -12,12 +12,15 @@ export default function Home({ result }) {
         <h1 className="page-title">About</h1>
         <h2>To-do</h2>
         <ul>
-          <li>Some player weirdness for Chicago B emoji</li>
-          <li>Existing team mashups (USCs, UWs, Davis, UCF, USF, UNF, check for more)</li>
-          <li>Circuit records</li>
-          <li>mobile site</li>
-          <li>player best games?</li>
+          <h4>Pre-release</h4>
+          <li>add 2022-23 stats</li>
+          <li>NAQT disclaimer</li>
           <li>put everything on Firebase</li>
+          <li>mobile site</li>
+          <li>App Router</li>
+          <h4>Post-release</h4>
+          <li>Circuit records</li>
+          <li>player best games?</li>
         </ul>
         <p>
           Welcome to College Quizbowl Stats. This site has two intended

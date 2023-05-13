@@ -62,3 +62,34 @@
 .button:has(>.inactiveButton){
   border-bottom: 2px dotted transparent !important;
 }
+
+@media (max-width: 1000px) {
+  .paginationControl {
+    max-width: 100%;
+    font-weight: 500;
+    text-align: left;
+    font-size: 12px;
+    color: var(--text-color);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .button {
+    background: none !important;
+    border: none !important;
+    border-radius: 0px !important;
+    color: #666;
+    display: block;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: var(--table-font);
+    padding: .25em;
+    border-radius: 0px;
+    margin-right: 4px;
+    margin-left: 4px;
+    border-bottom: 2px dotted transparent !important;
+  }
+}

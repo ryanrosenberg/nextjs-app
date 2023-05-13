@@ -2,6 +2,7 @@ import Head from "next/head";
 import Layout, { siteTitle } from "../components/layout";
 import RecentTournaments from "../components/recent_tournaments";
 import TeamsThisYear from "../components/teams_this_year";
+import styles from "../components/home_page.module.css";
 
 export default function Home({ result }) {
   return (
@@ -9,12 +10,12 @@ export default function Home({ result }) {
       <Head>
         <title>{siteTitle}</title>
       </Head>
-      <div className='homepage-flex'>
-        <div className="homepage-teams">
+      <div className={styles.homepageFlex}>
+        <div className={styles.homepageTeams}>
           <h2>Teams This Year</h2>
           <TeamsThisYear data = {result.teamsThisYear} />
         </div>
-        <div className="homepage-tournaments">
+        <div className={styles.homepageTournaments}>
           <h2>Recent Tournaments</h2>
           <RecentTournaments data = {result.recentTournaments} />
         </div>
