@@ -44,24 +44,22 @@ export default function Game({ result }) {
     []
   );
 
-
   var player_stats = _.groupBy(data.Players, "team");
   var team_stats = _.groupBy(data.Teams, "team");
 
   return (
     <div className="main-container">
       <div className="main-content">
+        <Link
+          className={styles.tournamentLink}
+          href={`../tournaments/${data.Summary[0]["tournament_id"]}`}
+        >
+          ← {data.Summary[0]["tournament_name"]}
+        </Link>
         <h1 className="page-title">
           {`${data.Summary[0]["round"]}: ${data.Summary[0]["team"]} vs. ${data.Summary[1]["team"]}`}
         </h1>
-        <p className="page-subtitle">
-          <Link
-            className={styles.tournamentLink}
-            href={`../tournaments/${data.Summary[0]["tournament_id"]}`}
-          >
-            ← {data.Summary[0]["tournament_name"]}
-          </Link>
-        </p>
+        <p className="page-subtitle"></p>
         <hr />
         <div className={styles.playerStatsRow}>
           {Object.keys(player_stats).map((team_name) => {
