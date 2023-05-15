@@ -44,6 +44,7 @@ export default function Game({ result }) {
     []
   );
 
+
   var player_stats = _.groupBy(data.Players, "team");
   var team_stats = _.groupBy(data.Teams, "team");
 

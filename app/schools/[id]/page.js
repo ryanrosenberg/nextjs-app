@@ -1,16 +1,17 @@
 import School from "./school-page";
+import { db } from "../../../lib/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 export async function generateStaticParams() {
-  // // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/teams");
-  const posts = await res.json();
-
-  const paths = posts.map((post) => ({
-    id: post.slug,
-  }));
+  const querySnapshot = await getDocs(collection(db, "schools"));
+  var paths = [];
+  querySnapshot.forEach((doc) => {
+    paths.push({ id: doc.id });
+  });
 
   return paths;
 }
+
 
 export async function generateMetadata({ params }) {
   const pageData = await getData(params);
@@ -20,13 +21,12 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/teams/" + params.id
-  ).then((response) => response.json());
-  
+  const docRef = doc(db, "schools", params.id);
+  const docSnap = await getDoc(docRef);
+
   return {
     props: {
-      result: sampleData,
+      result: docSnap.data(),
     },
   };
 }

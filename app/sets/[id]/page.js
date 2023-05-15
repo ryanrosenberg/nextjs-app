@@ -1,20 +1,17 @@
 import Set from "./set-page";
 import { db } from "../../../lib/firestore";
-import { doc, getDoc } from "firebase/firestore";
-
-export const dynamicParams = true;
-
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 export async function generateStaticParams() {
-  const res = await fetch("https://cqs-backend.herokuapp.com/sets");
-  const posts = await res.json();
-
-  const paths = posts.map((post) => ({
-    id: post.set_slug,
-  }));
+  const querySnapshot = await getDocs(collection(db, "set_stats"));
+  var paths = [];
+  querySnapshot.forEach((doc) => {
+    paths.push({ id: doc.id });
+  });
 
   return paths;
 }
+
 
 export async function generateMetadata({ params }) {
   const pageData = await getData(params);
@@ -26,8 +23,6 @@ export async function generateMetadata({ params }) {
 export async function getData(params) {
   const docRef = doc(db, "set_stats", params.id);
   const docSnap = await getDoc(docRef);
-
-  console.log(1);
 
   return {
     props: {

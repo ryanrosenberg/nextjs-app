@@ -1,13 +1,12 @@
 'use client'
 
-import { usePathname, useSearchParams } from "next/navigation";
-import PaginatedTable from "../../../components/paginated_table";
-import StandingsTable from "../../../components/standings_table";
+import NormalTable from "../../../../components/normal_table";
 import { useMemo } from "react";
+import { usePathname, useSearchParams } from 'next/navigation';
 import _ from "lodash";
-import styles from "./tournaments.module.css";
-import { slug } from "../../../lib/utils";
-import NestedSideNav from "../../../components/nested_side_nav";
+import styles from "../tournaments.module.css";
+import { slug } from "../../../../lib/utils";
+import NestedSideNav from "../../../../components/nested_side_nav";
 
 export default function Tournament({ result }) {
   const data = result.props.result;
@@ -15,36 +14,32 @@ export default function Tournament({ result }) {
   const searchParams = useSearchParams();
   const url = pathname + searchParams.toString();
  
-  const standingsColumns = useMemo(
+  const teamDetailColumns = useMemo(
     () => [
       {
-        Header: "Rank",
-        accessor: "Rank",
+        Header: "Rd",
+        accessor: "Round",
         border: "right",
       },
       {
-        Header: "Team",
-        accessor: "Team",
+        Header: "Opponent",
+        accessor: "Opponent",
         align: "left",
         border: "right",
       },
       {
-        Header: "School",
-        accessor: "School",
-        align: "left",
+        Header: "Result",
+        accessor: "Result",
+        align: "center",
         border: "right",
       },
       {
-        Header: "GP",
-        accessor: "GP",
+        Header: "PF",
+        accessor: "PF",
       },
       {
-        Header: "W-L",
-        accessor: "W-L",
-      },
-      {
-        Header: "TUH",
-        accessor: "TUH",
+        Header: "PA",
+        accessor: "PA",
         border: "right",
       },
       {
@@ -61,52 +56,36 @@ export default function Tournament({ result }) {
         border: "right",
       },
       {
-        Header: "15/G",
-        accessor: "15/G",
+        Header: "TUH",
+        accessor: "TUH",
       },
       {
-        Header: "10/G",
-        accessor: "10/G",
-      },
-      {
-        Header: "-5/G",
-        accessor: "-5/G",
+        Header: "PPTUH",
+        accessor: "PPTUH",
         border: "right",
       },
       {
-        Header: "TU%",
-        accessor: "TU%",
+        Header: "BHrd",
+        accessor: "BHrd",
       },
       {
-        Header: "PPG",
-        accessor: "PPG",
+        Header: "BPts",
+        accessor: "BPts",
+        border: "right",
       },
       {
         Header: "PPB",
         accessor: "PPB",
-        border: "right",
-      },
-      {
-        Header: "A-Value",
-        accessor: "A-Value",
-        Tooltip:
-          "A-Value is a measure of a team's performance on a set compared to all other teams that played the set. It approximates how many points a team would be expected to score against the average team playing the set.",
       },
     ],
     []
   );
 
-  const playersColumns = useMemo(
+  const teamDetailPlayerColumns = useMemo(
     () => [
       {
         Header: "Player",
         accessor: "Player",
-        align: "left",
-        border: "right",
-      },
-      {
-        Header: "Team",
-        accessor: "Team",
         align: "left",
         border: "right",
       },
@@ -159,6 +138,10 @@ export default function Tournament({ result }) {
         accessor: "TU%",
       },
       {
+        Header: "Pts",
+        accessor: "Pts",
+      },
+      {
         Header: "PPG",
         accessor: "PPG",
       },
@@ -166,12 +149,8 @@ export default function Tournament({ result }) {
     []
   );
 
-  let player_lookup = {};
-  const player_names = _.map(data.Players, "raw_player");
-  const player_slugs = _.map(data.Players, "slug");
-  player_names.forEach((k, i) => {
-    player_lookup[k] = player_slugs[i];
-  });
+  let teamDetailTeams = _.groupBy(data["Team Detail Teams"], "Team");
+  let teamDetailPlayers = _.groupBy(data["Team Detail Players"], "Team");
 
   return (
     <>
@@ -192,25 +171,40 @@ export default function Tournament({ result }) {
           )}
           <ul className={styles.linkRow}>
             <li>
-              <a href={url + '/team-detail'}>Team Detail</a>
+              <a href = {url + '/../'}>Tournament Page</a>
             </li>
             <li>
-              <a href={url + '/player-detail'}>Player Detail</a>
+              <a href = {url + '/../team-detail'}>Team Detail</a>
             </li>
           </ul>
-          <h2 id="standings">Standings</h2>
-          <StandingsTable
-            grouping_column="bracket"
-            columns={standingsColumns}
-            data={data.Standings}
-          />
           <br></br>
-          <h2 id="players">Players</h2>
-          <PaginatedTable
-            columns={playersColumns}
-            data={data.Players}
-            itemsPerPage={10}
-          />
+          <h2 id="team-detail"></h2>
+          {Object.keys(teamDetailTeams).map((team) => {
+            return (
+              <div>
+                <h3 className={styles.teamPlayerHeader} id={slug(team)}>
+                  {team}
+                </h3>
+                <NormalTable
+                  columns={teamDetailColumns}
+                  data={teamDetailTeams[team]}
+                  className={styles.teamDetail}
+                />
+                <br></br>
+                {teamDetailPlayers[team] ? (
+                  <NormalTable
+                    columns={teamDetailPlayerColumns}
+                    data={teamDetailPlayers[team]}
+                    className={styles.teamPlayerDetail}
+                  />
+                ) : (
+                  ""
+                )}
+                <br></br>
+                <hr />
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
