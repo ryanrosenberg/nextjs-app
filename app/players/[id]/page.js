@@ -5,14 +5,15 @@ import { doc, getDoc } from "firebase/firestore";
 
 export async function generateStaticParams() {
   // // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/players");
-  const posts = await res.json();
+  // const res = await fetch("https://cqs-backend.herokuapp.com/players");
+  // const posts = await res.json();
 
-  const paths = posts.map((post) => ({
-    id: post.slug,
-  }));
+  // const paths = posts.map((post) => ({
+  //   id: post.slug,
+  // }));
 
-  return paths;
+  // return paths;
+  return [];
 }
 
 export async function generateMetadata({ params }) {

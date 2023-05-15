@@ -354,8 +354,6 @@ export default function Tournament({ result }) {
     player_lookup[k] = player_slugs[i];
   });
 
-  // console.log(teamDetailPlayers['Belmont University A']);
-
   return (
     <>
       <div className="main-container">
@@ -368,7 +366,7 @@ export default function Tournament({ result }) {
               These results are NAQT's property, provided for research purposes
               only, and are not to be posted elsewhere without NAQT's
               permission. Results may also be accessed on NAQT's website{" "}
-              <a href="https://basketball-reference.com">here</a>.
+              <a href={`https://www.naqt.com/stats/tournament/standings.jsp?tournament_id=${data.Summary[0]["naqt_id"]}`}>here</a>.
             </p>
           ) : (
             <></>

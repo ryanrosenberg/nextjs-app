@@ -26,9 +26,7 @@ h1,
 h2,
 h3,
 h4,
-h5,
-.page-title,
-.page-subtitle {
+h5 {
   font-family: var(--header-font), serif;
 }
 
@@ -124,6 +122,18 @@ hr {
 #custom-templates .empty-message {
   padding: 5px 10px;
   text-align: center;
+}
+
+
+.page-title,
+.page-subtitle {
+  font-family: var(--main-font);
+  font-weight: 300;
+}
+
+.naqt-disclaimer {
+  font-weight: 300;
+  font-style: italic;
 }
 
 .tt-menu {

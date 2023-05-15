@@ -30,6 +30,11 @@
     "react-paginate": "^8.1.4",
     "react-scrollspy": "^3.4.3",
     "react-search-box": "^3.0.0",
-    "react-select": "^5.7.2"
+    "react-select": "^5.7.2",
+    "sequelize": "^6.31.1",
+    "sequelize-auto": "^0.8.8"
+  },
+  "devDependencies": {
+    "sqlite3": "^5.1.6"
   }
 }

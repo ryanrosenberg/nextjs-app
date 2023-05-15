@@ -1,7 +1,3 @@
-export const metadata = {
-  title: "About | College Quizbowl Stats",
-};
-
 export default function About() {
   
   return (
@@ -11,11 +7,11 @@ export default function About() {
         <h2>To-do</h2>
         <ul>
           <h4>Pre-release</h4>
-          <li>add 2022-23 stats</li>
-          <li>NAQT disclaimer</li>
+          <li>update record book</li>
+          <li>Miscellaneous errors: JM name, weird tournament anchor thing</li>
           <li>put everything on Firebase</li>
           <li>mobile site menu</li>
-          <li>App Router</li>
+          <li>build site</li>
           <h4>Post-release</h4>
           <li>Circuit records</li>
           <li>player best games?</li>

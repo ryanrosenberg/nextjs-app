@@ -23,6 +23,7 @@ export async function getData(params) {
   const sampleData = await fetch(
     "https://cqs-backend.herokuapp.com/teams/" + params.id
   ).then((response) => response.json());
+  
   return {
     props: {
       result: sampleData,

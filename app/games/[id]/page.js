@@ -1,15 +1,7 @@
 import Game from "./game-page";
 
 export async function generateStaticParams() {
-    // // Call an external API endpoint to get posts
-    const res = await fetch("https://cqs-backend.herokuapp.com/games");
-    const posts = await res.json();
-  
-    const paths = posts.map((post) => ({
-      id: post.slug,
-    }));
-    
-    return paths;
+    return [];
   }
   
   export async function getData( params ) {
