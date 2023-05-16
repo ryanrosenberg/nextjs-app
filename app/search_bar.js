@@ -38,7 +38,7 @@ export default function SearchBar({ value }) {
       />
       <div className={result.length > 0 ? styles.searchResult : ""}>
         {result.map((en) => (
-          <a href={`../${slug(en.item.type)}/${en.item.slug}`}>
+          <a href={`https://quizbowlstats.com/${slug(en.item.type)}/${en.item.slug}`}>
             <div className={styles.searchResultEntry}>
               {en.item.name}{" "}
               <i className={styles.description}>{en.item.description}</i>
