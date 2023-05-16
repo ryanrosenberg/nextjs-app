@@ -103,6 +103,15 @@ export default function Player({ result }) {
       border: "right",
     },
     {
+      Header: "W",
+      accessor: "W",
+    },
+    {
+      Header: "L",
+      accessor: "L",
+      border: "right",
+    },
+    {
       Header: "15",
       accessor: "15",
     },
