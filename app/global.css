@@ -354,6 +354,7 @@ div.row div.col-sm-4 {
 
 #map {
   height: 500px;
+  width: 65%;
 }
 
 .leaflet-marker-icon {

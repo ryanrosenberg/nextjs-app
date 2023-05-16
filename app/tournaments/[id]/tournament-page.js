@@ -172,6 +172,8 @@ export default function Tournament({ result }) {
     player_lookup[k] = player_slugs[i];
   });
 
+  console.log(data.Players);
+
   return (
     <>
       <div className="main-container">

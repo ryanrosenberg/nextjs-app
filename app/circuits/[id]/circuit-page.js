@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useMemo } from "react";
 import _ from "lodash";
@@ -137,7 +137,7 @@ export default function Circuit({ result }) {
               host_markers={data.Sites}
             />
           </div>
-          <p style={{'fontSize': '1.2em', 'textAlign': 'right'}}>
+          <p style={{ fontSize: "1.2em", textAlign: "left" }}>
             Blue markers represent schools that have hosted tournaments. Faded
             markers represent inactive schools (i.e. have not played/hosted
             since 2021.)
