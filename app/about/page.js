@@ -12,6 +12,7 @@ export default function About() {
           <li>put everything on Firebase</li>
           <li>build site</li>
           <li>weird tournament anchor thing</li>
+          <li>add Nats scoresheets</li>
           <h4>Post-release</h4>
           <li>Circuit records</li>
           <li>player best games?</li>

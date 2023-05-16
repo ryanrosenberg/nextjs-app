@@ -1,13 +1,13 @@
 import Tournament from "./tournament-page";
+import { db } from "../../../lib/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
 export async function generateStaticParams() {
-  // // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/tournaments");
-  const posts = await res.json();
-
-  const paths = posts.map((post) => ({
-    id: post.slug,
-  }));
+  const querySnapshot = await getDocs(collection(db, "tournaments"));
+  var paths = [];
+  querySnapshot.forEach((doc) => {
+    paths.push({ id: doc.id });
+  });
 
   return paths;
 }
@@ -20,12 +20,16 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/tournaments/" + params.id
-  ).then((response) => response.json());
+  const querySnapshot = await getDocs(
+    collection(db, "tournaments", params.id, "results")
+  );
+  var paths = {};
+  querySnapshot.forEach((doc) => {
+    paths[doc.id] = doc.data()[doc.id];
+  });
   return {
     props: {
-      result: sampleData,
+      result: paths,
     },
   };
 }

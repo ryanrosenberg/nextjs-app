@@ -1,13 +1,13 @@
 import Season from "./season-page";
+import { db } from "../../../lib/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 export async function generateStaticParams() {
-  // // Call an external API endpoint to get posts
-  const res = await fetch("https://cqs-backend.herokuapp.com/seasons");
-  const posts = await res.json();
-
-  const paths = posts.map((post) => ({
-    id: post.slug,
-  }));
+  const querySnapshot = await getDocs(collection(db, "seasons"));
+  var paths = [];
+  querySnapshot.forEach((doc) => {
+    paths.push({ id: doc.id });
+  });
 
   return paths;
 }
@@ -19,19 +19,18 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/seasons/" + params.id
-  ).then((response) => response.json());
+  const docRef = doc(db, "seasons", params.id);
+  const docSnap = await getDoc(docRef);
+
   return {
     props: {
-      result: sampleData,
+      result: docSnap.data(),
     },
   };
 }
 
 export default async function Page({ params }) {
-  // Fetch data directly in a Server Component
   const pageData = await getData(params);
-  // Forward fetched data to your Client Component
+
   return <Season result={pageData} />;
 }

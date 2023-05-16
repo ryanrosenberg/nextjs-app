@@ -1,16 +1,18 @@
 // Import your Client Component
 import Circuit from "./circuit-page";
+import { db } from "../../../lib/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 export async function generateStaticParams() {
-  const res = await fetch("https://cqs-backend.herokuapp.com/circuits");
-  const posts = await res.json();
+  const querySnapshot = await getDocs(collection(db, "circuits"));
+  var paths = [];
+  querySnapshot.forEach((doc) => {
+    paths.push({ id: doc.id });
+  });
 
-  const paths = posts.map((post) => ({
-    id: post.slug,
-  }));
-  
   return paths;
 }
+
 
 export async function generateMetadata({ params }) {
   const pageData = await getData(params);
@@ -19,14 +21,13 @@ export async function generateMetadata({ params }) {
   };
 }
 
-async function getData(params) {
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/circuits/" + params.id
-  ).then((response) => response.json());
+export async function getData(params) {
+  const docRef = doc(db, "circuits", params.id);
+  const docSnap = await getDoc(docRef);
 
   return {
     props: {
-      result: sampleData,
+      result: docSnap.data(),
     },
   };
 }
