@@ -1,6 +1,4 @@
 import parse from "html-react-parser";
-import Link from "next/link";
-
 export default function RawHtml({ html }) {
     try {
         const new_string = parse(html, {

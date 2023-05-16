@@ -6,7 +6,6 @@ import StandingsTable from "../../../components/standings_table";
 import { useMemo } from "react";
 import _ from "lodash";
 import styles from "./tournaments.module.css";
-import { slug } from "../../../lib/utils";
 import NestedSideNav from "../../../components/nested_side_nav";
 
 export default function Tournament({ result }) {

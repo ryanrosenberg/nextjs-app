@@ -3,7 +3,6 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import NormalTable from "../../../../components/normal_table";
 import { useMemo } from "react";
-import Link from "next/link";
 import _ from "lodash";
 import styles from "../tournaments.module.css";
 import { slug } from "../../../../lib/utils";
@@ -116,9 +115,9 @@ export default function Tournament({ result }) {
                         }
                       >
                         {player_lookup[player] ? (
-                          <Link href={`../../players/${player_lookup[player]}`}>
+                          <a href={`../../players/${player_lookup[player]}`}>
                             {player}
-                          </Link>
+                          </a>
                         ) : (
                           <p style={{ display: "inline" }}>{player}</p>
                         )}
