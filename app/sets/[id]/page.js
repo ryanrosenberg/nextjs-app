@@ -1,6 +1,8 @@
 import Set from "./set-page";
+import { db } from "../../../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 
 export async function generateStaticParams() {
@@ -22,13 +24,14 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/sets/" + params.id
-  ).then((response) => response.json());
-  
+  const docRef = doc(db, "set_stats", params.id);
+  const docSnap = await getDoc(docRef);
+
+  console.log(1);
+
   return {
     props: {
-      result: sampleData,
+      result: docSnap.data(),
     },
   };
 }
