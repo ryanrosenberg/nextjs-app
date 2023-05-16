@@ -68,6 +68,7 @@ export default function Tournament({ result }) {
   player_names.forEach((k, i) => {
     player_lookup[k] = player_slugs[i];
   });
+  
   return (
     <>
       <div className="main-container">
@@ -115,7 +116,7 @@ export default function Tournament({ result }) {
                         }
                       >
                         {player_lookup[player] ? (
-                          <Link href={`../players/${player_lookup[player]}`}>
+                          <Link href={`../../players/${player_lookup[player]}`}>
                             {player}
                           </Link>
                         ) : (

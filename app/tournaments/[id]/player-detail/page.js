@@ -38,11 +38,21 @@ export async function getData(params) {
   );
   const teamSnap = await getDoc(teamRef);
 
+  const playerRef = doc(
+    db,
+    "tournaments",
+    params.id,
+    "results",
+    "Players"
+  );
+  const playerSnap = await getDoc(playerRef);
+
   return {
     props: {
       result: {
         "Summary": summSnap.data()['Summary'],
         "Player Detail": teamSnap.data()['Player Detail'],
+        "Players": playerSnap.data()['Players'],
       },
     },
   };
