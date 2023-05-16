@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useMemo } from "react";
 import _ from "lodash";
@@ -173,15 +173,19 @@ export default function Player({ result }) {
           <NestedSideNav />
         </div>
         <div className="main-content">
-          <h1 className="page-title">{data.Years[0].Player}</h1>
+          <h1 className="page-title">{data.Tournaments[0].Player}</h1>
           <p className="page-subtitle">{subtitle}</p>
-          <hr />
-          <h2 id="years">Years</h2>
-          <GroupedTable
-            columns={yearsColumns}
-            data={data.Years}
-            grouping_column="School"
-          />
+          {data.Years.length > 0 && (
+            <div>
+              <hr />
+              <h2 id="years">Years</h2>
+              <GroupedTable
+                columns={yearsColumns}
+                data={data.Years}
+                grouping_column="School"
+              />
+            </div>
+          )}
           <hr />
           <h2 id="tournaments">Tournaments</h2>
           <GroupedTable
@@ -205,4 +209,3 @@ export default function Player({ result }) {
     </>
   );
 }
-

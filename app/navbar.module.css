@@ -126,5 +126,6 @@
     padding: .5em;
     background-color: var(--light-background);
     border-bottom: 2px solid var(--line-color);
+    border-radius: 0px;
   }
 }
