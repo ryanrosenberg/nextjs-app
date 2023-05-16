@@ -118,7 +118,7 @@
   }
 
   .mobileNavExpanded li:has(input) {
-    width: 90%;
+    width: 80%;
     max-width: 100%;
   }
 
