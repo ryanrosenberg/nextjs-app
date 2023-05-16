@@ -8,7 +8,6 @@
   "dependencies": {
     "@babel/runtime": "^7.20.13",
     "@next/bundle-analyzer": "^13.2.4",
-    "@popperjs/core": "^2.11.6",
     "classnames": "^2.3.2",
     "core-js": "^3.29.1",
     "cross-env": "^7.0.3",
@@ -16,7 +15,6 @@
     "fs": "^0.0.1-security",
     "fuse.js": "^6.6.2",
     "html-react-parser": "^3.0.9",
-    "jquery": "^3.6.3",
     "leaflet": "^1.9.3",
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "leaflet-geosearch": "^3.7.0",
@@ -28,13 +26,6 @@
     "react-icons": "^4.8.0",
     "react-leaflet": "^4.2.1",
     "react-paginate": "^8.1.4",
-    "react-scrollspy": "^3.4.3",
-    "react-search-box": "^3.0.0",
-    "react-select": "^5.7.2",
-    "sequelize": "^6.31.1",
-    "sequelize-auto": "^0.8.8"
-  },
-  "devDependencies": {
-    "sqlite3": "^5.1.6"
+    "react-scrollspy": "^3.4.3"
   }
 }
