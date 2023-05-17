@@ -1,5 +1,6 @@
 import styles from "../components/scoresheet.module.css";
 import _ from "lodash";
+import RawHtml from "./rawHtml";
 
 export default function Scoresheet({ qbj, packet }) {
   const team1_name = qbj.match_teams[0].team.name;
@@ -64,7 +65,7 @@ export default function Scoresheet({ qbj, packet }) {
               </tr>
             </thead>
             <tbody>
-              {qbj.match_questions.map((question) => {
+              {qbj.match_questions.map((question, i) => {
                 const buzzes = Array.from(
                   " ".repeat(team1_players.length + 4)
                 ).concat(
@@ -160,7 +161,7 @@ export default function Scoresheet({ qbj, packet }) {
                       ) {
                         return <td className={styles.teamTotal}>{buzz}</td>;
                       } else if (index == team1_players.length + 4) {
-                        return <td className={styles.tuNumber}>{buzz}</td>;
+                        return <td className={styles.tuNumberCell}><p className={styles.tuNumber}>{buzz}</p><RawHtml html={packet.tossups[i]['answer'].split(' [')[0].split(' (')[0]} /></td>;
                       } else {
                         return <td>{buzz}</td>;
                       }

@@ -1,6 +1,6 @@
 .scoresheet {
-    width: 80%;
-    font-family: 'Source Serif Pro';
+    width: 100%;
+    font-family: var(--table-header-font);
 }
 
 .playerNameTable {
@@ -29,11 +29,11 @@
     font-size: 1.1em;
 }
 
-.tuNumber {
-    border-right: 1px solid black !important;
-    border-left: 1px solid black !important;
-    font-weight: 600;
+.tuNumberCell {
     text-align: center;
-    font-size: 1.1em;
+}
+
+.tuNumber {
+    font-weight: 600;
     color: black;
 }
