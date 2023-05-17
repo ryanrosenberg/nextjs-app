@@ -19,7 +19,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const pageData = await getData(params);
   return {
-    title: `${pageData.props.result.Years[0].Player} | College Quizbowl Stats`,
+    title: `${pageData.props.result.Tournaments[0].Player} | College Quizbowl Stats`,
   };
 }
 

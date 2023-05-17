@@ -7,15 +7,14 @@ export default function About() {
         <h2>To-do</h2>
         <ul>
           <h4>Pre-release</h4>
-          <li>rebuild index</li>
-          <li>mobile site menu</li>
+          <li>clean up anchor links</li>
           <li>put everything on Firebase</li>
+          <li>rebuild index</li>
           <li>build site</li>
-          <li>weird tournament anchor thing</li>
-          <li>add Nats scoresheets</li>
           <h4>Post-release</h4>
           <li>Circuit records</li>
           <li>player best games?</li>
+          <li>lots of data cleaning I'm sure</li>
         </ul>
         <p>
           Welcome to College Quizbowl Stats. This site has two intended
