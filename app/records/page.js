@@ -1,13 +1,17 @@
 import Records from "./records-page";
+import { db } from "../../lib/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
 export async function getData() {
-  const records = await fetch("https://cqs-backend.herokuapp.com/records").then(
-    (response) => response.json()
-  );
-
+  const querySnapshot = await getDocs(collection(db, "records"));
+  var paths = [];
+  querySnapshot.forEach((doc) => {
+    paths[Number(doc.id.replace("record", ""))] = doc.data()["records"];
+  });
+  console.log(paths[2]);
   return {
     props: {
-      result: records,
+      result: paths,
     },
   };
 }
@@ -15,7 +19,6 @@ export async function getData() {
 export const metadata = {
   title: "Records | College Quizbowl Stats",
 };
-
 
 export default async function Page() {
   // Fetch data directly in a Server Component
