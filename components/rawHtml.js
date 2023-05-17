@@ -7,7 +7,7 @@ export default function RawHtml({ html }) {
             replace: (domNode) => {
               if (domNode.attribs && domNode.attribs.href) {
                 return (
-                  <Link href={domNode.attribs.href}>{domNode.children[0].data}</Link>
+                  <a href={domNode.attribs.href}>{domNode.children[0].data}</a>
                 );
               }
             },

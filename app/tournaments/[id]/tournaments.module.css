@@ -24,6 +24,17 @@
     border-bottom: .15em solid var(--line-color);
 }
 
+.linkRow {
+    list-style-type: none;
+    display: flex;
+    column-gap: 2em;
+    padding: 0px;
+    border-bottom: 2px solid var(--line-color);
+}
+.linkRow a {
+    font-size: 1.5em;
+}
+
 @media (max-width: 1000px) {
     .teamDetail {
         width: auto;
