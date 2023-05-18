@@ -6,7 +6,7 @@ import Fuse from "fuse.js";
 import { slug } from "../lib/utils";
 
 export default function SearchBar({ value }) {
-  var json = require("../test-index.json");
+  var json = require("../refresh-index.json");
 
   const options = {
     keys: ["name"],

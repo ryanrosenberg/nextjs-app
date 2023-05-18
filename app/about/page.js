@@ -7,10 +7,8 @@ export default function About() {
         <h2>To-do</h2>
         <ul>
           <h4>Pre-release</h4>
-          <li>clean up anchor links</li>
           <li>put everything on Firebase</li>
-          <li>rebuild index</li>
-          <li>build site</li>
+          <li>get feedback</li>
           <h4>Post-release</h4>
           <li>Circuit records</li>
           <li>player best games?</li>
