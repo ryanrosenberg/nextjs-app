@@ -103,6 +103,10 @@ export default function Player({ result }) {
       border: "right",
     },
     {
+      Header: "GP",
+      accessor: "GP",
+    },
+    {
       Header: "W",
       accessor: "W",
     },
