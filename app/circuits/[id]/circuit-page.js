@@ -287,6 +287,7 @@ export default function Circuit({ result }) {
               <NormalTable
                 columns={highestWinPct}
                 data={data.Records["Highest Winning %"]}
+                footer={"Min. 10 tournaments played"}
               />
             </div>
             <div className={styles.recordsCol}>
@@ -319,6 +320,7 @@ export default function Circuit({ result }) {
               <NormalTable
                 columns={playerPctColumns}
                 data={data.Records["Highest Player Winning %"]}
+                footer={"Min. 50 games played"}
               />
             </div>
             <div className={styles.recordsCol}>
