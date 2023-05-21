@@ -3,9 +3,11 @@
 import { useMemo } from "react";
 import _ from "lodash";
 import GroupedPaginatedTable from "../../../components/grouped_paginated_table";
+import NormalTable from "../../../components/normal_table";
 import PaginatedTable from "../../../components/paginated_table";
 import NestedSideNav from "../../../components/nested_side_nav";
 import dynamic from "next/dynamic";
+import styles from "./circuits.module.css";
 
 export default function Circuit({ result }) {
   const data = result.props.result;
@@ -119,6 +121,111 @@ export default function Circuit({ result }) {
     },
   ]);
 
+  const mostWinsColumns = useMemo(() => [
+    {
+      Header: "School",
+      accessor: "School",
+      align: "left",
+      border: "right",
+    },
+    {
+      Header: "Ts",
+      accessor: "Tournaments",
+    },
+    {
+      Header: "Wins",
+      accessor: "Wins",
+    },
+  ]);
+
+  const highestWinPct = useMemo(() => [
+    {
+      Header: "Team",
+      accessor: "Team",
+      align: "left",
+      border: "right",
+    },
+    {
+      Header: "Ts",
+      accessor: "Tournaments",
+    },
+    {
+      Header: "Win%",
+      accessor: "Win%",
+    },
+  ]);
+
+  const playerPtsColumns = useMemo(() => [
+    {
+      Header: "Player",
+      accessor: "Player",
+      align: "left",
+      border: "right",
+    },
+    {
+      Header: "Schools",
+      accessor: "Schools",
+      align: "left",
+      border: "right",
+    },
+    {
+      Header: "Ts",
+      accessor: "Ts",
+    },
+    {
+      Header: "GP",
+      accessor: "GP",
+      border: "right",
+    },
+    {
+      Header: "Pts",
+      accessor: "Pts",
+    },
+  ]);
+
+  const playerPctColumns = useMemo(() => [
+    {
+      Header: "Player",
+      accessor: "Player",
+      align: "left",
+      border: "right",
+    },
+    {
+      Header: "Schools",
+      accessor: "Schools",
+      align: "left",
+      border: "right",
+    },
+    {
+      Header: "GP",
+      accessor: "GP",
+      border: "right",
+    },
+    {
+      Header: "Win%",
+      accessor: "Win%",
+    },
+  ]);
+
+  const playerTsColumns = useMemo(() => [
+    {
+      Header: "Player",
+      accessor: "Player",
+      align: "left",
+      border: "right",
+    },
+    {
+      Header: "Schools",
+      accessor: "Schools",
+      align: "left",
+      border: "right",
+    },
+    {
+      Header: "Ts",
+      accessor: "Ts",
+    }
+  ]);
+
   const MapWithNoSSR = dynamic(() => import("./leaflet-map"), {
     ssr: false,
   });
@@ -157,6 +264,71 @@ export default function Circuit({ result }) {
             grouping_column="Year"
             itemsPerPage={10}
           />
+          <hr />
+          <h2 id="records">Records</h2>
+          <h3
+            style={{
+              textDecoration: "underline",
+              textUnderlineOffset: ".25em",
+            }}
+          >
+            School Records
+          </h3>
+          <div className={styles.recordsRow}>
+            <div className={styles.recordsCol}>
+              <h4>Most Wins</h4>
+              <NormalTable
+                columns={mostWinsColumns}
+                data={data.Records["Most Wins"]}
+              />
+            </div>
+            <div className={styles.recordsCol}>
+              <h4>Highest Winning %</h4>
+              <NormalTable
+                columns={highestWinPct}
+                data={data.Records["Highest Winning %"]}
+              />
+            </div>
+            <div className={styles.recordsCol}>
+              <h4>Most Tournament Wins</h4>
+              <NormalTable
+                columns={mostWinsColumns}
+                data={data.Records["Most Tournament Wins"]}
+              />
+            </div>
+          </div>
+
+          <h3
+            style={{
+              textDecoration: "underline",
+              textUnderlineOffset: ".25em",
+            }}
+          >
+            Player Records
+          </h3>
+          <div className={styles.recordsRow}>
+            <div className={styles.recordsCol}>
+              <h4>Most Wins</h4>
+              <NormalTable
+                columns={playerPtsColumns}
+                data={data.Records["Most Player Pts"]}
+              />
+            </div>
+            <div className={styles.recordsCol}>
+              <h4>Highest Winning %</h4>
+              <NormalTable
+                columns={playerPctColumns}
+                data={data.Records["Highest Player Winning %"]}
+              />
+            </div>
+            <div className={styles.recordsCol}>
+              <h4>Most Tournaments Played</h4>
+              <NormalTable
+                columns={playerTsColumns}
+                data={data.Records["Most Tournaments Played"]}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </>

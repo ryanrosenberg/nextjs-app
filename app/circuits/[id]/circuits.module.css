@@ -1,0 +1,10 @@
+.recordsCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.recordsRow {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2em;
+}
