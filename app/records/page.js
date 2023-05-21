@@ -8,7 +8,6 @@ export async function getData() {
   querySnapshot.forEach((doc) => {
     paths[Number(doc.id.replace("record", ""))] = doc.data()["records"];
   });
-  console.log(paths[2]);
   return {
     props: {
       result: paths,
