@@ -309,14 +309,14 @@ export default function Circuit({ result }) {
           </h3>
           <div className={styles.recordsRow}>
             <div className={styles.recordsCol}>
-              <h4>Most Wins</h4>
+              <h4>Most Points</h4>
               <NormalTable
                 columns={playerPtsColumns}
                 data={data.Records["Most Player Pts"]}
               />
             </div>
             <div className={styles.recordsCol}>
-              <h4>Highest Winning %</h4>
+              <h4>Highest Player Winning %</h4>
               <NormalTable
                 columns={playerPctColumns}
                 data={data.Records["Highest Player Winning %"]}
