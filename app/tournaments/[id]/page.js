@@ -3,7 +3,7 @@ import { db } from "../../../lib/firestore";
 import { collection, getDocs } from "firebase/firestore";
 
 export async function generateStaticParams() {
-  const querySnapshot = await getDocs(collection(db, "tournaments"));
+  const querySnapshot = await getDocs(collection(db, "dev_tournaments"));
   var paths = [];
   querySnapshot.forEach((doc) => {
     paths.push({ id: doc.id });
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
 
 export async function getData(params) {
   const querySnapshot = await getDocs(
-    collection(db, "tournaments", params.id, "results")
+    collection(db, "dev_tournaments", params.id, "results")
   );
   var paths = {};
   querySnapshot.forEach((doc) => {

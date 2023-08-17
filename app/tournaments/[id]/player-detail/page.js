@@ -3,7 +3,7 @@ import { db } from "../../../../lib/firestore";
 import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 
 export async function generateStaticParams() {
-  const querySnapshot = await getDocs(collection(db, "tournaments"));
+  const querySnapshot = await getDocs(collection(db, "dev_tournaments"));
   var paths = [];
   querySnapshot.forEach((doc) => {
     paths.push({ id: doc.id });

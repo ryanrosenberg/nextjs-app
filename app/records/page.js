@@ -3,7 +3,7 @@ import { db } from "../../lib/firestore";
 import { collection, getDocs } from "firebase/firestore";
 
 export async function getData() {
-  const querySnapshot = await getDocs(collection(db, "records"));
+  const querySnapshot = await getDocs(collection(db, "dev_records"));
   var paths = [];
   querySnapshot.forEach((doc) => {
     paths[Number(doc.id.replace("record", ""))] = doc.data()["records"];
