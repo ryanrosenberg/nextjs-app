@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
 export async function getData(params) {
   const summRef = doc(
     db,
-    "tournaments",
+    "dev_tournaments",
     params.id,
     "results",
     "Summary"
@@ -31,7 +31,7 @@ export async function getData(params) {
   const summSnap = await getDoc(summRef);
   const teamRef = doc(
     db,
-    "tournaments",
+    "dev_tournaments",
     params.id,
     "results",
     "Team Detail Teams"
@@ -40,7 +40,7 @@ export async function getData(params) {
 
   const playerRef = doc(
     db,
-    "tournaments",
+    "dev_tournaments",
     params.id,
     "results",
     "Team Detail Players"
