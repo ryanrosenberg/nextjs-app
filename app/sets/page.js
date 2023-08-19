@@ -1,4 +1,6 @@
 import SetsIndex from "./sets-index";
+import { db } from "../../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export const dynamicParams = false;
 

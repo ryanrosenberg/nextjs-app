@@ -1,4 +1,6 @@
 import Home from "./home-page";
+import { db } from "../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export const metadata = {
   title: "Home | College Quizbowl Stats",

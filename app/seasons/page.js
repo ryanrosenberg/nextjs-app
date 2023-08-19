@@ -1,4 +1,6 @@
 import SeasonsIndex from "./seasons-index";
+import { db } from "../../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export async function getData() {
   const docRef = doc(db, "adhoc", "champions");

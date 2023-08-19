@@ -1,4 +1,6 @@
 import Game from "./game-page";
+import { db } from "../../../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export async function generateStaticParams() {
     return [];
