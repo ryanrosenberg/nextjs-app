@@ -28,7 +28,7 @@ export default function About() {
         </ul>
         <h3 className={styles.header}>Status</h3>
         <p className={styles.paragraph}>
-          Currently, the site includes all closed collegiate tournaments in the seasons from 2011-2012 to 2022-2023 that have posted stats, with the exception of those that only posted stats on Neg5 or that posted stats without a Scoreboard page (and 2023 SCT/ICT, which will be added over the summer). Open tournaments that were primarily composed of closed collegiate teams, as well as Chicago Open, were also included. If you know of a tournament that isn't included here that you believe should be, contact me at <a href="mailto:ryanr345@gmail.com">ryanr345@gmail.com</a>.
+          Currently, the site includes all closed collegiate tournaments in the seasons from 2011-2012 to 2022-2023 that have posted stats, with the exception of those that only posted stats on Neg5 or that posted stats without a Scoreboard page. Open tournaments that were primarily composed of closed collegiate teams, as well as Chicago Open, were also included. If you know of a tournament that isn't included here that you believe should be, contact me at <a href="mailto:ryanr345@gmail.com">ryanr345@gmail.com</a>.
         </p>
         <h3 className={styles.header}>Data corrections and name changes</h3>
         <p className={styles.paragraph}>
