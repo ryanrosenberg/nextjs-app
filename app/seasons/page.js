@@ -1,12 +1,14 @@
 import SeasonsIndex from "./seasons-index";
+import { db } from "../../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export async function getData() {
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/seasons/champions"
-  ).then((response) => response.json());
+  const docRef = doc(db, "dev_adhoc", "champions");
+  const docSnap = await getDoc(docRef);
+
   return {
     props: {
-      result: sampleData,
+      result: docSnap.data().Champions,
     },
   };
 }

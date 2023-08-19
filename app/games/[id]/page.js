@@ -1,16 +1,22 @@
 import Game from "./game-page";
+import { db } from "../../../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export async function generateStaticParams() {
     return [];
   }
   
   export async function getData( params ) {
-    const sampleData = await fetch(
-      "https://cqs-backend.herokuapp.com/games/" + params.id
-    ).then((response) => response.json());
+    console.log(params.id)
+    const docRef = doc(db, "dev_games", params.id);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
+    // const sampleData = await fetch(
+    //   "https://cqs-backend.herokuapp.com/games/" + params.id
+    // ).then((response) => response.json());
     return {
       props: {
-        result: sampleData,
+        result: docSnap.data(),
       },
     };
   }

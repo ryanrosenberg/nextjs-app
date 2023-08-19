@@ -1,20 +1,24 @@
 import Home from "./home-page";
-
+import { db } from "../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export const metadata = {
   title: "Home | College Quizbowl Stats",
 };
 
 export async function getData() {
-  const tty = await fetch(
-    "https://cqs-backend.herokuapp.com/teams/thisyear"
-  ).then((response) => response.json());
-  const rt = await fetch(
-    "https://cqs-backend.herokuapp.com/tournaments/recent"
-  ).then((response) => response.json());
+  const rtRef = doc(db, "dev_adhoc", "recent_tournaments");
+  const rtSnap = await getDoc(rtRef);
+
+  const ttyRef = doc(db, "dev_adhoc", "teams_this_year");
+  const ttySnap = await getDoc(ttyRef);
+
   return {
     props: {
-      result: { teamsThisYear: tty, recentTournaments: rt },
+      result: {
+        teamsThisYear: ttySnap.data().Teams,
+        recentTournaments: rtSnap.data().Tournaments,
+      },
     },
   };
 }

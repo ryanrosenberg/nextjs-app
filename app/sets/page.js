@@ -1,14 +1,16 @@
 import SetsIndex from "./sets-index";
+import { db } from "../../lib/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 export const dynamicParams = false;
 
 export async function getData() {
-  const editors = await fetch(
-    "https://cqs-backend.herokuapp.com/sets/editors"
-  ).then((response) => response.json());
+  const docRef = doc(db, "dev_adhoc", "editors");
+  const docSnap = await getDoc(docRef);
+
   return {
     props: {
-      result: editors
+      result: docSnap.data().Editors,
     },
   };
 }

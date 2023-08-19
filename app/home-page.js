@@ -6,6 +6,7 @@ import styles from "../components/home_page.module.css";
 
 export default function Home({ result }) {
   const data = result.props.result;
+  
   return (
     <>
       <div className={styles.homepageFlex}>

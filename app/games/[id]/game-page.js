@@ -15,6 +15,7 @@ export default function Game({ result }) {
   const finals2 = require("../../../sample2.json");
   const packet1 = require("../../../packet1.json");
   const packet2 = require("../../../packet2.json");
+  
   const teamColumns = useMemo(
     () => [
       {

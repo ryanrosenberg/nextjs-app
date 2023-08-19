@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const docRef = doc(db, "set_stats", params.id);
+  const docRef = doc(db, "dev_set_stats", params.id);
   const docSnap = await getDoc(docRef);
 
   return {

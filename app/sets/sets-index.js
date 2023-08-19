@@ -4,6 +4,7 @@ import EditorTable from "../../components/editor_table";
 
 export default function SetsIndex({ result }) {
   const data = result.props.result;
+  console.log(data);
   return (
     <>
       <div>

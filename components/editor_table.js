@@ -6,6 +6,7 @@ import _ from "lodash";
 import classnames from "classnames";
 
 const EditorTable = ({ data }) => {
+  console.log(data);
   const columns = useMemo(() => [
     {
       Header: "Set",
