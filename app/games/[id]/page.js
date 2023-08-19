@@ -5,12 +5,12 @@ export async function generateStaticParams() {
   }
   
   export async function getData( params ) {
-    const sampleData = await fetch(
-      "https://cqs-backend.herokuapp.com/games/" + params.id
-    ).then((response) => response.json());
+    const docRef = doc(db, "games", params.id);
+    const docSnap = await getDoc(docRef);
+    
     return {
       props: {
-        result: sampleData,
+        result: docSnap.data(),
       },
     };
   }

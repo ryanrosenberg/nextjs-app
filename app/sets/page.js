@@ -3,12 +3,12 @@ import SetsIndex from "./sets-index";
 export const dynamicParams = false;
 
 export async function getData() {
-  const editors = await fetch(
-    "https://cqs-backend.herokuapp.com/sets/editors"
-  ).then((response) => response.json());
+  const docRef = doc(db, "adhoc", "editors");
+  const docSnap = await getDoc(docRef);
+
   return {
     props: {
-      result: editors
+      result: docSnap.data().Editors,
     },
   };
 }

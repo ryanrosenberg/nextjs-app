@@ -1,12 +1,12 @@
 import SeasonsIndex from "./seasons-index";
 
 export async function getData() {
-  const sampleData = await fetch(
-    "https://cqs-backend.herokuapp.com/seasons/champions"
-  ).then((response) => response.json());
+  const docRef = doc(db, "adhoc", "champions");
+  const docSnap = await getDoc(docRef);
+
   return {
     props: {
-      result: sampleData,
+      result: docSnap.data().Champions,
     },
   };
 }
