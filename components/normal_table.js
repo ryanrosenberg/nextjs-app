@@ -4,7 +4,13 @@ import classnames from "classnames";
 import RawHtml from "./rawHtml";
 import { useSortableData } from "../hooks/useSortableData.js";
 
-const NormalTable = ({ columns, data, className = null, footer = null, full_width = null }) => {
+const NormalTable = ({
+  columns,
+  data,
+  className = null,
+  footer = null,
+  full_width = null,
+}) => {
   const { items, requestSort, sortConfig } = useSortableData(data);
   const getClassNamesFor = (name) => {
     if (!sortConfig) {
@@ -24,7 +30,7 @@ const NormalTable = ({ columns, data, className = null, footer = null, full_widt
       >
         <thead className={tables.header}>
           <tr className={tables.headerRow}>
-            {columns.map((column) => (
+            {columns.map((column, i) => (
               <th
                 className={classnames(
                   tables.tableHeader,
@@ -35,7 +41,8 @@ const NormalTable = ({ columns, data, className = null, footer = null, full_widt
                     ? tables.borderRight
                     : tables.noBorder
                 )}
-                title = {column.Tooltip}
+                title={column.Tooltip}
+                key={i}
               >
                 <button
                   className={classnames(
@@ -51,13 +58,14 @@ const NormalTable = ({ columns, data, className = null, footer = null, full_widt
           </tr>
         </thead>
         <tbody>
-          {items.map((row) => {
+          {items.map((row, i) => {
             return (
-              <tr>
-                {columns.map((column) => {
+              <tr key={i}>
+                {columns.map((column, i) => {
                   var rowHTML =
                     column.align == "left" ? (
                       <td
+                        key={i}
                         className={classnames(
                           tables.cell,
                           column.border == "right"
@@ -69,6 +77,7 @@ const NormalTable = ({ columns, data, className = null, footer = null, full_widt
                       </td>
                     ) : (
                       <td
+                        key={i}
                         className={classnames(
                           column.align == "center"
                             ? tables.cellCenter

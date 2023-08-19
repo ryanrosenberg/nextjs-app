@@ -51,8 +51,9 @@ const PaginatedTable = ({
       >
         <thead className={tables.header}>
           <tr className={tables.headerRow}>
-            {columns.map((column) => (
+            {columns.map((column, i) => (
               <th
+                key={i}
                 className={classnames(
                   tables.tableHeader,
                   column.align == "left"
@@ -62,7 +63,7 @@ const PaginatedTable = ({
                     ? tables.borderRight
                     : tables.noBorder
                 )}
-                title = {column.Tooltip}
+                title={column.Tooltip}
               >
                 <button
                   className={classnames(
@@ -77,16 +78,17 @@ const PaginatedTable = ({
             ))}
           </tr>
         </thead>
-        {Object.keys(rowGroups).map((group) => {
+        {Object.keys(rowGroups).map((group, i) => {
           return (
-            <tbody>
+            <tbody key={i}>
               {rowGroups[group].map((row, i) => {
                 return (
-                  <tr>
-                    {columns.map((column) => {
+                  <tr key={i}>
+                    {columns.map((column, i) => {
                       var rowHTML =
                         column.align == "left" ? (
                           <td
+                            key={i}
                             className={classnames(
                               tables.cell,
                               column.border == "right"
@@ -98,6 +100,7 @@ const PaginatedTable = ({
                           </td>
                         ) : (
                           <td
+                            key={i}
                             className={classnames(
                               tables.cellRight,
                               column.border == "right"
