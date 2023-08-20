@@ -40,6 +40,9 @@ export default function Home() {
         <a href="../circuits/southeast">Southeast</a>{" "}
         <i>Florida, Georgia Tech, Vanderbilt…</i>
         <br />
+        <a href="../circuits/southern-california">Southern California</a>{" "}
+        <i>UC San Diego, UCLA, Claremont Colleges…</i>
+        <br />
         <a href="../circuits/uk">UK</a> <i>Oxford, Cambridge, Imperial…</i>
         <br />
         <a href="../circuits/upper-mid-atlantic">Upper Mid-Atlantic</a>{" "}
