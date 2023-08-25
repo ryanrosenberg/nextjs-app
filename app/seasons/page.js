@@ -1,14 +1,23 @@
 import SeasonsIndex from "./seasons-index";
-import { db } from "../../lib/firestore";
-import { doc, getDoc } from "firebase/firestore";
+// import { db } from "../../lib/firestore";
+// import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../lib/database";
+import { YearChampions } from "../../lib/kysely";
 
 export async function getData() {
-  const docRef = doc(db, "adhoc", "champions");
-  const docSnap = await getDoc(docRef);
+  // const docRef = doc(db, "adhoc", "champions");
+  // const docSnap = await getDoc(docRef);
 
+  // return {
+  //   props: {
+  //     result: docSnap.data().Champions,
+  //   },
+  // };
+  const data = await db.selectFrom("champions").selectAll().execute();
+  console.log(data);
   return {
     props: {
-      result: docSnap.data().Champions,
+      result: data,
     },
   };
 }
