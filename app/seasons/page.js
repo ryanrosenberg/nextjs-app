@@ -1,7 +1,7 @@
 import SeasonsIndex from "./seasons-index";
 // import { db } from "../../lib/firestore";
 // import { doc, getDoc } from "firebase/firestore";
-import { sql } from "@vercel/postgres";
+import { db } from "@vercel/postgres";
 
 export async function getData() {
   // const client = await db.connect();
@@ -13,7 +13,8 @@ export async function getData() {
   //     result: docSnap.data().Champions,
   //   },
   // };
-  const data = await sql`
+  const client = await db.connect();
+  const data = await client.sql`
   SELECT * from ((SELECT distinct champions.year from champions
     WHERE champions.year not in ('08-09', '09-10', '10-11')) champions
     LEFT JOIN (select year, school as "ACF Nationals" from champions where tournament = 'ACF Nationals') nats
