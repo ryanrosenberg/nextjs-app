@@ -5,6 +5,7 @@ import { useMemo } from "react";
 
 export default function Home({ result }) {
   const data = result.props.result;
+  console.log(data);
   const cols = useMemo(() => [
     {
       Header: "Season",
