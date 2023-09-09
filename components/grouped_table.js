@@ -107,6 +107,7 @@ export default function GroupedTable({
                                 ? tables.cellRight
                                 : tables.cellNumber
                             )}
+                            key = {i}
                           >
                             <RawHtml html={row[column.accessor]} />
                           </td>
