@@ -390,3 +390,94 @@ tbody:last-child {
     font-size: 12px;
   }
 }
+
+.row-hover:hover {
+  background-color: #e3e3e3;
+}
+
+@media (min-width: 768px) {
+
+  /* making the buzzpoint data a scrollable box */
+  .buzzes {
+    overflow-y: auto;
+    max-height: 95vh;
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.buzzpoint-word {
+  background-color: #DEEDFF;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 1px 5px;
+}
+
+rt {
+  font-size: 0.9rem;
+  font-family: 'Times New Roman', Times, serif;
+  color: #424242;
+}
+
+rt .get {
+  color: #0DA51C;
+}
+
+rt .neg {
+  color: #E20808;
+}
+
+rt .value {
+  padding: 0px 5px;
+}
+
+ruby {
+  display: inline-flex;
+  flex-direction: column-reverse;
+  vertical-align: bottom;
+  align-items: center;
+}
+
+rt {
+  display: inline;
+  line-height: 1.5;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.highlighted-word {
+  box-shadow: 5px 5px 10px #b3b3b3;
+  transition: all 200ms ease-out;
+  border-radius: 3px;
+}
+
+.pronunciation-guide {
+  color: rgb(119, 119, 119)
+}
+
+.compact {
+  font-size: .8rem;
+  line-height: 1.1rem;
+}
+
+.chart-hover-word {
+  background-color: lightgray;
+}
+
+.average-buzz-line {
+  border-left: dashed;
+  border-color: palevioletred;
+  padding-left: 6px;
+}
+
+rt {
+  z-index: 1000;
+}

@@ -1,0 +1,5 @@
+.tournamentFlex {
+    display: flex;
+    column-gap: 55px;
+    justify-content: space-evenly;
+}

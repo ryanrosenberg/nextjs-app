@@ -1,4 +1,5 @@
-import { React, useState, useMemo } from "react";
+"use client";
+import { useState, useMemo } from "react";
 
 export const useSortableData = (items, config = null) => {
   const [sortConfig, setSortConfig] = useState(config);

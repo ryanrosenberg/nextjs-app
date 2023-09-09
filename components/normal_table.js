@@ -1,5 +1,9 @@
+"use client";
+
+
 import tables from "./tables.module.css";
-import _ from "lodash";
+import Link from "next/link";
+import * as _ from 'radash';
 import classnames from "classnames";
 import RawHtml from "./rawHtml";
 import { useSortableData } from "../hooks/useSortableData.js";
@@ -18,6 +22,25 @@ const NormalTable = ({
     }
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
+
+  
+  const renderCell = (item, column) => {
+    let cellValue = item[column.accessor];
+
+    if (column.render)
+      return column.render(item);  
+
+    if (column.format)
+      cellValue = column.format(cellValue);
+
+    if (column.html)
+      cellValue = <span dangerouslySetInnerHTML={{ __html: cellValue }}></span>;
+    
+    if (column.linkTemplate)
+      return <Link href={_.template(column.linkTemplate, item)} className="underline">{cellValue}</Link>;
+
+    return cellValue;
+  }
   return (
     <div>
       <table
@@ -73,7 +96,7 @@ const NormalTable = ({
                             : tables.noBorder
                         )}
                       >
-                        <RawHtml html={row[column.accessor]} />
+                        <RawHtml html={renderCell(row, column)} />
                       </td>
                     ) : (
                       <td
@@ -90,7 +113,7 @@ const NormalTable = ({
                             : tables.cellNumber
                         )}
                       >
-                        <RawHtml html={row[column.accessor]} />
+                        <RawHtml html={renderCell(row, column)} />
                       </td>
                     );
                   return rowHTML;

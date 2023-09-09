@@ -1,0 +1,8 @@
+.tossupDisplayFlex {
+    display: flex;
+}
+
+.tossupInfoFlex {
+    display: flex;
+    flex-direction: column;
+}
