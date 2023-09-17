@@ -1,8 +1,8 @@
 import tables from "./tables.module.css";
 import _ from "lodash";
 import classnames from "classnames";
-import RawHtml from "../rawHtml";
-import { useSortableData } from "../../hooks/useSortableData";
+import RawHtml from "./rawHtml";
+import { useSortableData } from "../hooks/useSortableData";
 import tournaments from "./tournaments.module.css";
 
 export default function StandingsTable({
