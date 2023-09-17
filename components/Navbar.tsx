@@ -1,9 +1,10 @@
 'use client';
 
-import { Tournament } from "@/types";
+import { Tournament } from "../types";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from 'next/navigation'
+import styles from "./navbar.module.css"
 
 type NavbarProps = {
     tournament?: Tournament
@@ -22,15 +23,15 @@ export default function Navbar({ tournament }: NavbarProps) {
         { label: 'Players', url: `/tournament/${tournament.slug}/player` }
     ];
     
-    return <nav className="bg-gray-500 sticky">
+    return <nav className={`${styles.buzzpointNav} sticky`}>
             <div className="min-w-screen mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
-                    <div className="flex items-center">
+                <div className={styles.buzzpointNavFlex}>
+                    <div className={styles.buzzpointNavFlex}>
                         <div className="flex-shrink-0">
                             <Link className="text-white font-bold" href={`/tournament/${tournament.slug}`}>{tournament.name}</Link>
                         </div>
                         <div className="hidden md:block">
-                            <div className="ml-10 flex items-baseline space-x-4">
+                            <div className={styles.buzzpointNavFlex}>
                                 {menuItems.map(({ url, label }, i) => (
                                     <Link 
                                         key={i} 
@@ -44,10 +45,10 @@ export default function Navbar({ tournament }: NavbarProps) {
                         </div>
                     </div>
                     <div className="hidden md:block">
-                        <div className="ml-4 flex items-center md:ml-6">
+                        <div  className={styles.buzzpointNavFlex}>
                         </div>
                     </div>
-                    <div className="-mr-2 flex md:hidden">
+                    <div className={styles.buzzpointNavFlex}>
                         <button 
                             onClick={() => setMenuOpen(!menuOpen)}
                             type="button" 
@@ -66,6 +67,6 @@ export default function Navbar({ tournament }: NavbarProps) {
                         <Link key={i} className="block text-gray-300 hover:text-white px-3 py-2 rounded-md text-base font-medium" href={url}>{label}</Link>
                     ))}
                 </div>
-            </div>}
+            </div>} 
         </nav>;
 }

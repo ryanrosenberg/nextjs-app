@@ -54,10 +54,19 @@
     flex-grow: 10 !important;
 }
 
-
 .mobileNavList {
     display: none !important;
 }
+
+.buzzpointNav {
+    border-bottom: 2px solid var(--line-color);
+}
+
+.buzzpointNavFlex {
+    display: flex;
+    column-gap: 10px;
+}
+
 
 @media (max-width: 1000px) {
     .topNav {
