@@ -49,8 +49,8 @@ export default function TossupGraph({ buzzes, onHoverPositionChange }: TossupGra
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Area type="monotone" dataKey="total" name="Total Buzzes" stroke="#808080" fill="#808080" />
-                    <Area type="monotone" dataKey="correct" name="Correct Buzzes" stroke="#33ff3d" fill="#33ff3d" />
+                    <Area type="monotone" dataKey="total" name="Total Buzzes" stroke="#181818" fill="#fff" fillOpacity={0} />
+                    <Area type="monotone" dataKey="correct" name="Correct Buzzes" stroke="#C71400" fill="#C71400" fillOpacity={1}/>
                 </AreaChart>
             </ResponsiveContainer>
         </div>

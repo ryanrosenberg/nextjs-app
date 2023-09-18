@@ -7,7 +7,8 @@ export default function Home() {
     {
       accessor: "name",
       Header: "Tournament",
-      linkTemplate: "/tournament/{{slug}}/tossup"
+      border: "right",
+      linkTemplate: "/buzzpoints/{{slug}}/tossup"
     },
     {
       accessor: "location",

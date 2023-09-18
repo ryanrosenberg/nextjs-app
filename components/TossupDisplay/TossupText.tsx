@@ -1,6 +1,7 @@
 import { removeTags, sanitize } from "../../lib/jordan_utils";
 import TossupWord from "./TossupWord";
 import { BuzzDictionary, Tossup, Word } from "../../types";
+import styles from "./tossups.module.css"
 
 type TossupText = {
     tossup: Tossup;
@@ -104,7 +105,7 @@ export default function TossupText({ tossup: { question, answer, metadata }, buz
                 />
             )}
         </p>
-        <div>ANSWER: <span dangerouslySetInnerHTML={{ __html: answer }}></span></div>
+        <div className={styles.tossupAnswer}>ANSWER: <span dangerouslySetInnerHTML={{ __html: answer }}></span></div>
         {metadata && <div>{"<" + metadata + ">"}</div>}
         <div className="text-xs relative mt-2 mb-2">
             <span className="average-buzz-line"> = Average correct buzz position</span>

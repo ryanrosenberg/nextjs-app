@@ -31,7 +31,7 @@ export default function TossupWord({ word, index, buzzes, hoverPosition, buzzpoi
         <BuzzpointAnnotation buzzes={buzzes}>
             {hasAverageBuzzpoint && 
                 <span 
-                    className="average-buzz-line" 
+                    className="average-buzz-line-word" 
                     style={{
                         left: `calc(100% * ${averageBuzz! % 1})`
                     }}

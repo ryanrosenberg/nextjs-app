@@ -1,6 +1,5 @@
 "use client";
 
-
 import tables from "./tables.module.css";
 import Link from "next/link";
 import * as _ from 'radash';
@@ -23,7 +22,7 @@ const NormalTable = ({
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
-  
+  // console.log(items);
   const renderCell = (item, column) => {
     let cellValue = item[column.accessor];
 

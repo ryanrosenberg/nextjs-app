@@ -37,12 +37,12 @@ export default function Tournament({ params }: { params: { slug: string } }) {
             <div className={styles.tournamentFlex}>
                 <div className="md:basis-1/2">
                     <h2>Tossups</h2>
-                    <p className="mb-2"><Link href={`/tournament/${tournament.slug}/tossup`} className="underline">View all tossups</Link></p>
+                    <p className="mb-2"><Link href={`/buzzpoints/${tournament.slug}/tossup`} className="underline">View all tossups</Link></p>
                     <TossupCategoryTable tossupCategoryStats={tossupCategoryStats} />
                 </div>
                 <div className="md:basis-1/2">
                     <h2>Bonuses</h2>
-                    <p className="mb-2"><Link href={`/tournament/${tournament.slug}/bonus`} className="underline">View all bonuses</Link></p>
+                    <p className="mb-2"><Link href={`/buzzpoints/${tournament.slug}/bonus`} className="underline">View all bonuses</Link></p>
                     <BonusCategoryTable bonusCategoryStats={bonusCategoryStats}/>
                 </div>
             </div>

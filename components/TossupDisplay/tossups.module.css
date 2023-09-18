@@ -1,8 +1,59 @@
 .tossupDisplayFlex {
     display: flex;
+    column-gap: 20px;
 }
 
 .tossupInfoFlex {
     display: flex;
     flex-direction: column;
+    flex: 1
+}
+
+.tossupBuzzesFlex {
+    flex: 1
+}
+
+.allTossupTable {
+    text-underline-offset: .25em;
+}
+
+.tossupBuzzTable table {
+    border-collapse: collapse !important;
+}
+
+.tossupBuzzTable td {
+    border-bottom: 1px solid gray;
+}
+
+.tossupBuzzTable tbody tr.highlightedRow {
+    background-color: #DEEDFF;
+    transition: all 200ms ease-out;
+}
+
+.get {
+    background-color: var(--light-background);
+}
+
+.neg {
+    background-color: white;
+    color: var(--accent-color);
+}
+
+.zero {
+    background-color: white;
+    transition: all 200ms ease-out;
+}
+
+.tossupText {
+    background-color: whitesmoke;
+    font-family: 'Times New Roman';
+
+    border: 3px solid var(--line-color);
+    padding: 12px;
+}
+
+.tossupAnswer {
+    margin-top: 8px;
+    border-top: 1px solid var(--light-background);
+    padding-top: 8px;
 }

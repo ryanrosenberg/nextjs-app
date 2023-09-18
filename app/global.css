@@ -405,21 +405,14 @@ tbody:last-child {
   }
 }
 
-.buzzpoint-word {
-  background-color: #DEEDFF;
-  cursor: pointer;
-  border-radius: 5px;
-  padding: 1px 5px;
-}
-
 rt {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-family: 'Times New Roman', Times, serif;
   color: #424242;
 }
 
 rt .get {
-  color: #0DA51C;
+  color: #0173d1;
 }
 
 rt .neg {
@@ -427,7 +420,7 @@ rt .neg {
 }
 
 rt .value {
-  padding: 0px 5px;
+  padding: 0px 2px;
 }
 
 ruby {
@@ -435,6 +428,7 @@ ruby {
   flex-direction: column-reverse;
   vertical-align: bottom;
   align-items: center;
+  padding: 0px 3px 0px 0px;
 }
 
 rt {
@@ -453,10 +447,18 @@ rt {
   overflow-x: auto;
 }
 
+.buzzpoint-word {
+  cursor: pointer;
+  border-radius: 0px;
+  border-bottom: 2px solid var(--accent-color);
+  padding: 0px 1px 1px 1px;
+}
+
 .highlighted-word {
-  box-shadow: 5px 5px 10px #b3b3b3;
+  background-color: #DEEDFF;
+  /* box-shadow: 5px 5px 10px #b3b3b3; */
   transition: all 200ms ease-out;
-  border-radius: 3px;
+  border-radius: 0px;
 }
 
 .pronunciation-guide {
@@ -472,9 +474,17 @@ rt {
   background-color: lightgray;
 }
 
-.average-buzz-line {
+.average-buzz-line-word {
+  display: inline;
   border-left: dashed;
-  border-color: palevioletred;
+  border-color: var(--accent-color);
+  padding-left: 6px;
+}
+
+.average-buzz-line {
+  float: right;
+  border-left: dashed;
+  border-color: var(--accent-color);
   padding-left: 6px;
 }
 

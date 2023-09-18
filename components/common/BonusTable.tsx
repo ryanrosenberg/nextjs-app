@@ -44,12 +44,12 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item:Bonus) => (
                 <>
                     <Link
-                        href={`/tournament/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.easy_part }}></span>
                     </Link>
-                    <span className="ms-1 text-xs font-light">{`(Part ${item.easy_part_number})`}</span>
+                    <span className="ms-1 text-xs font-light">{` (Part ${item.easy_part_number})`}</span>
                 </>
             )
         },
@@ -67,12 +67,12 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item:Bonus) => (
                 <>
                     <Link
-                        href={`/tournament/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.medium_part }}></span>
                     </Link>
-                    <span className="ms-1 text-xs font-light">{`(Part ${item.medium_part_number})`}</span>
+                    <span className="ms-1 text-xs font-light">{` (Part ${item.medium_part_number})`}</span>
                 </>
             )
         },
@@ -90,12 +90,12 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item:Bonus) => (
                 <>
                     <Link
-                        href={`/tournament/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.hard_part }}></span>
                     </Link>
-                    <span className="ms-1 text-xs font-light">{`(Part ${item.hard_part_number})`}</span>
+                    <span className="ms-1 text-xs font-light">{` (Part ${item.hard_part_number})`}</span>
                 </>
             )
         },
