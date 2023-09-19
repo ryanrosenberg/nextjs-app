@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.13",
@@ -33,6 +34,8 @@
   },
   "devDependencies": {
     "@types/react": "18.2.21",
+    "eslint": "8.49.0",
+    "eslint-config-next": "13.5.1",
     "typescript": "5.2.2"
   }
 }

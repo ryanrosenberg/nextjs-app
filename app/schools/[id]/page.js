@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export async function getData(params) {
+async function getData(params) {
   const docRef = doc(db, "schools", params.id);
   const docSnap = await getDoc(docRef);
 

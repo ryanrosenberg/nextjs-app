@@ -6,7 +6,7 @@ export const metadata = {
   title: "Home | College Quizbowl Stats",
 };
 
-export async function getData() {
+async function getData() {
   const rtRef = doc(db, "adhoc", "recent_tournaments");
   const rtSnap = await getDoc(rtRef);
 

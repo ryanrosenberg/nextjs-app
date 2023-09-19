@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 
 export const dynamicParams = false;
 
-export async function getData() {
+async function getData() {
   const docRef = doc(db, "adhoc", "editors");
   const docSnap = await getDoc(docRef);
 

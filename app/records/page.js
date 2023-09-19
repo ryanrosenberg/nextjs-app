@@ -2,7 +2,7 @@ import Records from "./records-page";
 import { db } from "../../lib/firestore";
 import { collection, getDocs } from "firebase/firestore";
 
-export async function getData() {
+async function getData() {
   const querySnapshot = await getDocs(collection(db, "records"));
   var paths = [];
   querySnapshot.forEach((doc) => {

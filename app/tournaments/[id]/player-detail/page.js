@@ -20,7 +20,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export async function getData(params) {
+async function getData(params) {
   const summRef = doc(
     db,
     "tournaments",
