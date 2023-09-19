@@ -71,7 +71,9 @@ const NormalTable = ({
                     tables.headerButton,
                     tables[getClassNamesFor(column.Header)]
                   )}
-                  onClick={() => requestSort(column.Header)}
+                  onClick={() => {
+                    requestSort(column.accessor)
+                  }}
                 >
                   {column.Header}
                 </button>

@@ -12,7 +12,7 @@ export default function TossupSummary({ buzzes, tossup: { heard, average_buzz } 
     let columns = [
         { accessor: 'conversion_rate', Header: 'Conv. %', format: formatPercent },
         { accessor: 'power_rate', Header: 'Power %', format: formatPercent },
-        { accessor: 'average_buzz', Header: 'Average Buzz', format: formatDecimal }
+        { accessor: 'average_buzz', Header: 'Avg. Buzz', format: formatDecimal }
     ];
     let correctBuzzes = buzzes.filter(b => b.value > 0).map(b => b.buzz_position);
     let items = [{

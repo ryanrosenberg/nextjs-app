@@ -14,6 +14,7 @@ export default function TossupCategoryTable({ tossupCategoryStats }: TossupCateg
             accessor: "category",
             Header: "Category",
             border: "right",
+            align: 'left'
         },
         {
             accessor: "heard",

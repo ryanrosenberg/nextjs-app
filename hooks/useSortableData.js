@@ -4,9 +4,11 @@ import { useState, useMemo } from "react";
 export const useSortableData = (items, config = null) => {
   const [sortConfig, setSortConfig] = useState(config);
 
+  console.log(sortConfig);
+  console.log(items);
   const sortedItems = useMemo(() => {
     let sortableItems = [...items];
-    
+
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         const regex = /^[0-9\.]+$/g;
@@ -28,6 +30,20 @@ export const useSortableData = (items, config = null) => {
           return 0;
         }
       });
+      // sorted.sort((a, b) => {
+      //   let valueOne = a[sortConfig.key];
+      //   let valueTwo = b[sortConfig.key];
+
+      //   if (valueOne == null && valueTwo == null) return 0;
+      //   if (valueOne == null) return sortConfig.direction === "ascending" ? 1 : -1;
+      //   if (valueTwo == null) return sortConfig.direction === "ascending" ? -1 : 1;
+      //   if (valueOne === valueTwo) return 0;
+
+      //   return valueOne > valueTwo ? 1 : -1;
+      // });
+
+      // if (sortConfig.direction === "descending")
+      //   sorted.reverse();
     }
     return sortableItems;
   }, [items, sortConfig]);

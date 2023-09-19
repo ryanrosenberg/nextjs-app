@@ -14,6 +14,7 @@ export default function BonusCategoryTable({ bonusCategoryStats }: BonusCategory
             accessor: "category",
             Header: "Category",
             border: "right",
+            align: 'left'
         },
         {
             accessor: "heard",

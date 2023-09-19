@@ -471,7 +471,10 @@ rt {
 }
 
 .chart-hover-word {
+  padding: 5px;
+  border-radius: 5px;
   background-color: lightgray;
+  box-shadow: 5px 5px 10px #b3b3b3;
 }
 
 .average-buzz-line-word {
