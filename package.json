@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -21,11 +21,11 @@
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "leaflet-geosearch": "^3.7.0",
     "lodash": "^4.17.21",
-    "next": "^13.4.2",
+    "next": "^13.5.1",
     "path": "^0.12.7",
     "radash": "^11.0.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-leaflet": "^4.2.1",
     "react-paginate": "^8.1.4",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/react": "18.2.21",
     "eslint": "8.49.0",
-    "eslint-config-next": "13.5.1",
+    "eslint-config-next": "^13.5.1",
     "typescript": "5.2.2"
   }
 }

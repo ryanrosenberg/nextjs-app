@@ -3,8 +3,7 @@ import "./global.css";
 import {
   alegreya_sans,
   signika_neg,
-  inter,
-  sourceCodePro400,
+  inter
 } from "../styles/fonts";
 import styles from "./layout.module.css";
 import Navbar from "./navbar.js";
@@ -22,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      className={`${signika_neg.variable} ${alegreya_sans.variable} ${inter.variable} ${sourceCodePro400.variable}`}
+      className={`${signika_neg.variable} ${alegreya_sans.variable} ${inter.variable}`}
       lang="en"
     >
       <body data-bs-spy="scroll" data-bs-target="#toc">
