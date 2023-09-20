@@ -15,6 +15,10 @@ export function PlayerTable({ players }: PlayerTableProps) {
             Header: "Player"
         },
         {
+            accessor: "team",
+            Header: "Team"
+        },
+        {
             accessor: "powers",
             Header: "Powers",
             defaultDescending: true
