@@ -1,18 +1,7 @@
 import SeasonsIndex from "./seasons-index";
-// import { db } from "../../lib/firestore";
-// import { doc, getDoc } from "firebase/firestore";
 import { db } from "@vercel/postgres";
 
 export async function getData() {
-  // const client = await db.connect();
-  // const docRef = doc(db, "adhoc", "champions");
-  // const docSnap = await getDoc(docRef);
-
-  // return {
-  //   props: {
-  //     result: docSnap.data().Champions,
-  //   },
-  // };
   const client = await db.connect();
   const data = await client.sql`
   SELECT * from ((SELECT distinct champions.year from champions

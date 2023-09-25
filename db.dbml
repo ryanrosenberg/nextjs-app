@@ -1,0 +1,167 @@
+Table champions {
+  year varchar
+  tournament_id integer [ref: < tournaments.tournament_id]
+  tournament varchar
+  school varchar
+  team varchar
+  team_id integer [ref: < teams.team_id]
+  indexes {
+    (tournament, year) [pk]
+  }
+}
+
+Table sets {
+  set_id integer [primary key]
+  year varchar
+  set varchar
+  set_name varchar
+  difficulty varchar
+  has_powers bool
+  default_tuh integer
+  set_slug varchar
+  found bool
+}
+
+Table tournaments {
+  tournament_id integer [primary key]
+  set_id integer [ref: > sets.set_id]
+  site_id integer [ref: > sites.site_id]
+  date date
+  online bool
+  nationals bool
+  tournament_name varchar
+  naqt_id integer
+}
+
+Table sites {
+  site_id integer [primary key]
+  site varchar
+  is_school integer
+  school_id integer [ref: - schools.school_id]
+  lat numeric
+  lon numeric
+  school varchar
+  state varchar
+  region varchar
+  circuit varchar
+  circuit_slug varchar
+}
+
+Table tournament_results {
+  tournament_id integer [ref: < tournaments.tournament_id]
+  team_id integer [ref: < teams.team_id]
+  tupptuh numeric
+  bhptuh numeric
+  PPB numeric
+  sos numeric
+  a_value numeric
+  rank integer
+  bracket integer
+  num_teams integer
+  indexes {
+    (tournament_id, team_id) [pk]
+  }
+}
+
+Table schools {
+  school_id integer [primary key]
+  school_name varchar
+  slug varchar
+  circuit varchar [ref: <> sites.circuit]
+  circuit_slug varchar [ref: <> sites.circuit_slug]
+  lon numeric
+  lat numeric
+  open bool
+  high_school bool
+}
+
+Table teams {
+  team_id varchar [primary key]
+  team varchar
+  school_id integer [ref: > schools.school_id]
+  school varchar [ref: > schools.school_name]
+}
+
+Table players {
+  player_id integer [primary key]
+  person_id integer [ref: > people.person_id]
+}
+
+Table people {
+  person_id integer [primary key]
+  player varchar
+  fname varchar
+  lname varchar
+  slug varchar
+  schools varchar
+}
+
+Table editors {
+  set_id integer [ref: > sets.set_id]
+  person_id integer [ref: > people.person_id]
+  headitor varchar
+  editor varchar
+  category varchar
+  subcategory varchar
+  indexes {
+    (set_id, person_id) [pk]
+  }
+}
+
+Table games {
+  game_id integer [primary key]
+  tournament_id integer
+  round varchar
+  game_num integer
+}
+
+Table team_games {
+  tournament_id integer [ref: < tournaments.tournament_id]
+  set_id integer [ref: > sets.set_id]
+  site_id integer [ref: > sites.site_id]
+  school_id integer [ref: > schools.school_id]
+  team_id integer [ref: > teams.team_id]
+  game_id integer [ref: > games.game_id]
+  round varchar
+  game_num integer
+  tuh integer
+  prov_team varchar  
+  opponent varchar
+  opponent_id integer
+  result numeric
+  powers integer
+  tens integer
+  negs integer
+  tu_pts integer
+  bonuses_heard integer
+  bonus_pts integer
+  total_pts integer
+  opp_pts integer
+  indexes {
+    (tournament_id, game_id, team_id) [pk]
+  }
+}
+
+Table player_games {
+  tournament_id integer [ref: < tournaments.tournament_id]
+  set_id integer [ref: > sets.set_id]
+  site_id integer [ref: > sites.site_id]
+  school_id integer [ref: > schools.school_id]
+  team_id integer [ref: > teams.team_id]
+  game_id integer [ref: > games.game_id]
+  player_id integer [ref: > players.player_id]
+  round varchar
+  game_num integer
+  tuh integer
+  opponent varchar
+  opponent_team_id integer
+  result numeric
+  powers integer
+  tens integer
+  negs integer
+  pts integer
+  indexes {
+    (tournament_id, game_id, team_id, player_id) [pk]
+  }
+}
+
