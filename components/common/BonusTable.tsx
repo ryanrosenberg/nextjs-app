@@ -13,15 +13,6 @@ type BonusTableProps = {
 export function BonusTable({ bonuses }: BonusTableProps) {
     const columns = [
         {
-            accessor: "round",
-            Header: "Round"
-        },
-        {
-            accessor: "question_number",
-            Header: "#",
-            border: "right"
-        },
-        {
             accessor: "category",
             Header: "Category",
             border: "right"
@@ -44,7 +35,7 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item:Bonus) => (
                 <>
                     <Link
-                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.id}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.easy_part }}></span>
@@ -67,7 +58,7 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item:Bonus) => (
                 <>
                     <Link
-                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.id}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.medium_part }}></span>
@@ -90,7 +81,7 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item:Bonus) => (
                 <>
                     <Link
-                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.id}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.hard_part }}></span>

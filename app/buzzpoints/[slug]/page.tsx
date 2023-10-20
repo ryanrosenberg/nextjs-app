@@ -16,6 +16,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     let tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
+    console.log(tournament);
+    
 
     return {
         title: `${tournament.name} - Buzzpoints App`,
@@ -25,11 +27,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default function Tournament({ params }: { params: { slug: string } }) {
     const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const questionSet = getQuestionSetQuery.get(tournament.question_set_id) as QuestionSet;
-    const tossupCategoryStats = getTossupCategoryStatsQuery.all(tournament.id) as TossupCategory[];
-    const bonusCategoryStats = getBonusCategoryStatsQuery.all(tournament.id) as BonusCategory[];
+    const tossupCategoryStats = getTossupCategoryStatsQuery.all(tournament.question_set_id) as TossupCategory[];
+    const bonusCategoryStats = getBonusCategoryStatsQuery.all(tournament.question_set_id) as BonusCategory[];
     const startDate = new Date(tournament.start_date).toLocaleDateString("en-US");
-
+    
     return (
         <Layout tournament={tournament}>
             <h2 className="page-title">{tournament.name}</h2>
