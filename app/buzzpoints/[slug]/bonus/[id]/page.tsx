@@ -26,6 +26,7 @@ export const generateStaticParams = () => {
 export async function generateMetadata({ params }: { params: { slug:string, id:string }}): Promise<Metadata> {
     const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
     const bonusParts = getBonusPartsQuery.all(tournament.id, params.id) as BonusPart[];
+    console.log(params.id)
     
     return {
         title: `${removeTags(shortenAnswerline(bonusParts[0].answer))} - ${tournament.name} - Buzzpoints App`,
