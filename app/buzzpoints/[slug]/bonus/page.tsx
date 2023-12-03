@@ -7,7 +7,7 @@ import { Metadata } from "next";
 export async function generateStaticParams() {
     const tournaments = getTournamentsQuery.all() as Tournament[];
 
-    return tournaments.map(({ slug }) => ({ slug }));
+    return tournaments.map(({ slug }) => ({ slug: '2023-bhsu' }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
