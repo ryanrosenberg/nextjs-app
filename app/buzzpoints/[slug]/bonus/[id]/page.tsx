@@ -14,7 +14,7 @@ export const generateStaticParams = () => {
 
         for (let { id } of bonuses) {
             paths.push({
-                slug,
+                slug: '2023-bhsu',
                 id: String(id)
             });
         }
