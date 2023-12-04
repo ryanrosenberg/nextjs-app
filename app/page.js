@@ -43,7 +43,30 @@ export async function getData(params) {
            `;
 
   const tty_res = await client.sql`
-            `;
+  SELECT 
+  team as Team,
+  school as School, slug,
+  count(distinct team_games.tournament_id) as Ts,
+  count(result) as GP,
+  sum(case result when 1 then 1 else 0 end) as W,
+  sum(case result when 0 then 1 else 0 end) as L,
+avg(result) as \"Win%\",
+  sum(coalesce(tuh, 20)) as TUH,
+sum(powers)/count(result)::numeric as \"15/G\",
+sum(tens)/count(result)::numeric as \"10/G\",
+sum(negs)/count(result)::numeric as \"-5/G\",
+(sum(coalesce(powers, 0)) + sum(tens))/sum(coalesce(tuh, 20))::numeric as \"TU%\",
+avg(total_pts)::numeric as PPG, 
+sum(bonus_pts)/sum(bonuses_heard)::numeric as PPB
+  from team_games
+  left join teams on team_games.team_id = teams.team_id
+  left join schools on teams.school_id = schools.school_id
+  left join tournaments on team_games.tournament_id = tournaments.tournament_id
+  left join sets on tournaments.set_id = sets.set_id
+  where sets.year = '22-23'
+  and teams.school_id is not null
+  GROUP BY 1,2,3
+  ORDER BY GP desc`;
   const all = {
     teamsThisYear: tty_res.rows,
     recentTournaments: rt_res.rows,
