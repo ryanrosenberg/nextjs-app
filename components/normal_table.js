@@ -1,7 +1,7 @@
 import tables from "./tables.module.css";
 import _ from "lodash";
 import classnames from "classnames";
-import RawHtml from "./rawHtml";
+import { renderCell } from "../lib/utils.js";
 import { useSortableData } from "../hooks/useSortableData.js";
 
 const NormalTable = ({
@@ -73,7 +73,7 @@ const NormalTable = ({
                             : tables.noBorder
                         )}
                       >
-                        <RawHtml html={row[column.accessor]} />
+                        {renderCell(row, column)}
                       </td>
                     ) : (
                       <td
@@ -90,7 +90,7 @@ const NormalTable = ({
                             : tables.cellNumber
                         )}
                       >
-                        <RawHtml html={row[column.accessor]} />
+                        {renderCell(row, column)}
                       </td>
                     );
                   return rowHTML;

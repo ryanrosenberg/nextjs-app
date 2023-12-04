@@ -1,10 +1,9 @@
 import tables from "./tables.module.css";
 import _ from "lodash";
-import * as ra from "radash";
 import classnames from "classnames";
-import Link from "next/link";
 import { useSortableData } from "../hooks/useSortableData";
 import tournaments from "./tournaments.module.css";
+import { renderCell } from "../lib/utils";
 
 export default function StandingsTable({
   columns,
@@ -20,22 +19,6 @@ export default function StandingsTable({
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
   let rowGroups = _.groupBy(items, grouping_column);
-
-  const renderCell = (item, column) => {
-    let cellValue = item[column.accessor];
-
-    if (column.format) cellValue = column.format(cellValue);
-
-    if (column.html)
-      cellValue = <span dangerouslySetInnerHTML={{ __html: cellValue }}></span>;
-
-    if (column.linkTemplate)
-      return (
-        <Link href={ra.template(column.linkTemplate, item)}>{cellValue}</Link>
-      );
-
-    return cellValue;
-  };
 
   return (
     <div>

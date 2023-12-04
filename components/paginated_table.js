@@ -5,7 +5,7 @@ import ReactPaginate from "react-paginate";
 import { useSortableData } from "../hooks/useSortableData";
 import _ from "lodash";
 import classnames from "classnames";
-import RawHtml from "./rawHtml";
+import { renderCell } from "../lib/utils";
 
 const PaginatedTable = ({
   columns,
@@ -96,7 +96,7 @@ const PaginatedTable = ({
                                 : tables.noBorder
                             )}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         ) : (
                           <td
@@ -111,7 +111,7 @@ const PaginatedTable = ({
                                 : tables.cellNumber
                             )}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         );
                       return rowHTML;
