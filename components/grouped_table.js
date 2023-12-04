@@ -2,7 +2,7 @@ import tables from "./tables.module.css";
 import group_tables from "./grouped_table.module.css";
 import _ from "lodash";
 import classnames from "classnames";
-import RawHtml from "./rawHtml";
+import { renderCell } from "../lib/utils";
 import { useSortableData } from "../hooks/useSortableData";
 
 export default function GroupedTable({
@@ -60,10 +60,10 @@ export default function GroupedTable({
         </thead>
         {Object.keys(rowGroups).map((group, i) => {
           return (
-            <tbody key = {i}>
+            <tbody key={i}>
               <tr className={group_tables.rowGroup} key={i}>
                 <td className={tables.cell} colSpan={columns.length} key={i}>
-                  <RawHtml html={rowGroups[group][0][grouping_column]} />
+                  {renderCell(rowGroups[group][0], {'accessor': grouping_column, 'html': true})}
                 </td>
               </tr>
               {rowGroups[group].map((row, i) => {
@@ -81,7 +81,7 @@ export default function GroupedTable({
                             )}
                             key={i}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         ) : (
                           <td
@@ -96,7 +96,7 @@ export default function GroupedTable({
                             )}
                             key={i}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         );
                       return rowHTML;
