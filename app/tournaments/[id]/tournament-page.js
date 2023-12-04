@@ -7,17 +7,20 @@ import { useMemo } from "react";
 import _ from "lodash";
 import styles from "./tournaments.module.css";
 import NestedSideNav from "../../../components/nested_side_nav";
-import { slugify, sanitize, formatDecimal } from "../../../lib/utils";
+import { slugify, sanitize, formatDecimal, formatPercent } from "../../../lib/utils";
 
 export default function Tournament({ result }) {
   const data = result.props.result;
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const url = pathname + searchParams.toString();
-  console.log(pathname);
-  console.log(searchParams);
   data.Standings.map((item) => {
     item.team_slug = slugify(item.team);
+    return item;
+  });
+  data.Players.map((item) => {
+    item.team_slug = slugify(sanitize(item.team));
+    item.player_slug = slugify(sanitize(item.player));
     return item;
   });
 
@@ -87,7 +90,7 @@ export default function Tournament({ result }) {
       {
         Header: "TU%",
         accessor: "TU%",
-        format: formatDecimal,
+        format: formatPercent,
       },
       {
         Header: "PPG",
@@ -118,12 +121,14 @@ export default function Tournament({ result }) {
         accessor: "player",
         align: "left",
         border: "right",
+        linkTemplate: pathname + "/player-detail#{{player_slug}}-{{team_slug}}",
       },
       {
         Header: "Team",
         accessor: "team",
         align: "left",
         border: "right",
+        linkTemplate: pathname + "/team-detail#{{team_slug}}",
       },
       {
         Header: "GP",
@@ -150,32 +155,39 @@ export default function Tournament({ result }) {
       {
         Header: "15/G",
         accessor: "15/G",
+        format: formatDecimal,
       },
       {
         Header: "10/G",
         accessor: "10/G",
+        format: formatDecimal,
       },
       {
         Header: "-5/G",
         accessor: "-5/G",
         border: "right",
+        format: formatDecimal,
       },
       {
         Header: "P/N",
         accessor: "P/N",
+        format: formatDecimal,
       },
       {
         Header: "G/N",
         accessor: "G/N",
         border: "right",
+        format: formatDecimal,
       },
       {
         Header: "TU%",
         accessor: "TU%",
+        format: formatDecimal,
       },
       {
         Header: "PPG",
         accessor: "ppg",
+        format: formatDecimal,
       },
     ],
     []
