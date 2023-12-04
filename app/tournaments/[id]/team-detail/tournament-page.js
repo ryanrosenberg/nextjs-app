@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { usePathname, useSearchParams } from 'next/navigation';
 import _ from "lodash";
 import styles from "../tournaments.module.css";
-import { slug } from "../../../../lib/utils";
+import { slug, slugify } from "../../../../lib/utils";
 import NestedSideNav from "../../../../components/nested_side_nav";
 
 export default function Tournament({ result }) {
@@ -182,7 +182,7 @@ export default function Tournament({ result }) {
           {Object.keys(teamDetailTeams).map((team, i) => {
             return (
               <div key = {i}>
-                <h3 className={styles.teamPlayerHeader} id={slug(team)}>
+                <h3 className={styles.teamPlayerHeader} id={slugify(team)}>
                   {team}
                 </h3>
                 <NormalTable

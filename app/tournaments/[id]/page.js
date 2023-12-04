@@ -43,12 +43,12 @@ export async function getData(params) {
   sum(powers) as \"15\", 
   sum(tens) as \"10\", 
   sum(negs) as \"-5\",
-  sum(powers)/count(result) as \"15/G\",
-  sum(tens)/count(result) as \"10/G\",
-  sum(negs)/count(result) as \"-5/G\",
-  (sum(coalesce(powers, 0)) + sum(tens))/sum(coalesce(tuh, 20)) as \"TU%\",
+  sum(powers)/count(result)::numeric as \"15/G\",
+  sum(tens)/count(result)::numeric as \"10/G\",
+  sum(negs)/count(result)::numeric as \"-5/G\",
+  (sum(coalesce(powers, 0)) + sum(tens))/sum(coalesce(tuh, 20))::numeric as \"TU%\",
   avg(total_pts) as PPG, 
-  sum(bonus_pts)/sum(bonuses_heard) as PPB,
+  sum(bonus_pts)/sum(bonuses_heard)::numeric as PPB,
   max(a_value) as \"A-Value\" 
   from team_games
   LEFT JOIN teams on team_games.team_id::varchar = teams.team_id::varchar

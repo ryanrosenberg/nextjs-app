@@ -1,8 +1,8 @@
 import tables from "./tables.module.css";
-import group_tables from "./grouped_table.module.css";
 import _ from "lodash";
+import * as ra from "radash";
 import classnames from "classnames";
-import RawHtml from "./rawHtml";
+import Link from "next/link";
 import { useSortableData } from "../hooks/useSortableData";
 import tournaments from "./tournaments.module.css";
 
@@ -19,20 +19,23 @@ export default function StandingsTable({
     }
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
-  // columns = columns.filter(column => column.accessor != grouping_column)
   let rowGroups = _.groupBy(items, grouping_column);
 
-  // if(grouping_column == 'category'){
-  //   rowGroups = {
-  //     'Literature': rowGroups['Literature'],
-  //     'History': rowGroups['History'],
-  //     'Science': rowGroups['Science'],
-  //     'Arts': rowGroups['Arts'],
-  //     'Beliefs': rowGroups['Beliefs'],
-  //     'Thought': rowGroups['Thought'],
-  //     'Other': rowGroups['Other'],
-  //   }
-  // }
+  const renderCell = (item, column) => {
+    let cellValue = item[column.accessor];
+
+    if (column.format) cellValue = column.format(cellValue);
+
+    if (column.html)
+      cellValue = <span dangerouslySetInnerHTML={{ __html: cellValue }}></span>;
+
+    if (column.linkTemplate)
+      return (
+        <Link href={ra.template(column.linkTemplate, item)}>{cellValue}</Link>
+      );
+
+    return cellValue;
+  };
 
   return (
     <div>
@@ -90,7 +93,7 @@ export default function StandingsTable({
                             )}
                             key={i}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         ) : (
                           <td
@@ -105,7 +108,7 @@ export default function StandingsTable({
                             )}
                             key={i}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         );
                       return rowHTML;

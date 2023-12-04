@@ -18,20 +18,7 @@ export default function GroupedTable({
     }
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
-  // columns = columns.filter(column => column.accessor != grouping_column)
   let rowGroups = _.groupBy(items, grouping_column);
-
-  // if(grouping_column == 'category'){
-  //   rowGroups = {
-  //     'Literature': rowGroups['Literature'],
-  //     'History': rowGroups['History'],
-  //     'Science': rowGroups['Science'],
-  //     'Arts': rowGroups['Arts'],
-  //     'Beliefs': rowGroups['Beliefs'],
-  //     'Thought': rowGroups['Thought'],
-  //     'Other': rowGroups['Other'],
-  //   }
-  // }
 
   return (
     <div>

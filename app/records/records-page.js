@@ -4,7 +4,7 @@ import NestedSideNav from "../../components/nested_side_nav";
 import NormalTable from "../../components/normal_table";
 import PaginatedTable from "../../components/paginated_table";
 import styles from "./records.module.css";
-import { slug } from "../../lib/utils";
+import { slugify } from "../../lib/utils";
 
 export default function Records({ result }) {
   const data = result.props.result;
@@ -54,7 +54,7 @@ export default function Records({ result }) {
                 return (
                   <a
                     className="circuit-link"
-                    href={"../circuits/" + slug(circuit) + "#records"}
+                    href={"../circuits/" + slugify(circuit) + "#records"}
                   >
                     {circuit}
                   </a>

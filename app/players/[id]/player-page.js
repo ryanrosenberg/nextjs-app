@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import _ from "lodash";
 import Link from "next/link";
-import { slug } from "../../../lib/utils.js";
+import { slugify } from "../../../lib/utils.js";
 import RawHtml from "../../../components/rawHtml";
 import GroupedTable from "../../../components/grouped_table";
 import NestedSideNav from "../../../components/nested_side_nav";
@@ -23,7 +23,7 @@ export default function Player({ result }) {
         align: "left",
         border: "right",
         render: ({ val }) => (
-          <Link href={"../schools/" + slug(val)}>{val}</Link>
+          <Link href={"../schools/" + slugify(val)}>{val}</Link>
         ),
       },
       {

@@ -5,7 +5,7 @@ import NormalTable from "../../../../components/normal_table";
 import { useMemo } from "react";
 import _ from "lodash";
 import styles from "../tournaments.module.css";
-import { slug } from "../../../../lib/utils";
+import { slugify } from "../../../../lib/utils";
 import NestedSideNav from "../../../../components/nested_side_nav";
 
 export default function Tournament({ result }) {
@@ -98,20 +98,20 @@ export default function Tournament({ result }) {
           {Object.keys(playerDetail).map((team) => {
             const teamPlayers = _.groupBy(playerDetail[team], "player");
             return (
-              <div key={slug(team)}>
-                <h3 id={slug(team) + "-players"} className={styles.teamHeader}>
+              <div key={slugify(team)}>
+                <h3 id={slugify(team) + "-players"} className={styles.teamHeader}>
                   {team}
                 </h3>
                 <hr style={{ width: "100%" }} />
                 {Object.keys(teamPlayers).map((player) => {
                   return (
-                    <div key={slug(player)}>
+                    <div key={slugify(player)}>
                       <h4
                         className={styles.teamPlayerHeader}
                         id={
-                          slug(player) +
+                          slugify(player) +
                           "-" +
-                          slug(teamPlayers[player][0]["team"])
+                          slugify(teamPlayers[player][0]["team"])
                         }
                       >
                         {player_lookup[player] ? (
