@@ -44,7 +44,7 @@ export default function GroupedTable({
       >
         <thead className={tables.header}>
           <tr className={tables.headerRow}>
-            {columns.map((column) => (
+            {columns.map((column, i) => (
               <th
                 className={classnames(
                   tables.tableHeader,
@@ -55,7 +55,8 @@ export default function GroupedTable({
                     ? tables.borderRight
                     : tables.noBorder
                 )}
-                title = {column.Tooltip}
+                title={column.Tooltip}
+                key={i}
               >
                 <button
                   className={classnames(
@@ -70,18 +71,18 @@ export default function GroupedTable({
             ))}
           </tr>
         </thead>
-        {Object.keys(rowGroups).map((group) => {
+        {Object.keys(rowGroups).map((group, i) => {
           return (
             <tbody>
-              <tr className={group_tables.rowGroup}>
-                <td className={tables.cell} colSpan={columns.length}>
+              <tr className={group_tables.rowGroup} key={i}>
+                <td className={tables.cell} colSpan={columns.length} key={i}>
                   <RawHtml html={rowGroups[group][0][grouping_column]} />
                 </td>
               </tr>
               {rowGroups[group].map((row, i) => {
                 return (
-                  <tr>
-                    {columns.map((column) => {
+                  <tr key={i}>
+                    {columns.map((column, i) => {
                       var rowHTML =
                         column.align == "left" ? (
                           <td
@@ -91,6 +92,7 @@ export default function GroupedTable({
                                 ? tables.borderRight
                                 : tables.noBorder
                             )}
+                            key={i}
                           >
                             <RawHtml html={row[column.accessor]} />
                           </td>
@@ -105,6 +107,7 @@ export default function GroupedTable({
                                 ? tables.cellRight
                                 : tables.cellNumber
                             )}
+                            key={i}
                           >
                             <RawHtml html={row[column.accessor]} />
                           </td>
