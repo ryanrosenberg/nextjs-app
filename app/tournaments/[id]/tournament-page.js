@@ -18,24 +18,24 @@ export default function Tournament({ result }) {
     () => [
       {
         Header: "Rank",
-        accessor: "Rank",
+        accessor: "rank",
         border: "right",
       },
       {
         Header: "Team",
-        accessor: "Team",
+        accessor: "team",
         align: "left",
         border: "right",
       },
       {
         Header: "School",
-        accessor: "School",
+        accessor: "school",
         align: "left",
         border: "right",
       },
       {
         Header: "GP",
-        accessor: "GP",
+        accessor: "gp",
       },
       {
         Header: "W-L",
@@ -43,7 +43,7 @@ export default function Tournament({ result }) {
       },
       {
         Header: "TUH",
-        accessor: "TUH",
+        accessor: "tuh",
         border: "right",
       },
       {
@@ -78,11 +78,11 @@ export default function Tournament({ result }) {
       },
       {
         Header: "PPG",
-        accessor: "PPG",
+        accessor: "ppg",
       },
       {
         Header: "PPB",
-        accessor: "PPB",
+        accessor: "ppb",
         border: "right",
       },
       {
@@ -99,23 +99,23 @@ export default function Tournament({ result }) {
     () => [
       {
         Header: "Player",
-        accessor: "Player",
+        accessor: "player",
         align: "left",
         border: "right",
       },
       {
         Header: "Team",
-        accessor: "Team",
+        accessor: "team",
         align: "left",
         border: "right",
       },
       {
         Header: "GP",
-        accessor: "GP",
+        accessor: "gp",
       },
       {
         Header: "TUH",
-        accessor: "TUH",
+        accessor: "tuh",
         border: "right",
       },
       {
@@ -159,7 +159,7 @@ export default function Tournament({ result }) {
       },
       {
         Header: "PPG",
-        accessor: "PPG",
+        accessor: "ppg",
       },
     ],
     []
@@ -171,6 +171,7 @@ export default function Tournament({ result }) {
   player_names.forEach((k, i) => {
     player_lookup[k] = player_slugs[i];
   });
+  console.log(data.Standings);
 
   return (
     <>
@@ -178,7 +179,7 @@ export default function Tournament({ result }) {
         <NestedSideNav lowestLevel={3} />
         <div className="main-content">
           <h1 className="page-title">{data.Summary[0]["tournament_name"]}</h1>
-          <p className="page-subtitle">{data.Summary[0]["date"]}</p>
+          <p className="page-subtitle">{data.Summary[0]["date"].toLocaleDateString("en-US")}</p>
           {data.Summary[0]["naqt_id"] ? (
             <p className="naqt-disclaimer">
               These results are NAQT's property, provided for research purposes

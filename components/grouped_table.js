@@ -73,7 +73,7 @@ export default function GroupedTable({
         </thead>
         {Object.keys(rowGroups).map((group, i) => {
           return (
-            <tbody>
+            <tbody key = {i}>
               <tr className={group_tables.rowGroup} key={i}>
                 <td className={tables.cell} colSpan={columns.length} key={i}>
                   <RawHtml html={rowGroups[group][0][grouping_column]} />

@@ -45,7 +45,7 @@ export default function StandingsTable({
       >
         <thead className={tables.header}>
           <tr className={tables.headerRow}>
-            {columns.map((column) => (
+            {columns.map((column, i) => (
               <th
                 className={classnames(
                   tables.tableHeader,
@@ -56,7 +56,8 @@ export default function StandingsTable({
                     ? tables.borderRight
                     : tables.noBorder
                 )}
-                title = {column.Tooltip}
+                title={column.Tooltip}
+                key={i}
               >
                 <button
                   className={classnames(
@@ -71,13 +72,13 @@ export default function StandingsTable({
             ))}
           </tr>
         </thead>
-        {Object.keys(rowGroups).map((group) => {
+        {Object.keys(rowGroups).map((group, i) => {
           return (
-            <tbody className={tournaments.bracketGroups}>
+            <tbody className={tournaments.bracketGroups} key={i}>
               {rowGroups[group].map((row, i) => {
                 return (
-                  <tr>
-                    {columns.map((column) => {
+                  <tr key={i}>
+                    {columns.map((column, i) => {
                       var rowHTML =
                         column.align == "left" ? (
                           <td
@@ -87,6 +88,7 @@ export default function StandingsTable({
                                 ? tables.borderRight
                                 : tables.noBorder
                             )}
+                            key={i}
                           >
                             <RawHtml html={row[column.accessor]} />
                           </td>
@@ -101,6 +103,7 @@ export default function StandingsTable({
                                 ? tables.cellRight
                                 : tables.cellNumber
                             )}
+                            key={i}
                           >
                             <RawHtml html={row[column.accessor]} />
                           </td>

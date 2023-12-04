@@ -179,9 +179,9 @@ export default function Tournament({ result }) {
           </ul>
           <br></br>
           <h2 id="team-detail"></h2>
-          {Object.keys(teamDetailTeams).map((team) => {
+          {Object.keys(teamDetailTeams).map((team, i) => {
             return (
-              <div>
+              <div key = {i}>
                 <h3 className={styles.teamPlayerHeader} id={slug(team)}>
                   {team}
                 </h3>
