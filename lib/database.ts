@@ -5,11 +5,8 @@ import { createKysely } from "@vercel/postgres-kysely";
 
 const dialect = new PostgresDialect({
   pool: new Pool({
-    database: "verceldb",
-    host: "ep-orange-wind-33988347-pooler.us-east-1.postgres.vercel-storage.com",
-    user: "default",
-    password: "Q4joftsWb3kZ",
-    port: 5432,
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
   }),
 });
 
