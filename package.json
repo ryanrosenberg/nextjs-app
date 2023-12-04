@@ -22,7 +22,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "leaflet-geosearch": "^3.7.0",
     "lodash": "^4.17.21",
-    "next": "^13.4.2",
+    "next": "^14.0.4-canary.37",
     "path": "^0.12.7",
     "pg": "^8.11.3",
     "react": "18.2.0",
