@@ -1,5 +1,5 @@
 import { Tournament } from "../types";
-import Navbar from "./Navbar";
+import Navbar from "./buzzpoint_navbar";
 
 type LayoutProps = {
     tournament?: Tournament;

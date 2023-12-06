@@ -17,14 +17,6 @@ type TossupTableProps = {
 export function TossupTable({ tossups }: TossupTableProps) {
   const columns = [
     {
-      accessor: "round",
-      Header: "Round",
-    },
-    {
-      accessor: "question_number",
-      Header: "#",
-    },
-    {
       accessor: "category",
       Header: "Category",
     },
@@ -32,7 +24,7 @@ export function TossupTable({ tossups }: TossupTableProps) {
       accessor: "answer",
       Header: "Answer",
       linkTemplate:
-        "/buzzpoints/{{tournament_slug}}/tossup/{{round}}/{{question_number}}",
+        "/buzzpoints/{{set_slug}}/tossup/{{id}}",
       html: true,
     },
     {

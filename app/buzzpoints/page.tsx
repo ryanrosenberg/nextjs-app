@@ -3,12 +3,13 @@ import NormalTable from "../../components/normal_table";
 
 export default function Home() {
   const tournaments = getTournamentsQuery.all();
+  
   const columns = [
     {
       accessor: "name",
       Header: "Tournament",
       border: "right",
-      linkTemplate: "/buzzpoints/{{slug}}/tossup"
+      linkTemplate: "/buzzpoints/{{slug}}"
     },
     {
       accessor: "location",

@@ -24,7 +24,7 @@ export default function BonusDisplay({
         <div className="mb-2">
           {!!navOptions.previous && (
             <Link
-              href={`/buzzpoints/${tournament.slug}/bonus/${navOptions.previous.round}/${navOptions.previous.number}`}
+              href={`/buzzpoints/${tournament.slug}/bonus/${navOptions.previous.id}`}
               className="underline"
             >
               Previous bonus
@@ -33,7 +33,7 @@ export default function BonusDisplay({
           {!!navOptions.previous && !!navOptions.next && " - "}
           {!!navOptions.next && (
             <Link
-              href={`/buzzpoints/${tournament.slug}/bonus/${navOptions.next.round}/${navOptions.next.number}`}
+              href={`/buzzpoints/${tournament.slug}/bonus/${navOptions.next.id}`}
               className="underline"
             >
               Next bonus

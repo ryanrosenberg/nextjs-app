@@ -22,7 +22,6 @@ const NormalTable = ({
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
-  // console.log(items);
   const renderCell = (item, column) => {
     let cellValue = item[column.accessor];
 
