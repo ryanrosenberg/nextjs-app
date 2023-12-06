@@ -19,7 +19,7 @@ export async function generateMetadata({ params }) {
 
 export async function getData(params) {
   const client = await dbi.connect();
-  const summary_res = await client.sql`
+  const summary_res = client.sql`
   SELECT 
            date, 
            tournaments.tournament_id,
@@ -31,7 +31,7 @@ export async function getData(params) {
            WHERE tournaments.tournament_id::varchar = ${params.id}
            `;
 
-  const standings_res = await client.sql`
+  const standings_res = client.sql`
   SELECT 
   rank as Rank,
   teams.team as Team,
@@ -63,7 +63,7 @@ export async function getData(params) {
   ORDER BY Rank
           `;
 
-  const players_res = await client.sql`
+  const players_res = client.sql`
   SELECT *, rawPPG as PPG from (
     SELECT
        coalesce(fname|| ' ' || lname, player_games.player) as Player,
@@ -94,14 +94,17 @@ export async function getData(params) {
        ORDER BY rawPPG desc) e
           `;
 
-  const all = {
-    Summary: summary_res.rows,
-    Standings: standings_res.rows,
-    Players: players_res.rows,
-  };
+  const all = await Promise.all([
+    summary_res, standings_res, players_res
+  ])
+
   return {
     props: {
-      result: all,
+      result: {
+        Summary: all[0].rows,
+        Standings: all[1].rows,
+        Players: all[2].rows,
+      },
     },
   };
 }

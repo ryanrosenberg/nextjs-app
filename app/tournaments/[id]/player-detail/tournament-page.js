@@ -2,7 +2,7 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import NormalTable from "../../../../components/normal_table";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import _ from "lodash";
 import styles from "../tournaments.module.css";
 import { slugify, sanitize } from "../../../../lib/utils";
@@ -41,14 +41,14 @@ export default function Tournament({ result }) {
         accessor: "opponent",
         align: "left",
         border: "right",
-        linkTemplate: "team-detail#{{opponent_slug}}"
+        linkTemplate: "team-detail#{{opponent_slug}}",
       },
       {
         Header: "Result",
         accessor: "result",
         align: "center",
         border: "right",
-        linkTemplate: "/games/{{game_id}}"
+        linkTemplate: "/games/{{game_id}}",
       },
       {
         Header: "TUH",
@@ -79,7 +79,9 @@ export default function Tournament({ result }) {
   return (
     <>
       <div className="main-container">
-        <NestedSideNav lowestLevel={3} />
+        <Suspense>
+          <NestedSideNav lowestLevel={3} />
+        </Suspense>
         <div className="main-content">
           <h1 className="page-title">{data.Summary[0]["tournament_name"]}</h1>
           <p className="page-subtitle">

@@ -1,8 +1,7 @@
 "use client";
 
 import NormalTable from "../../../../components/normal_table";
-import { useMemo } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { Suspense, useMemo } from "react";
 import _ from "lodash";
 import styles from "../tournaments.module.css";
 import {
@@ -15,9 +14,6 @@ import NestedSideNav from "../../../../components/nested_side_nav";
 
 export default function Tournament({ result }) {
   const data = result.props.result;
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const url = pathname + searchParams.toString();
 
   let teamDetailTeams = _.groupBy(
     data["Team Detail Teams"].map((item) => {
@@ -185,7 +181,9 @@ export default function Tournament({ result }) {
   return (
     <>
       <div className="main-container">
-        <NestedSideNav lowestLevel={3} />
+        <Suspense>
+          <NestedSideNav lowestLevel={3} />
+        </Suspense>
         <div className="main-content">
           <h1 className="page-title">{data.Summary[0]["tournament_name"]}</h1>
           <p className="page-subtitle">
@@ -212,10 +210,10 @@ export default function Tournament({ result }) {
           )}
           <ul className={styles.linkRow}>
             <li>
-              <a href={url + "/../"}>Tournament Page</a>
+              <a href=".">Tournament Page</a>
             </li>
             <li>
-              <a href={url + "/../team-detail"}>Team Detail</a>
+              <a href="./team-detail">Team Detail</a>
             </li>
           </ul>
           <br></br>

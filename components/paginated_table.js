@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import tables from "./tables.module.css";
 import paginated_table from "./paginated_table.module.css";
@@ -21,9 +23,7 @@ const PaginatedTable = ({
     }
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
-  const [page, setPage] = useState(1);
+  
   const [itemOffset, setItemOffset] = useState(0);
 
   // Simulate fetching items from another resources.

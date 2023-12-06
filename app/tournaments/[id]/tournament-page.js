@@ -2,7 +2,6 @@
 
 import StandingsTable from "../../../components/standings_table";
 import _ from "lodash";
-import NestedSideNav from "../../../components/nested_side_nav";
 import { slugify, sanitize } from "../../../lib/utils";
 import PlayerTable from "../../../components/player_table";
 import TournamentNavRow from "../../../components/tournament-nav-row";
@@ -32,7 +31,6 @@ export default function Tournament({ result }) {
   return (
     <>
       <div className="main-container">
-        <NestedSideNav lowestLevel={3} />
         <div className="main-content">
           <h1 className="page-title">{data.Summary[0]["tournament_name"]}</h1>
           <p className="page-subtitle">
@@ -54,12 +52,20 @@ export default function Tournament({ result }) {
             <></>
           )}
           <Suspense>
-            <TournamentNavRow id = {tournament_id} />
+            <TournamentNavRow id={tournament_id} />
             <h2 id="standings">Standings</h2>
-            <StandingsTable id = {tournament_id} grouping_column="bracket" data={data.Standings} />
+            <StandingsTable
+              id={tournament_id}
+              grouping_column="bracket"
+              data={data.Standings}
+            />
             <br></br>
             <h2 id="players">Players</h2>
-            <PlayerTable id = {tournament_id} data={data.Players} itemsPerPage={10} />
+            <PlayerTable
+              id={tournament_id}
+              data={data.Players}
+              itemsPerPage={10}
+            />
           </Suspense>
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function TournamentNavRow({id}) {
         <a href={`${id}/team-detail`}>Team Detail</a>
       </li>
       <li>
-        <a href={`${id}/team-detail`}>Player Detail</a>
+        <a href={`${id}/player-detail`}>Player Detail</a>
       </li>
     </ul>
   );
