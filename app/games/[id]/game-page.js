@@ -19,7 +19,7 @@ export default function Game({ result }) {
     () => [
       {
         Header: "Player",
-        accessor: "Player",
+        accessor: "player",
         align: "left",
         border: "right",
       },
@@ -38,7 +38,7 @@ export default function Game({ result }) {
       },
       {
         Header: "Pts",
-        accessor: "Pts",
+        accessor: "pts",
       },
     ],
     []
@@ -62,9 +62,9 @@ export default function Game({ result }) {
         <p className="page-subtitle"></p>
         <hr />
         <div className={styles.playerStatsRow}>
-          {Object.keys(player_stats).map((team_name) => {
+          {Object.keys(player_stats).map((team_name, i) => {
             return (
-              <div className={styles.teamDiv}>
+              <div className={styles.teamDiv} key={i}>
                 <h2 className={styles.teamName}>{team_name}</h2>
                 <p className={styles.teamScore}>
                   {team_stats[team_name][0]["total_pts"]}
