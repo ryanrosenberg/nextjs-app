@@ -10,6 +10,7 @@ import { Suspense } from "react";
 
 export default function Tournament({ result }) {
   const data = result.props.result;
+  const tournament_id = data.Summary[0].tournament_id;
 
   data.Standings.map((item) => {
     item.team_slug = slugify(item.team);
@@ -53,12 +54,12 @@ export default function Tournament({ result }) {
             <></>
           )}
           <Suspense>
-            <TournamentNavRow />
+            <TournamentNavRow id = {tournament_id} />
             <h2 id="standings">Standings</h2>
-            <StandingsTable grouping_column="bracket" data={data.Standings} />
+            <StandingsTable id = {tournament_id} grouping_column="bracket" data={data.Standings} />
             <br></br>
             <h2 id="players">Players</h2>
-            <PlayerTable data={data.Players} itemsPerPage={10} />
+            <PlayerTable id = {tournament_id} data={data.Players} itemsPerPage={10} />
           </Suspense>
         </div>
       </div>

@@ -1,13 +1,9 @@
-"use client";
-
 import _ from "lodash";
 import { formatDecimal } from "../lib/utils";
-import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import PaginatedTable from "./paginated_table";
 
-export default function PlayerTable({ data, itemsPerPage }) {
-  const pathname = usePathname();
+export default function PlayerTable({ data, id, itemsPerPage }) {
 
   const columns = useMemo(
     () => [
@@ -16,14 +12,14 @@ export default function PlayerTable({ data, itemsPerPage }) {
         accessor: "player",
         align: "left",
         border: "right",
-        linkTemplate: pathname + "/player-detail#{{player_slug}}-{{team_slug}}",
+        linkTemplate: id + "/player-detail#{{player_slug}}-{{team_slug}}",
       },
       {
         Header: "Team",
         accessor: "team",
         align: "left",
         border: "right",
-        linkTemplate: pathname + "/team-detail#{{team_slug}}",
+        linkTemplate: id + "/team-detail#{{team_slug}}",
       },
       {
         Header: "GP",

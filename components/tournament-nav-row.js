@@ -1,17 +1,13 @@
-"use client";
-
 import styles from "./tournaments.module.css";
-import { usePathname } from "next/navigation";
 
-export default function TournamentNavRow() {
-  const pathname = usePathname();
+export default function TournamentNavRow({id}) {
   return (
     <ul className={styles.linkRow}>
       <li>
-        <a href={pathname + "/team-detail"}>Team Detail</a>
+        <a href={`${id}/team-detail`}>Team Detail</a>
       </li>
       <li>
-        <a href={pathname + "/player-detail"}>Player Detail</a>
+        <a href={`${id}/team-detail`}>Player Detail</a>
       </li>
     </ul>
   );

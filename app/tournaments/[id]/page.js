@@ -21,7 +21,10 @@ export async function getData(params) {
   const client = await dbi.connect();
   const summary_res = await client.sql`
   SELECT 
-           date, tournaments.tournament_name, naqt_id
+           date, 
+           tournaments.tournament_id,
+           tournaments.tournament_name,
+           naqt_id
            from tournaments 
            LEFT JOIN sets on tournaments.set_id::varchar = sets.set_id::varchar
            LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar

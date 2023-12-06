@@ -1,20 +1,17 @@
-"use client";
-
 import tables from "./tables.module.css";
 import _ from "lodash";
 import classnames from "classnames";
 import { useSortableData } from "../hooks/useSortableData";
 import tournaments from "./tournaments.module.css";
 import { renderCell, formatDecimal, formatPercent } from "../lib/utils";
-import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
 export default function StandingsTable({
   data,
+  id,
   grouping_column,
   full_width = null,
 }) {
-  const pathname = usePathname();
   const { items, requestSort, sortConfig } = useSortableData(data);
 
   const columns = useMemo(
@@ -29,7 +26,7 @@ export default function StandingsTable({
         accessor: "team",
         align: "left",
         border: "right",
-        linkTemplate: pathname + "/team-detail#{{team_slug}}",
+        linkTemplate: id + "/team-detail#{{team_slug}}",
       },
       {
         Header: "School",
