@@ -57,6 +57,7 @@ export async function getData(params) {
   LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar
   WHERE team_games.tournament_id::varchar = ${params.id}
   GROUP BY 1, 2, 3, 4, 5
+  ORDER BY Rank
           `;
 
   const players_res = await client.sql`
