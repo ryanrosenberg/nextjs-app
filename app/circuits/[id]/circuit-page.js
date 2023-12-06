@@ -3,34 +3,44 @@
 import { useMemo } from "react";
 import _ from "lodash";
 import GroupedPaginatedTable from "../../../components/grouped_paginated_table";
-import NormalTable from "../../../components/normal_table";
 import PaginatedTable from "../../../components/paginated_table";
 import NestedSideNav from "../../../components/nested_side_nav";
 import dynamic from "next/dynamic";
+import { slugify, sanitize, formatPercent, formatComma, formatDecimal } from "../../../lib/utils";
 import styles from "./circuits.module.css";
 
 export default function Circuit({ result }) {
   const data = result.props.result;
+  
+  data.Tournaments.map((item) => {
+    item.date = new Date(item.date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    return item;
+  });
   const schoolsColumns = useMemo(
     () => [
       {
         Header: "School",
-        accessor: "School",
+        accessor: "school",
         align: "left",
         border: "right",
+        linkTemplate: "/schools/{{school_slug}}"
       },
       {
         Header: "Yrs",
-        accessor: "Yrs",
+        accessor: "yrs",
       },
       {
         Header: "Ts",
-        accessor: "Ts",
+        accessor: "ts",
         border: "right",
       },
       {
         Header: "GP",
-        accessor: "GP",
+        accessor: "gp",
       },
       {
         Header: "W-L",
@@ -39,50 +49,61 @@ export default function Circuit({ result }) {
       {
         Header: "Win%",
         accessor: "Win%",
+        format: formatPercent
       },
       {
         Header: "TUH",
-        accessor: "TUH",
+        accessor: "tuh",
         border: "right",
+        format: formatComma
       },
       {
         Header: "15",
         accessor: "15",
+        format: formatComma,
       },
       {
         Header: "10",
         accessor: "10",
+        format: formatComma,
       },
       {
         Header: "-5",
         accessor: "-5",
         border: "right",
+        format: formatComma,
       },
       {
         Header: "15/G",
         accessor: "15/G",
+        format: formatDecimal
       },
       {
         Header: "10/G",
         accessor: "10/G",
+        format: formatDecimal,
       },
       {
         Header: "-5/G",
         accessor: "-5/G",
         border: "right",
+        format: formatDecimal,
       },
       {
         Header: "TU%",
         accessor: "TU%",
         border: "right",
+        format: formatPercent,
       },
       {
         Header: "PPG",
-        accessor: "PPG",
+        accessor: "ppg",
+        format: formatDecimal
       },
       {
         Header: "PPB",
-        accessor: "PPB",
+        accessor: "ppb",
+        format: formatDecimal
       },
     ],
     []
@@ -91,32 +112,34 @@ export default function Circuit({ result }) {
   const tournamentsColumns = useMemo(() => [
     {
       Header: "Date",
-      accessor: "Date",
+      accessor: "date",
       border: "right",
     },
     {
       Header: "Set",
       accessor: "Set",
       align: "left",
+      linkTemplate: "/sets/{{set_slug}}"
     },
     {
       Header: "Site",
-      accessor: "Site",
+      accessor: "site",
       align: "left",
       border: "right",
+      linkTemplate: "/tournaments/{{tournament_id}}",
     },
     {
       Header: "Teams",
-      accessor: "Teams",
+      accessor: "teams",
     },
     {
       Header: "Schools",
-      accessor: "Schools",
+      accessor: "schools",
       border: "right",
     },
     {
       Header: "Champion",
-      accessor: "Champion",
+      accessor: "champion",
       align: "left",
     },
   ]);
@@ -237,7 +260,7 @@ export default function Circuit({ result }) {
           <NestedSideNav />
         </div>
         <div className="main-content">
-          <h1 className="page-title">{data.Tournaments[0]["Circuit"]}</h1>
+          <h1 className="page-title">{data.Tournaments[0]["circuit"]}</h1>
           <div id="map">
             <MapWithNoSSR
               school_markers={data.Schools}
@@ -261,11 +284,11 @@ export default function Circuit({ result }) {
           <GroupedPaginatedTable
             columns={tournamentsColumns}
             data={data.Tournaments}
-            grouping_column="Year"
+            grouping_column="year"
             itemsPerPage={10}
           />
           <hr />
-          <h2 id="records">Records</h2>
+          {/* <h2 id="records">Records</h2>
           <h3
             style={{
               textDecoration: "underline",
@@ -330,7 +353,7 @@ export default function Circuit({ result }) {
                 data={data.Records["Most Tournaments Played"]}
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

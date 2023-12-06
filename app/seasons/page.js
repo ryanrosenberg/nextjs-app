@@ -13,14 +13,9 @@ export async function getData() {
     order by 1
     `;
 
-  const res = data.rows.map((en) => {
-    en["year"] = `<a href = '/seasons/${en["year"]}'>${en["year"]}</a>`;
-    return en;
-  });
-
   return {
     props: {
-      result: res,
+      result: data.rows,
     },
   };
 }

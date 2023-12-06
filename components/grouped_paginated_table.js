@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate";
 import _ from "lodash";
 import classnames from "classnames";
 import RawHtml from "./rawHtml";
+import { renderCell } from "../lib/utils";
 import { useSortableData } from "../hooks/useSortableData";
 
 const GroupedPaginatedTable = ({
@@ -42,7 +43,7 @@ const GroupedPaginatedTable = ({
   let rowGroups = _.groupBy(currentItems, grouping_column);
 
   return (
-    <div>
+    <div style={{display: "flex", flexDirection: "column", maxWidth: "1600px"}}>
       <table
         className={classnames(
           tables.dataframe,
@@ -86,7 +87,7 @@ const GroupedPaginatedTable = ({
                   className={tables.cell}
                   colSpan={Object.keys(rowGroups[group][0]).length}
                 >
-                  <RawHtml html={rowGroups[group][0][grouping_column]} />
+                  {renderCell(rowGroups[group][0], {'accessor': grouping_column, 'html': true})}
                 </td>
               </tr>
               {rowGroups[group].map((row, i) => {
@@ -104,7 +105,7 @@ const GroupedPaginatedTable = ({
                                 : tables.noBorder
                             )}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         ) : (
                           <td
@@ -119,7 +120,7 @@ const GroupedPaginatedTable = ({
                                 : tables.cellNumber
                             )}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         );
                       return rowHTML;

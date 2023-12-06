@@ -32,7 +32,7 @@ export async function getData(params) {
            WHERE tournaments.tournament_id::varchar = ${params.id}
            `;
 
-           const players_res = await client.sql`
+  const players_res = await client.sql`
            SELECT *, rawPPG as PPG from (
              SELECT
                 coalesce(fname|| ' ' || lname, player_games.player) as Player,

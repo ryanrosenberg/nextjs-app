@@ -189,7 +189,11 @@ export default function Tournament({ result }) {
         <div className="main-content">
           <h1 className="page-title">{data.Summary[0]["tournament_name"]}</h1>
           <p className="page-subtitle">
-            {data.Summary[0]["date"].toLocaleDateString("en-US")}
+            {data.Summary[0]["date"].toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
           {data.Summary[0]["naqt_id"] ? (
             <p className="naqt-disclaimer">

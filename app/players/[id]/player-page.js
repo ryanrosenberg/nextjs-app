@@ -2,37 +2,41 @@
 
 import { useMemo } from "react";
 import _ from "lodash";
-import Link from "next/link";
-import { slugify } from "../../../lib/utils.js";
+import { formatDecimal, sanitize, slugify } from "../../../lib/utils.js";
 import RawHtml from "../../../components/rawHtml";
 import GroupedTable from "../../../components/grouped_table";
 import NestedSideNav from "../../../components/nested_side_nav";
+import GroupedPaginatedTable from "../../../components/grouped_paginated_table.js";
 
 export default function Player({ result }) {
   const data = result.props.result;
+  
+  data.Tournaments.map((item) => {
+    item.date = new Date(item.date).toLocaleDateString("en-US");
+    item.team_slug = slugify(sanitize(item.team))
+    return item;
+  });
   const yearsColumns = useMemo(
     () => [
       {
         Header: "Season",
-        accessor: "Year",
+        accessor: "year",
         border: "right",
       },
       {
         Header: "School",
-        accessor: "School",
+        accessor: "school",
         align: "left",
         border: "right",
-        render: ({ val }) => (
-          <Link href={"../schools/" + slugify(val)}>{val}</Link>
-        ),
+        linkTemplate: "/schools/{{school_slug}}"
       },
       {
         Header: "Ts",
-        accessor: "Ts",
+        accessor: "ts",
       },
       {
         Header: "GP",
-        accessor: "GP",
+        accessor: "gp",
         border: "right",
       },
       {
@@ -51,19 +55,23 @@ export default function Player({ result }) {
       {
         Header: "15/G",
         accessor: "15/G",
+        format: formatDecimal
       },
       {
         Header: "10/G",
         accessor: "10/G",
+        format: formatDecimal,
       },
       {
         Header: "-5/G",
         accessor: "-5/G",
         border: "right",
+        format: formatDecimal,
       },
       {
         Header: "PPG",
-        accessor: "PPG",
+        accessor: "ppg",
+        format: formatDecimal,
       },
     ],
     []
@@ -72,47 +80,43 @@ export default function Player({ result }) {
   const tournamentsColumns = useMemo(() => [
     {
       Header: "Date",
-      accessor: "Date",
+      accessor: "date",
       border: "right",
     },
     {
       Header: "Set",
       accessor: "Set",
       align: "left",
+      linkTemplate: "/sets/{{set_slug}}"
     },
     {
       Header: "Site",
-      accessor: "Site",
+      accessor: "site",
       align: "left",
       border: "right",
+      linkTemplate: "/tournaments/{{tournament_id}}"
     },
     {
       Header: "School",
-      accessor: "School",
+      accessor: "school",
       align: "left",
+      linkTemplate: "/schools/{{school_slug}}"
     },
     {
       Header: "Team",
-      accessor: "Team",
+      accessor: "team",
       align: "left",
       border: "right",
+      linkTemplate: "/tournaments/{{tournament_id}}/team-detail#{{team_slug}}",
     },
     {
       Header: "Finish",
-      accessor: "Finish",
+      accessor: "finish",
       border: "right",
     },
     {
       Header: "GP",
-      accessor: "GP",
-    },
-    {
-      Header: "W",
-      accessor: "W",
-    },
-    {
-      Header: "L",
-      accessor: "L",
+      accessor: "gp",
       border: "right",
     },
     {
@@ -131,28 +135,34 @@ export default function Player({ result }) {
     {
       Header: "15/G",
       accessor: "15/G",
+      format: formatDecimal
     },
     {
       Header: "10/G",
       accessor: "10/G",
+      format: formatDecimal,
     },
     {
       Header: "-5/G",
       accessor: "-5/G",
       border: "right",
+      format: formatDecimal,
     },
     {
       Header: "P/N",
       accessor: "P/N",
+      format: formatDecimal,
     },
     {
       Header: "G/N",
       accessor: "G/N",
       border: "right",
+      format: formatDecimal,
     },
     {
       Header: "PPG",
-      accessor: "PPG",
+      accessor: "ppg",
+      format: formatDecimal,
     },
   ]);
 
@@ -162,15 +172,16 @@ export default function Player({ result }) {
       accessor: "Set",
       align: "left",
       border: "right",
+      linkTemplate: "/sets/{{set_slug}}"
     },
     {
       Header: "Categories",
-      accessor: "Categories",
+      accessor: "categories",
       align: "left",
     },
   ]);
 
-  const subtitle = _.map(data.Years, "School")
+  const subtitle = _.map(data.Years, "school")
     .filter((v, i, a) => a.indexOf(v) == i)
     .map((school, i) => (
       <span key={i}>
@@ -186,7 +197,7 @@ export default function Player({ result }) {
           <NestedSideNav />
         </div>
         <div className="main-content">
-          <h1 className="page-title">{data.Tournaments[0].Player}</h1>
+          <h1 className="page-title">{data.Years[0].player}</h1>
           <p className="page-subtitle">{subtitle}</p>
           {data.Years.length > 0 && (
             <div>
@@ -195,16 +206,17 @@ export default function Player({ result }) {
               <GroupedTable
                 columns={yearsColumns}
                 data={data.Years}
-                grouping_column="School"
+                grouping_column="school"
               />
             </div>
           )}
           <hr />
           <h2 id="tournaments">Tournaments</h2>
-          <GroupedTable
+          <GroupedPaginatedTable
             columns={tournamentsColumns}
             data={data.Tournaments}
-            grouping_column="Year"
+            grouping_column="year"
+            itemsPerPage={10}
           />
           {data.Editing.length > 0 && (
             <div>
@@ -213,7 +225,7 @@ export default function Player({ result }) {
               <GroupedTable
                 columns={editingColumns}
                 data={data.Editing}
-                grouping_column="Year"
+                grouping_column="year"
               />
             </div>
           )}
