@@ -31,7 +31,7 @@ export async function getData(params) {
            `;
   const team_detail_team_res = await client.sql`
   SELECT
-  CAST(REPLACE(round, 'Round ', '') as int) as Round,
+  REPLACE(round, 'Round ', '')::numeric as Round,
   team as Team,
   game_num, game_id,
   opponent as Opponent,
