@@ -1,16 +1,13 @@
 import Tournament from "./tournament-page";
 import { db as dbi } from "@vercel/postgres";
-import { db } from "../../../lib/firestore";
-import { collection, getDocs } from "firebase/firestore";
 
 export async function generateStaticParams() {
-  const querySnapshot = await getDocs(collection(db, "tournaments"));
-  var paths = [];
-  querySnapshot.forEach((doc) => {
-    paths.push({ id: doc.id });
-  });
-
-  return paths;
+  const client = await dbi.connect();
+  const tournaments = await client.sql`
+  SELECT distinct tournament_id
+           from tournaments 
+           `;
+  return tournaments.rows;
 }
 
 export async function generateMetadata({ params }) {
