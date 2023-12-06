@@ -6,6 +6,7 @@ import NestedSideNav from "../../../components/nested_side_nav";
 import { slugify, sanitize } from "../../../lib/utils";
 import PlayerTable from "../../../components/player_table";
 import TournamentNavRow from "../../../components/tournament-nav-row";
+import { Suspense } from "react";
 
 export default function Tournament({ result }) {
   const data = result.props.result;
@@ -51,12 +52,14 @@ export default function Tournament({ result }) {
           ) : (
             <></>
           )}
-          <TournamentNavRow />
-          <h2 id="standings">Standings</h2>
-          <StandingsTable grouping_column="bracket" data={data.Standings} />
-          <br></br>
-          <h2 id="players">Players</h2>
-          <PlayerTable data={data.Players} itemsPerPage={10} />
+          <Suspense>
+            <TournamentNavRow />
+            <h2 id="standings">Standings</h2>
+            <StandingsTable grouping_column="bracket" data={data.Standings} />
+            <br></br>
+            <h2 id="players">Players</h2>
+            <PlayerTable data={data.Players} itemsPerPage={10} />
+          </Suspense>
         </div>
       </div>
     </>
