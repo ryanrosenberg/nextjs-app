@@ -40,7 +40,7 @@ export async function getData(params) {
   avg(coalesce(powers, 0)) as \"15/G\",
   avg(tens) as \"10/G\",
   avg(negs) as \"-5/G\",
-  (sum(coalesce(powers, 0)) + sum(tens))/count(negs)::numeric as \"G/N\",
+  (sum(coalesce(powers, 0)) + sum(tens))/NULLIF(count(negs), 0)::numeric as \"G/N\",
   avg(pts) as PPG from
   player_games
   LEFT JOIN schools on player_games.school_id = schools.school_id
@@ -69,12 +69,14 @@ export async function getData(params) {
   rank || '/' || CAST(num_teams as int) as Finish,
   count(tens) as GP,
   sum(coalesce(tuh, 20)) as TUH,
-  sum(powers) as \"15\", sum(tens) as \"10\", sum(negs) as \"-5\",
-  sum(powers)/count(tens)::numeric as \"15/G\",
-  sum(tens)/count(tens)::numeric as \"10/G\",
-  sum(negs)/count(tens)::numeric as \"-5/G\",
+  sum(powers) as \"15\", 
+  sum(tens) as \"10\", 
+  sum(negs) as \"-5\",
+  sum(powers)/NULLIF(count(tens), 0)::numeric as \"15/G\",
+  sum(tens)/NULLIF(count(tens), 0)::numeric as \"10/G\",
+  sum(negs)/NULLIF(count(tens), 0)::numeric as \"-5/G\",
   sum(powers)/sum(negs)::numeric as \"P/N\",
-  (sum(coalesce(powers, 0)) + sum(tens))/sum(negs)::numeric as \"G/N\",
+  (sum(coalesce(powers, 0)) + sum(tens))/NULLIF(sum(negs), 0)::numeric as \"G/N\",
   avg(pts) as PPG from
   player_games
   LEFT JOIN schools on player_games.school_id = schools.school_id
