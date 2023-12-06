@@ -10,7 +10,14 @@ export const useSortableData = (items, config = null) => {
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         const regex = /^[0-9\.]+$/g;
+        console.log(a)
         if (typeof a[sortConfig.key] == "string" && a[sortConfig.key].match(regex)) {
+          if (a[sortConfig.key] === "regionals" & b[sortConfig.key] === "nationals") {
+            return sortConfig.direction === "ascending" ? -1 : 1;
+          }
+          if (a[sortConfig.key] === "nationals" & b[sortConfig.key] === "regionals") {
+            return sortConfig.direction === "ascending" ? 1 : -1;
+          }
           if (parseFloat(a[sortConfig.key]) < parseFloat(b[sortConfig.key])) {
             return sortConfig.direction === "ascending" ? -1 : 1;
           }
@@ -19,6 +26,12 @@ export const useSortableData = (items, config = null) => {
           }
           return 0;
         } else {
+          if (a[sortConfig.key] === "regionals" & b[sortConfig.key] === "nationals") {
+            return sortConfig.direction === "ascending" ? -1 : 1;
+          }
+          if (a[sortConfig.key] === "nationals" & b[sortConfig.key] === "regionals") {
+            return sortConfig.direction === "ascending" ? 1 : -1;
+          }
           if (a[sortConfig.key] < b[sortConfig.key]) {
             return sortConfig.direction === "ascending" ? -1 : 1;
           }

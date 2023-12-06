@@ -315,6 +315,7 @@ WITH raw_buzzes AS (
     )
     SELECT	buzz.player_id,
             player.name,
+            player.player_slug,
             team.name as team,
             sum(iif(buzz.value > 10, 1, 0)) as powers,
             sum(iif(buzz.value = 10, 1, 0)) as gets,
@@ -336,7 +337,7 @@ WITH raw_buzzes AS (
     LEFT JOIN	buzz neg ON buzz.game_id = neg.game_id AND buzz.tossup_id = neg.tossup_id AND buzz.value > 0 AND neg.value < 0
     WHERE	round.tournament_id = ?
         AND	exclude_from_individual = 0
-    group by buzz.player_id, player.name, team.name
+    group by buzz.player_id, player.name, player.player_slug, team.name
 `)
 
 export const get = cache(function get<T>(statement:Statement, ...params:any[]) {

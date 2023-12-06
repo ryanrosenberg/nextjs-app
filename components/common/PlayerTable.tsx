@@ -1,6 +1,5 @@
 'use client';
 
-import Table from "../Table";
 import { formatDecimal } from "../../lib/jordan_utils";
 import NormalTable from "../normal_table";
 
@@ -12,11 +11,9 @@ export function PlayerTable({ players }: PlayerTableProps) {
     const columns = [
         {
             accessor: "name",
-            Header: "Player"
-        },
-        {
-            accessor: "team",
-            Header: "Team"
+            Header: "Player",
+            linkTemplate:
+              "/players/{{player_slug}}",
         },
         {
             accessor: "powers",
