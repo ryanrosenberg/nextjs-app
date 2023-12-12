@@ -8,6 +8,7 @@ import { slugify } from "../../lib/utils";
 
 export default function Records({ result }) {
   const data = result.props.result;
+  console.log(data);
   const circuits = [
     "Asia",
     "Central CC",
