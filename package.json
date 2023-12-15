@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start"
   },
@@ -22,7 +22,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "leaflet-geosearch": "^3.7.0",
     "lodash": "^4.17.21",
-    "next": "^14.0.4-canary.37",
+    "next": "^14.0.5-canary.14",
     "path": "^0.12.7",
     "pg": "^8.11.3",
     "radash": "^11.0.0",

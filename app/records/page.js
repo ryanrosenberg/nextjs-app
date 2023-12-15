@@ -1,8 +1,10 @@
 import Records from "./records-page";
 import { db as dbi } from "@vercel/postgres";
+import { cache } from 'react'
 
 export async function getData() {
   const client = await dbi.connect();
+  // Most Wins -- School
   const summary1 = client.sql`
   SELECT 
   school_name as \"School\", 
@@ -18,6 +20,7 @@ export async function getData() {
   GROUP BY 1, 2
   ORDER BY Wins desc
   LIMIT 10`;
+  // Highest Winning Percentage -- Team
   const summary2 = client.sql`
   SELECT 
   a.*
@@ -35,6 +38,7 @@ GROUP BY 1) a
 WHERE Tournaments >= 10
 ORDER BY 3 desc
 LIMIT 10`;
+  // Most Tournaments Won -- School
   const summary3 = client.sql`SELECT 
   school_name as \"School\", 
   slug,
@@ -50,16 +54,45 @@ LIMIT 10`;
   GROUP BY 1, 2
   ORDER BY 3 desc
   LIMIT 10`;
+  // Most ACF Nationals and DI ICT Titles -- School
   const summary4 = client.sql`
-  SELECT champions.*, 
-  schools.slug 
+  SELECT 
+  coalesce(nats.school, ict.school) as school,
+  coalesce(nats.slug, ict.slug) as slug,
+  coalesce(nats.nats, 0) as nats, 
+  coalesce(ict.ict, 0) as ict, 
+  coalesce(nats.nats, 0) + coalesce(ict.ict, 0) as total 
+  from
+  (SELECT 
+  schools.school_name as School, 
+  champions.tournament, 
+  schools.slug,
+  count(schools.slug) as nats
   from champions
   left join teams on champions.team_id = teams.team_id
-  left join schools on teams.school_id = schools.school_id`;
-
-  const summary5 = client.sql`SELECT year as Season, team as \"Team\", 
-count(distinct tournament_id) as Tournaments,
-sum(case result when 1 then 1 else 0 end) as Wins
+  left join schools on teams.school_id = schools.school_id
+  WHERE champions.tournament = 'ACF Nationals'
+  GROUP BY 1, 2, 3) nats
+  FULL JOIN
+  (SELECT 
+  schools.school_name as School, 
+  champions.tournament, 
+  schools.slug,
+  count(schools.slug) as ict
+  from champions
+  left join teams on champions.team_id = teams.team_id
+  left join schools on teams.school_id = schools.school_id
+  WHERE champions.tournament = 'DI ICT'
+  GROUP BY 1, 2, 3) ict
+  ON nats.slug = ict.slug
+  ORDER BY Total desc`;
+  // Most Wins in a Season -- Team
+  const summary5 = client.sql`
+  SELECT 
+  year as Season, 
+  team as \"Team\", 
+  count(distinct tournament_id) as Tournaments,
+  sum(case result when 1 then 1 else 0 end) as Wins
 from team_games
 left join teams on team_games.team_id = teams.team_id
 left join schools on teams.school_id = schools.school_id
@@ -69,7 +102,11 @@ and sets.difficulty <> 'easy'
 GROUP BY 1, 2
 ORDER BY 4 desc
 LIMIT 10`;
-  const summary6 = client.sql`SELECT sets.year as Season, team as \"Team\", 
+  // Most Tournaments Won in a Season -- School
+  const summary6 = client.sql`
+  SELECT 
+  sets.year as Season, 
+  team as \"Team\", 
   count(distinct tournament_results.tournament_id) as Tournaments,
   sum(case rank when 1 then 1 else 0 end) as Wins
   from tournament_results
@@ -82,6 +119,7 @@ LIMIT 10`;
   GROUP BY 1, 2
   ORDER BY 4 desc
   LIMIT 10`;
+  // Highest National Tournament PP20TUH -- Team
   const summary7 = client.sql`SELECT *
   FROM (
   SELECT sets.year as Season,
@@ -90,7 +128,7 @@ LIMIT 10`;
   site, 
   team as \"Team\", 
   team_games.tournament_id,
-  round(sum(total_pts)*20/sum(coalesce(tuh, 20)), 2) as PP20TUH
+  sum(total_pts)*20/sum(coalesce(tuh, 20))::numeric as PP20TUH
   from team_games
   left join teams on team_games.team_id = teams.team_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
@@ -101,13 +139,16 @@ LIMIT 10`;
   GROUP BY 1, 2, 3, 4, 5, 6
   ORDER BY 7 desc
   LIMIT 10) a`;
+  // Highest National Tournament TU% -- Team
   const summary8 = client.sql`
   SELECT 
-  *
-  FROM (
-  SELECT sets.year as Season,
-  \"set\" as Tournament, \"set\", site, team as \"Team\", team_games.tournament_id,
-  (sum(coalesce(powers, 0))+sum(tens))/nullif(sum(coalesce(tuh, 20)), 0) as \"TU%\"
+  sets.year as Season,
+  \"set\" as Tournament, 
+  \"set\", 
+  site, 
+  team as \"Team\", 
+  team_games.tournament_id,
+  (sum(coalesce(powers, 0))+sum(tens)::numeric)/nullif(sum(coalesce(tuh, 20)), 0) as \"TU%\"
   from team_games
   left join teams on team_games.team_id = teams.team_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
@@ -117,11 +158,24 @@ LIMIT 10`;
   and \"set\" in ('DI ICT', 'ACF Nationals')
   GROUP BY 1, 2, 3, 4, 5, 6
   ORDER BY 7 desc
-  LIMIT 10) a`;
+  LIMIT 10`;
+  // Highest National Tournament PPB (normalized) -- Team
   const summary9 = client.sql`
-  SELECT sets.year as Season, team_games.tournament_id,
-  \"set\" as Tournament, \"set\", site, team as \"Team\", 
-  round((sum(bonus_pts)/nullif(sum(bonuses_heard), 0)), 2) as PPB
+  Select 
+  teams.*,
+  summ.mean,
+  summ.sd,
+  (teams.PPB - summ.mean)/summ.sd as z
+  FROM
+  (SELECT 
+  sets.year as Season, 
+  team_games.tournament_id,
+  \"set\" as Tournament, 
+  \"set\", 
+  sets.set_id,
+  site, 
+  team as Team, 
+  (sum(bonus_pts)::numeric/nullif(sum(bonuses_heard), 0)) as PPB
   from team_games
   left join teams on team_games.team_id = teams.team_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
@@ -129,52 +183,44 @@ LIMIT 10`;
   left join sites on tournaments.site_id = sites.site_id
   where teams.school is not null
   and sets.\"set\" in ('DI ICT', 'ACF Nationals')
-  GROUP BY 1, 2, 3, 4, 5, 6`;
-  const summary10 = client.sql`
-  SELECT *
-  FROM (
-  SELECT sets.year as Season,
-  \"set\" as Tournament, \"set\", site, team as \"Team\", team_games.tournament_id,
-  round(sum(total_pts)*20/sum(coalesce(tuh, 20)), 2) as PP20TUH
-  from team_games
-  left join teams on team_games.team_id = teams.team_id
-  left join tournaments on team_games.tournament_id = tournaments.tournament_id
-  left join sets on tournaments.set_id = sets.set_id
-  left join sites on tournaments.site_id = sites.site_id
-  where teams.school is not null
-  and sets.difficulty <> 'easy'
-  GROUP BY 1, 2, 3, 4, 5, 6
-  ORDER BY 7 desc
-  LIMIT 10) a`;
-console.log(1);
-  const summary11 = client.sql`SELECT 
-  *
-  FROM (
-  SELECT sets.year as Season,
-  \"set\" as Tournament, 
-  \"set\", 
-  site, 
-  team as \"Team\", 
-  team_games.tournament_id,
-  (sum(coalesce(powers, 0))+sum(tens))/sum(coalesce(tuh, 20)) as \"TU%\"
-  from team_games
-  left join teams on team_games.team_id = teams.team_id
-  left join tournaments on team_games.tournament_id = tournaments.tournament_id
-  left join sets on tournaments.set_id = sets.set_id
-  left join sites on tournaments.site_id = sites.site_id
-  where teams.school is not null
-  and sets.difficulty <> 'easy'
-  GROUP BY 1, 2, 3, 4, 5, 6
-  ORDER BY 7 desc
-  LIMIT 10) a`;
-  const summary12 = client.sql`SELECT 
+  GROUP BY 1, 2, 3, 4, 5, 6, 7) teams
+  LEFT JOIN
+  (SELECT 
+  a.set_id,
+  avg(a.PPB) as mean,
+  stddev_pop(a.PPB) as sd
+  FROM
+  (SELECT 
   sets.year as Season, 
   team_games.tournament_id,
   \"set\" as Tournament, 
   \"set\", 
+  sets.set_id,
+  site, 
+  team as Team, 
+  (sum(bonus_pts)::numeric/nullif(sum(bonuses_heard), 0)) as PPB
+  from team_games
+  left join teams on team_games.team_id = teams.team_id
+  left join tournaments on team_games.tournament_id = tournaments.tournament_id
+  left join sets on tournaments.set_id = sets.set_id
+  left join sites on tournaments.site_id = sites.site_id
+  where teams.school is not null
+  and sets.\"set\" in ('DI ICT', 'ACF Nationals')
+  GROUP BY 1, 2, 3, 4, 5, 6, 7) a
+  GROUP BY 1) summ
+  on teams.set_id = summ.set_id
+  ORDER BY z desc
+  LIMIT 10`;
+  // Highest Tournament PP20TUH -- Team
+  const summary10 = client.sql`
+  SELECT 
+  sets.year as Season,
+  \"set\" as Tournament, 
+  \"set\", 
   site, 
   team as \"Team\", 
-  round((sum(bonus_pts)/nullif(sum(bonuses_heard), 0)), 2) as PPB
+  team_games.tournament_id,
+  sum(total_pts)*20/sum(coalesce(tuh, 20))::numeric as PP20TUH
   from team_games
   left join teams on team_games.team_id = teams.team_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
@@ -182,8 +228,82 @@ console.log(1);
   left join sites on tournaments.site_id = sites.site_id
   where teams.school is not null
   and sets.difficulty <> 'easy'
-  GROUP BY 1, 2, 3, 4, 5, 6`;
-  const summary13 = client.sql`SELECT 
+  GROUP BY 1, 2, 3, 4, 5, 6
+  ORDER BY 7 desc
+  LIMIT 10`;
+  // Highest Tournament TU% -- Team
+  const summary11 = client.sql`
+  SELECT sets.year as Season,
+  \"set\" as Tournament, 
+  \"set\", 
+  site, 
+  team as \"Team\", 
+  team_games.tournament_id,
+  (sum(coalesce(powers, 0))+sum(tens))/sum(coalesce(tuh, 20))::numeric as \"TU%\"
+  from team_games
+  left join teams on team_games.team_id = teams.team_id
+  left join tournaments on team_games.tournament_id = tournaments.tournament_id
+  left join sets on tournaments.set_id = sets.set_id
+  left join sites on tournaments.site_id = sites.site_id
+  where teams.school is not null
+  and sets.difficulty <> 'easy'
+  GROUP BY 1, 2, 3, 4, 5, 6
+  ORDER BY 7 desc
+  LIMIT 10`;
+  // Highest Tournament PPB (normalized) -- Team
+  const summary12 = client.sql`
+  Select 
+  teams.*,
+  summ.mean,
+  summ.sd,
+  (teams.PPB - summ.mean)/nullif(summ.sd, 0) as z
+  FROM
+  (SELECT 
+  sets.year as Season, 
+  team_games.tournament_id,
+  \"set\" as Tournament, 
+  \"set\", 
+  sets.set_id,
+  site, 
+  team as Team, 
+  (sum(bonus_pts)::numeric/nullif(sum(bonuses_heard), 0)) as PPB
+  from team_games
+  left join teams on team_games.team_id = teams.team_id
+  left join tournaments on team_games.tournament_id = tournaments.tournament_id
+  left join sets on tournaments.set_id = sets.set_id
+  left join sites on tournaments.site_id = sites.site_id
+  where teams.school is not null
+  and sets.difficulty <> 'easy'
+  GROUP BY 1, 2, 3, 4, 5, 6, 7) teams
+  LEFT JOIN
+  (SELECT 
+  a.set_id,
+  avg(a.PPB) as mean,
+  stddev_pop(a.PPB) as sd
+  FROM
+  (SELECT 
+  sets.year as Season, 
+  team_games.tournament_id,
+  \"set\" as Tournament, 
+  \"set\", 
+  sets.set_id,
+  site, 
+  team as Team, 
+  (sum(bonus_pts)::numeric/nullif(sum(bonuses_heard), 0)) as PPB
+  from team_games
+  left join teams on team_games.team_id = teams.team_id
+  left join tournaments on team_games.tournament_id = tournaments.tournament_id
+  left join sets on tournaments.set_id = sets.set_id
+  left join sites on tournaments.site_id = sites.site_id
+  and sets.difficulty <> 'easy'
+  GROUP BY 1, 2, 3, 4, 5, 6, 7) a
+  GROUP BY 1) summ
+  on teams.set_id = summ.set_id
+  ORDER BY z desc
+  LIMIT 10`;
+  // Most Points in a Game, Winning Team
+  const summary13 = client.sql`
+  SELECT 
   sets.year as Season,
   \"set\" as Tournament, 
   \"set\", 
@@ -202,17 +322,19 @@ console.log(1);
   and sets.difficulty <> 'easy'
   ORDER BY total_pts desc
   LIMIT 10`;
+  // Most PP20TUH in a Full Game, Winning Team
   const summary14 = client.sql`
   SELECT 
   sets.year as Season,
   \"set\" as Tournament, 
-  \"set\", site, 
+  \"set\", 
+  site, 
   team as \"Team\", 
   team_games.tournament_id,
   game_id, 
   coalesce(tuh, 20) as TUH,
   total_pts as Pts,
-  round(total_pts*20/coalesce(tuh, 20), 2) as PP20TUH
+  total_pts*20/coalesce(tuh, 20)::numeric as PP20TUH
   from team_games
   left join teams on team_games.team_id = teams.team_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
@@ -223,6 +345,7 @@ console.log(1);
   and coalesce(tuh, 20) > 12
   ORDER BY PP20TUH desc
   LIMIT 10`;
+  // Most Points in a Game, Both Teams
   const summary15 = client.sql`
   SELECT
   sets.year as Season,
@@ -233,7 +356,7 @@ console.log(1);
   game_id, 
   string_agg(team, ' vs. ') as Teams, 
   string_agg(total_pts::text, ' - ') as Score, 
-  coalesce(avg(tuh), 20) as TUH,
+  coalesce(max(tuh), 20) as TUH,
   sum(total_pts) as Pts
   from team_games
   left join teams on team_games.team_id = teams.team_id
@@ -245,6 +368,7 @@ console.log(1);
   GROUP BY 1, 2, 3, 4, 5, 6
   ORDER BY Pts desc
   LIMIT 10`;
+  // Most PP20TUH in a Game, Both Teams
   const summary16 = client.sql`
   SELECT sets.year as Season,
   \"set\" as Tournament, 
@@ -254,7 +378,7 @@ console.log(1);
   string_agg(team, ' vs. ') as Teams, 
   string_agg(cast(total_pts as text), ' - ') as Score, 
   sum(total_pts) as Pts,
-  coalesce(avg(tuh), 20) as TUH,
+  coalesce(max(tuh), 20) as TUH,
   round(sum(total_pts)*20/coalesce(avg(tuh), 20), 2) as PP20TUH
   from team_games
   left join teams on team_games.team_id = teams.team_id
@@ -267,6 +391,7 @@ console.log(1);
   GROUP BY 1, 2, 3, 4, 5, 6
   ORDER BY PP20TUH desc
   LIMIT 10`;
+  // Most Negs in a Game -- Team
   const summary17 = client.sql`
   SELECT sets.year as Season,
   \"set\" as Tournament, 
@@ -291,8 +416,38 @@ console.log(1);
   and coalesce(powers, 0) + tens + negs <= coalesce(tuh, 20)
   ORDER BY negs desc
   LIMIT 10`;
+  // Highest PPB in a Game
   const summary18 = client.sql`
-  SELECT sets.year as Season,
+  SELECT 
+  sets.year as Season,
+  \"set\" as Tournament, 
+  \"set\", 
+  site,
+  game_id, 
+  team as Team,
+  team_games.tournament_id,
+  case result when 1 then 'W' when 0 then 'L' else 'T' end as Result,
+  coalesce(tuh, 20) as TUH,
+  powers as \"15\", 
+  tens as \"10\", 
+  negs as \"-5\",
+  bonuses_heard as BHrd,
+  bonus_pts as BPts,
+  bonus_pts/bonuses_heard::numeric as PPB
+  from team_games
+  left join teams on team_games.team_id = teams.team_id
+  left join tournaments on team_games.tournament_id = tournaments.tournament_id
+  left join sets on tournaments.set_id = sets.set_id
+  left join sites on tournaments.site_id = sites.site_id
+  where teams.school is not null
+  and sets.difficulty <> 'easy'
+  and bonuses_heard >= 8
+  order by PPB desc
+  LIMIT 10`;
+  // Most Grails
+  const summary19 = client.sql`
+  SELECT 
+  sets.year as Season,
   \"set\" as Tournament, 
   \"set\", 
   site,
@@ -316,10 +471,10 @@ console.log(1);
   and negs = 0
   and coalesce(tuh, 20) > 12
   ORDER BY Pts desc`;
-  const summary19 = client.sql`
-  SELECT *
-  from (
-  SELECT fname || ' ' || lname as Player, slug,
+  // Most Points Scored -- Player
+  const summary20 = client.sql`
+  SELECT fname || ' ' || lname as Player, 
+  slug,
   count(distinct tournament_id) as Ts,
   count(tournament_id) as GP,
   sum(pts) as Pts
@@ -333,8 +488,9 @@ console.log(1);
   and fname is not null
   GROUP BY 1, 2
   ORDER BY Pts desc
-  LIMIT 10) a`;
-  const summary20 = client.sql`
+  LIMIT 10`;
+  // Most Tournaments Played -- Player
+  const summary21 = client.sql`
   SELECT fname || ' ' || lname as Player, 
   slug,
   replace(string_agg(distinct school, ', '), ',', ', ') as Schools,
@@ -350,7 +506,8 @@ console.log(1);
   GROUP BY 1, 2
   ORDER BY Ts desc
   LIMIT 10`;
-  const summary21 = client.sql`
+  // Most National Tournaments Played
+  const summary22 = client.sql`
   SELECT fname || ' ' || lname as Player, 
   slug,
   replace(string_agg(distinct school, ', '), ',', ', ') as Schools,
@@ -367,13 +524,34 @@ and sets.\"set\" in ('DI ICT', 'ACF Nationals')
 GROUP BY 1, 2
 ORDER BY Ts desc
 LIMIT 10`;
-  const summary22 = client.sql`
+  // Most Wins -- Player
+  const summary23 = client.sql`
+  SELECT 
+  fname || ' ' || lname as Player, 
+  slug,
+  replace(string_agg(distinct school, ', '), ',', ', ') as Schools,
+  sum(case when result = 1 then 1 else 0 end) as Wins
+  from player_games
+  left join (select game_id, team_id, result from team_games) results on player_games.team_id = results.team_id and player_games.game_id = results.game_id
+  left join teams on player_games.team_id = teams.team_id
+  left join sets on player_games.set_id = sets.set_id
+  LEFT JOIN players on player_games.player_id = players.player_id
+  LEFT JOIN people on players.person_id = people.person_id
+  where teams.school_id is not null
+  and sets.difficulty <> 'easy'
+  and fname is not null
+  GROUP BY 1, 2
+  ORDER BY Wins desc
+  LIMIT 10`;
+  // Most Tournament Wins -- Player
+  const summary24 = client.sql`
   SELECT 
   fname || ' ' || lname as Player, 
   slug,
   replace(string_agg(distinct school, ', '), ',', ', ') as Schools,
   sum(case when rank = 1 then 1 else 0 end) as Wins
-  from (select distinct player_id, tournament_id, set_id, team_id from player_games) player_games
+  from 
+  (select distinct player_id, tournament_id, set_id, team_id from player_games) player_games
   left join tournament_results on player_games.team_id = tournament_results.team_id 
   and player_games.tournament_id = tournament_results.tournament_id
   left join teams on player_games.team_id = teams.team_id
@@ -386,8 +564,9 @@ LIMIT 10`;
   GROUP BY 1, 2
   ORDER BY Wins desc
   LIMIT 10`;
-  const summary23 = client.sql`
-  select * from (
+  // Highest Winning Percentage -- Player
+  const summary25 = client.sql`
+  select a.* from (
     SELECT fname || ' ' || lname as Player, 
     slug,
     replace(string_agg(distinct school, ', '), ',', ', ') as Schools,
@@ -406,7 +585,8 @@ LIMIT 10`;
     ORDER BY 5 desc) a
     where GP >= 50
     LIMIT 10`;
-  const summary24 = client.sql`
+  // Most Points in a Season -- Player
+  const summary26 = client.sql`
   SELECT 
   sets.year as Season, 
   school as School,
@@ -428,17 +608,19 @@ and fname is not null
 GROUP BY 1, 2, 3, 4, 5
 ORDER BY Pts desc
 LIMIT 10`;
-  const summary25 = client.sql`
+  // Highest PP20TUH in a Season -- Player
+  const summary27 = client.sql`
   Select * from (
-    SELECT sets.year as Season, 
-            school as School,
-            fname || ' ' || lname as Player, 
-            people.slug as player_slug, 
-            schools.slug as school_slug,
+    SELECT 
+    sets.year as Season, 
+    school as School,
+    fname || ' ' || lname as Player, 
+    people.slug as player_slug, 
+    schools.slug as school_slug,
     count(distinct tournament_id) as Ts,
     count(tournament_id) as GP,
     sum(pts) as Pts,
-    round(sum(pts)*20/nullif(sum(coalesce(tuh, 20)), 0), 2) as PP20TUH
+    sum(pts)*20/nullif(sum(coalesce(tuh, 20)), 0)::numeric as PP20TUH
     from player_games
     left join teams on player_games.team_id = teams.team_id
     left join schools on teams.school_id = schools.school_id
@@ -452,16 +634,18 @@ LIMIT 10`;
     ORDER BY PP20TUH desc) a
     where Ts >= 5
     LIMIT 10`;
-  const summary26 = client.sql` 
+  // Highest Winning Percentage in a Season -- Player
+  const summary28 = client.sql` 
   Select * from (
-    SELECT sets.year as Season,
+    SELECT 
+    sets.year as Season,
     fname || ' ' || lname as Player,
     people.slug as player_slug, 
     schools.slug as school_slug,
-school as School,
-count(distinct tournament_id) as Ts,
-count(player_games.game_id) as GP,
-round(avg(result), 3) as \"Win%\"
+    school as School,
+    count(distinct tournament_id) as Ts,
+    count(player_games.game_id) as GP,
+    avg(result) as \"Win%\"
 from player_games
 left join (select game_id, team_id, result from team_games) results on player_games.team_id = results.team_id and player_games.game_id = results.game_id
 left join teams on player_games.team_id = teams.team_id
@@ -476,7 +660,8 @@ GROUP BY 1, 2, 3, 4, 5
 ORDER BY \"Win%\" desc) a
 where Ts >= 5
 LIMIT 10`;
-  const summary27 = client.sql`
+  // Highest PP20TUH in a Tournament -- Player
+  const summary29 = client.sql`
   Select 
   a.*,
   a.rawPP20TUH as PP20TUH from 
@@ -492,7 +677,7 @@ LIMIT 10`;
     schools.slug as school_slug,
     count(game_id) as GP,
     sum(pts) as Pts,
-    round(sum(pts)*20/nullif(sum(coalesce(tuh, 20)), 0), 2) as rawPP20TUH
+    sum(pts)*20/nullif(sum(coalesce(tuh, 20)), 0)::numeric as rawPP20TUH
     from player_games
     left join teams on player_games.team_id = teams.team_id
     left join schools on teams.school_id = schools.school_id
@@ -506,11 +691,14 @@ LIMIT 10`;
     and fname is not null
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
     ORDER BY rawPP20TUH desc) a
+    where rawPP20TUH is not null
     LIMIT 10`;
-  const summary28 = client.sql`
+  // Highest PP20TUH in a National Tournament -- Player
+  const summary30 = client.sql`
   Select 
   a.*, 
-  a.rawPP20TUH as PP20TUH from 
+  a.rawPP20TUH as PP20TUH 
+  from 
   (SELECT 
     sets.year as Season, 
     \"set\" as Tournament, 
@@ -538,13 +726,22 @@ LIMIT 10`;
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
     ORDER BY rawPP20TUH desc) a
     LIMIT 10`;
-  const summary29 = client.sql`
-  Select a.* from (SELECT sets.year as Season, 
-    \"set\" as Tournament, \"set\", site, player_games.tournament_id,
-    team as Team, fname || ' ' || lname as Player, people.slug as player_slug, schools.slug as school_slug,
+  // Most Negs per 20 TUH in a Tournament -- Player
+  const summary31 = client.sql`
+  Select a.* from (
+    SELECT 
+    sets.year as Season, 
+    \"set\" as Tournament, 
+    \"set\", 
+    site, 
+    player_games.tournament_id,
+    team as Team, 
+    fname || ' ' || lname as Player, 
+    people.slug as player_slug, 
+    schools.slug as school_slug,
     count(game_id) as GP,
     sum(negs) as \"-5\",
-    round(sum(negs)*20/nullif(sum(coalesce(tuh, 20)), 0), 2) as \"-5P20TUH\"
+    sum(negs)*20/nullif(sum(coalesce(tuh, 20)), 0)::numeric as \"-5P20TUH\"
     from player_games
     left join teams on player_games.team_id = teams.team_id
     left join schools on teams.school_id = schools.school_id
@@ -559,10 +756,13 @@ LIMIT 10`;
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
     ORDER BY \"-5P20TUH\" desc) a
     where GP >= 5
+    and \"-5P20TUH\" is not null
     LIMIT 10`;
-  const summary30 = client.sql`
+  // Most Points in a Game
+  const summary32 = client.sql`
   Select a.* from (
-    SELECT sets.year as Season,
+    SELECT 
+    sets.year as Season,
     \"set\" as Tournament, 
     \"set\",
     site, 
@@ -588,12 +788,22 @@ LIMIT 10`;
     and fname is not null
     ORDER BY Pts desc) a
     LIMIT 10`;
-  const summary31 = client.sql`Select a.* from (SELECT sets.year as Season,
-    \"set\" as Tournament, \"set\", site, 
-            team as Team, fname || ' ' || lname as Player, people.slug as player_slug,
-            game_id,player_games.tournament_id,
+  // Most Points in a National Tournament Game
+  const summary33 = client.sql`
+  Select a.* from (
+    SELECT sets.year as Season,
+    \"set\" as Tournament,
+    \"set\", 
+    site, 
+    team as Team, 
+    fname || ' ' || lname as Player, 
+    people.slug as player_slug,
+    game_id,
+    player_games.tournament_id,
     coalesce(tuh, 20) as TUH,
-    powers as \"15\", tens as \"10\", negs as \"-5\",
+    powers as \"15\", 
+    tens as \"10\", 
+    negs as \"-5\",
     pts as Pts
     from player_games
     left join teams on player_games.team_id = teams.team_id
@@ -608,12 +818,22 @@ LIMIT 10`;
     and sets.\"set\" in ('DI ICT', 'ACF Nationals')
     ORDER BY Pts desc) a
     LIMIT 10`;
-  const summary32 = client.sql`Select a.* from (SELECT sets.year as Season,
-    \"set\" as Tournament, \"set\", site, 
-            team as Team, fname || ' ' || lname as Player, people.slug as player_slug,
-            game_id,player_games.tournament_id,
+  // Most Tossups in a Game
+  const summary34 = client.sql`Select a.* from (
+    SELECT 
+    sets.year as Season,
+    \"set\" as Tournament, 
+    \"set\", 
+    site, 
+    team as Team, 
+    fname || ' ' || lname as Player, 
+    people.slug as player_slug,
+    game_id,
+    player_games.tournament_id,
     coalesce(tuh, 20) as TUH,
-    powers as \"15\", tens as \"10\", negs as \"-5\",
+    powers as \"15\", 
+    tens as \"10\", 
+    negs as \"-5\",
     coalesce(powers, 0) + tens as Tossups
     from player_games
     left join teams on player_games.team_id = teams.team_id
@@ -627,12 +847,22 @@ LIMIT 10`;
     and fname is not null
     ORDER BY Tossups desc) a
     LIMIT 10`;
-  const summary33 = client.sql`Select a.* from (SELECT sets.year as Season,
-    \"set\" as Tournament, \"set\", site, 
-            team as Team, fname || ' ' || lname as Player, people.slug as player_slug,
-            game_id,player_games.tournament_id,
+  // Most Negs in a Game
+  const summary35 = client.sql`
+  Select a.* from (
+    SELECT sets.year as Season,
+    \"set\" as Tournament, 
+    \"set\", 
+    site, 
+    team as Team, 
+    fname || ' ' || lname as Player, 
+    people.slug as player_slug,
+    game_id,
+    player_games.tournament_id,
     coalesce(tuh, 20) as TUH,
-    powers as \"15\", tens as \"10\", negs as \"-5\"
+    powers as \"15\", 
+    tens as \"10\", 
+    negs as \"-5\"
     from player_games
     left join teams on player_games.team_id = teams.team_id
     left join tournaments on player_games.tournament_id = tournaments.tournament_id
@@ -645,7 +875,11 @@ LIMIT 10`;
     and fname is not null
     ORDER BY negs desc) a
     LIMIT 10`;
-  const summary34 = client.sql`SELECT school as School, slug,
+  // Most Tournaments Hosted
+  const summary36 = client.sql`
+  SELECT 
+  school as School, 
+  slug,
   count(distinct tournaments.tournament_id) as Tournaments
   from tournaments
   left join sites on tournaments.site_id = sites.site_id
@@ -654,11 +888,16 @@ LIMIT 10`;
   GROUP BY 1, 2
   ORDER BY 3 desc
   LIMIT 10`;
-  const summary35 = client.sql`SELECT 
+  // Largest Tournaments Hosted
+  const summary37 = client.sql`
+  SELECT 
   tournaments.tournament_id,
-  sets.year as Year, \"set\" as \"Tournament\",
-  site as Host, school, slug,
-count(distinct team_id) as Teams
+  sets.year as Year, 
+  \"set\" as \"Tournament\",
+  site as Host, 
+  school, 
+  slug,
+  count(distinct team_id) as Teams
 from team_games
 left join sets on team_games.set_id = sets.set_id
 left join tournaments on team_games.tournament_id = tournaments.tournament_id
@@ -666,12 +905,10 @@ left join sites on tournaments.site_id = sites.site_id
 left join schools on sites.school = schools.school_name
 where school is not null
 and \"set\" not in ('DI ICT', 'ACF Nationals')
-GROUP BY 1
+GROUP BY 1, 2, 3, 4, 5, 6
 ORDER BY Teams desc
 LIMIT 10`;
-  const summary36 = client.sql``;
-  const summary37 = client.sql``;
-
+  
   const all = await Promise.all([
     summary1,
     summary2,
@@ -718,13 +955,15 @@ LIMIT 10`;
   };
 }
 
+const cachedData = cache(getData)
+
 export const metadata = {
   title: "Records | College Quizbowl Stats",
 };
 
 export default async function Page() {
   // Fetch data directly in a Server Component
-  const pageData = await getData();
+  const pageData = await cachedData();
   // Forward fetched data to your Client Component
   return <Records result={pageData} />;
 }

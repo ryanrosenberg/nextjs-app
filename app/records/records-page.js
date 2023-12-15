@@ -4,11 +4,10 @@ import NestedSideNav from "../../components/nested_side_nav";
 import NormalTable from "../../components/normal_table";
 import PaginatedTable from "../../components/paginated_table";
 import styles from "./records.module.css";
-import { slugify } from "../../lib/utils";
+import { formatComma, formatDecimal, formatPercent, formatPercent3, slugify } from "../../lib/utils";
 
 export default function Records({ result }) {
   const data = result.props.result;
-  console.log(data);
   const circuits = [
     "Asia",
     "Central CC",
@@ -40,7 +39,7 @@ export default function Records({ result }) {
         data-bs-spy="scroll"
         data-bs-target="#navbar-example"
       >
-        <div className="side-nav">
+        <div className={styles.sideNav}>
           <NestedSideNav />
         </div>
         <div className="main-content">
@@ -51,11 +50,12 @@ export default function Records({ result }) {
           <h2 id="circuit-records">Circuit Records</h2>
           <div className={styles.circuitFlex}>
             <p>
-              {circuits.map((circuit) => {
+              {circuits.map((circuit, i) => {
                 return (
                   <a
                     className="circuit-link"
                     href={"../circuits/" + slugify(circuit) + "#records"}
+                    key={i}
                   >
                     {circuit}
                   </a>
@@ -76,15 +76,17 @@ export default function Records({ result }) {
                     accessor: "School",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/schools/{{slug}}"
                   },
                   {
                     Header: "Tournaments",
-                    accessor: "Tournaments",
+                    accessor: "tournaments",
                     border: "right",
                   },
                   {
                     Header: "Wins",
-                    accessor: "Wins",
+                    accessor: "wins",
+                    format: formatComma
                   },
                 ]}
                 data={data[0]}
@@ -102,12 +104,15 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Tournaments",
-                    accessor: "Tournaments",
+                    accessor: "tournaments",
                     border: "right",
+                    format: formatComma
                   },
                   {
                     Header: "Win%",
                     accessor: "Win%",
+                    format: formatPercent,
+                    digits: 2
                   },
                 ]}
                 data={data[1]}
@@ -123,15 +128,17 @@ export default function Records({ result }) {
                     accessor: "School",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/schools/{{slug}}",
                   },
                   {
                     Header: "Tournaments",
-                    accessor: "Tournaments",
+                    accessor: "tournaments",
                     border: "right",
                   },
                   {
                     Header: "Wins",
-                    accessor: "Wins",
+                    accessor: "wins",
+                    format: formatComma
                   },
                 ]}
                 data={data[2]}
@@ -148,18 +155,19 @@ export default function Records({ result }) {
                     accessor: "school",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/schools/{{slug}}",
                   },
                   {
                     Header: "Nats",
-                    accessor: "ACF Nationals",
+                    accessor: "nats",
                   },
                   {
                     Header: "ICT",
-                    accessor: "DI ICT",
+                    accessor: "ict",
                   },
                   {
                     Header: "Total",
-                    accessor: "Total",
+                    accessor: "total",
                   },
                 ]}
                 data={data[3]}
@@ -175,7 +183,7 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Team",
@@ -185,11 +193,11 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Tournaments",
-                    accessor: "Tournaments",
+                    accessor: "tournaments",
                   },
                   {
                     Header: "Wins",
-                    accessor: "Wins",
+                    accessor: "wins",
                   },
                 ]}
                 data={data[4]}
@@ -203,7 +211,7 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Team",
@@ -213,11 +221,11 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Tournaments",
-                    accessor: "Tournaments",
+                    accessor: "tournaments",
                   },
                   {
                     Header: "Wins",
-                    accessor: "Wins",
+                    accessor: "wins",
                   },
                 ]}
                 data={data[5]}
@@ -235,13 +243,14 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
@@ -251,7 +260,9 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "PP20TUH",
-                    accessor: "PP20TUH",
+                    accessor: "pp20tuh",
+                    format: formatDecimal,
+                    digits: 2,
                   },
                 ]}
                 data={data[6]}
@@ -264,13 +275,14 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
@@ -281,6 +293,8 @@ export default function Records({ result }) {
                   {
                     Header: "TU%",
                     accessor: "TU%",
+                    format: formatPercent,
+                    digits: 2,
                   },
                 ]}
                 data={data[7]}
@@ -292,35 +306,44 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}"
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "PPB",
-                    accessor: "PPB",
+                    accessor: "ppb",
+                    format: formatDecimal,
+                    digits: 2,
                   },
                   {
                     Header: "mean",
                     accessor: "mean",
+                    format: formatDecimal,
+                    digits: 2,
                   },
                   {
                     Header: "stdev",
                     accessor: "sd",
+                    format: formatDecimal,
+                    digits: 2
                   },
                   {
                     Header: "z-score",
                     accessor: "z",
+                    format: formatDecimal,
+                    digits: 2,
                   },
                 ]}
                 data={data[8]}
@@ -336,11 +359,12 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                     align: "left",
                     border: "right",
                   },
@@ -352,7 +376,9 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "PP20TUH",
-                    accessor: "PP20TUH",
+                    accessor: "pp20tuh",
+                    format: formatDecimal,
+                    digits: 2,
                   },
                 ]}
                 data={data[9]}
@@ -365,13 +391,14 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
@@ -382,6 +409,8 @@ export default function Records({ result }) {
                   {
                     Header: "TU%",
                     accessor: "TU%",
+                    format: formatPercent,
+                    digits: 2,
                   },
                 ]}
                 data={data[10]}
@@ -393,35 +422,44 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "PPB",
-                    accessor: "PPB",
+                    accessor: "ppb",
+                    format: formatDecimal,
+                    digits: 2
                   },
                   {
                     Header: "mean",
                     accessor: "mean",
+                    format: formatDecimal,
+                    digits: 2
                   },
                   {
                     Header: "stdev",
                     accessor: "sd",
+                    format: formatDecimal,
+                    digits: 2
                   },
                   {
                     Header: "z-score",
                     accessor: "z",
+                    format: formatDecimal,
+                    digits: 2
                   },
                 ]}
                 data={data[11]}
@@ -439,14 +477,15 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                     align: "left",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
@@ -456,12 +495,13 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                     border: "right",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[12]}
@@ -475,14 +515,15 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                     align: "left",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
@@ -492,16 +533,18 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
                     border: "right",
                   },
                   {
                     Header: "PP20TUH",
-                    accessor: "PP20TUH",
+                    accessor: "pp20tuh",
+                    format: formatDecimal,
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[13]}
@@ -518,34 +561,36 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                     align: "left",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Teams",
-                    accessor: "Teams",
+                    accessor: "teams",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                     border: "right",
                   },
                   {
                     Header: "Score",
-                    accessor: "Score",
+                    accessor: "score",
                     border: "right",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[14]}
@@ -559,38 +604,40 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                     align: "left",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Teams",
-                    accessor: "Teams",
+                    accessor: "teams",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                     border: "right",
                   },
                   {
                     Header: "Score",
-                    accessor: "Score",
+                    accessor: "score",
                     border: "right",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
                   },
                   {
                     Header: "PP20TUH",
-                    accessor: "PP20TUH",
+                    accessor: "pp20tuh",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[15]}
@@ -605,30 +652,32 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                     align: "left",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "Result",
-                    accessor: "Result",
-                    align: "left",
+                    accessor: "result",
+                    align: "center",
                     border: "right",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                     border: "right",
                   },
                   {
@@ -646,7 +695,8 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[16]}
@@ -658,30 +708,32 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                     align: "left",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "Result",
-                    accessor: "Result",
-                    align: "left",
+                    accessor: "result",
+                    align: "center",
                     border: "right",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                     border: "right",
                   },
                   {
@@ -699,16 +751,19 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "BHrd",
-                    accessor: "BHrd",
+                    accessor: "bhrd",
                   },
                   {
                     Header: "BPts",
-                    accessor: "BPts",
+                    accessor: "bpts",
                     border: "right",
                   },
                   {
                     Header: "PPB",
-                    accessor: "PPB",
+                    accessor: "ppb",
+                    format: formatDecimal,
+                    digits: 2,
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[17]}
@@ -723,30 +778,31 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                     align: "left",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "Opponent",
-                    accessor: "Opponent",
+                    accessor: "opponent",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                     border: "right",
                   },
                   {
@@ -764,7 +820,8 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[18]}
@@ -782,22 +839,23 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{slug}}",
                   },
                   {
                     Header: "Ts",
-                    accessor: "Ts",
+                    accessor: "ts",
                   },
                   {
                     Header: "GP",
-                    accessor: "GP",
+                    accessor: "gp",
                     border: "right",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
                   },
                 ]}
                 data={data[19]}
@@ -809,19 +867,20 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{slug}}",
                   },
                   {
                     Header: "Schools",
-                    accessor: "Schools",
+                    accessor: "schools",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "Ts",
-                    accessor: "Ts",
+                    accessor: "ts",
                   },
                 ]}
                 data={data[20]}
@@ -835,19 +894,20 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{slug}}",
                   },
                   {
                     Header: "Schools",
-                    accessor: "Schools",
+                    accessor: "schools",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "Ts",
-                    accessor: "Ts",
+                    accessor: "ts",
                   },
                 ]}
                 data={data[21]}
@@ -861,19 +921,20 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{slug}}",
                   },
                   {
                     Header: "Schools",
-                    accessor: "Schools",
+                    accessor: "schools",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "Wins",
-                    accessor: "Wins",
+                    accessor: "wins",
                   },
                 ]}
                 data={data[22]}
@@ -885,19 +946,20 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{slug}}",
                   },
                   {
                     Header: "Schools",
-                    accessor: "Schools",
+                    accessor: "schools",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "Wins",
-                    accessor: "Wins",
+                    accessor: "wins",
                   },
                 ]}
                 data={data[23]}
@@ -909,24 +971,27 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{slug}}",
                   },
                   {
                     Header: "Schools",
-                    accessor: "Schools",
+                    accessor: "schools",
                     align: "left",
                     border: "right",
                   },
                   {
                     Header: "GP",
-                    accessor: "GP",
+                    accessor: "gp",
                     border: "right",
                   },
                   {
                     Header: "Win%",
                     accessor: "Win%",
+                    format: formatPercent,
+                    digits: 2,
                   },
                 ]}
                 data={data[24]}
@@ -943,30 +1008,33 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "School",
-                    accessor: "School",
+                    accessor: "school",
                     align: "left",
+                    linkTemplate: "/schools/{{school_slug}}",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "Ts",
-                    accessor: "Ts",
+                    accessor: "ts",
                   },
                   {
                     Header: "GP",
-                    accessor: "GP",
+                    accessor: "gp",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
+                    format: formatComma,
                   },
                 ]}
                 data={data[25]}
@@ -978,35 +1046,39 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "School",
-                    accessor: "School",
+                    accessor: "school",
                     align: "left",
+                    linkTemplate: "/schools/{{school_slug}}",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "Ts",
-                    accessor: "Ts",
+                    accessor: "ts",
                   },
                   {
                     Header: "GP",
-                    accessor: "GP",
+                    accessor: "gp",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
                     border: "right",
                   },
                   {
                     Header: "PP20TUH",
-                    accessor: "PP20TUH",
+                    accessor: "pp20tuh",
+                    format: formatDecimal,
+                    digits: 2
                   },
                 ]}
                 data={data[26]}
@@ -1023,31 +1095,35 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "School",
-                    accessor: "School",
+                    accessor: "school",
                     align: "left",
+                    linkTemplate: "/schools/{{school_slug}}",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "Ts",
-                    accessor: "Ts",
+                    accessor: "ts",
                   },
                   {
                     Header: "GP",
-                    accessor: "GP",
+                    accessor: "gp",
                     border: "right",
                   },
                   {
                     Header: "Win%",
                     accessor: "Win%",
+                    format: formatPercent,
+                    digits: 2
                   },
                 ]}
                 data={data[27]}
@@ -1066,37 +1142,41 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "GP",
-                    accessor: "GP",
+                    accessor: "gp",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
                     border: "right",
                   },
                   {
                     Header: "PP20TUH",
-                    accessor: "PP20TUH",
+                    accessor: "pp20tuh",
+                    format: formatDecimal,
+                    linkTemplate: "/tournaments/{{tournament_id}}/player-detail",
                   },
                 ]}
                 data={data[28]}
@@ -1111,37 +1191,41 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "GP",
-                    accessor: "GP",
+                    accessor: "gp",
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
                     border: "right",
                   },
                   {
                     Header: "PP20TUH",
-                    accessor: "PP20TUH",
+                    accessor: "pp20tuh",
+                    format: formatDecimal,
+                    linkTemplate: "/tournaments/{{tournament_id}}/player-detail",
                   },
                 ]}
                 data={data[29]}
@@ -1158,28 +1242,30 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "GP",
-                    accessor: "GP",
+                    accessor: "gp",
                   },
                   {
                     Header: "-5",
@@ -1189,6 +1275,8 @@ export default function Records({ result }) {
                   {
                     Header: "-5P20TUH",
                     accessor: "-5P20TUH",
+                    format: formatDecimal,
+                    linkTemplate: "/tournaments/{{tournament_id}}/player-detail",
                   },
                 ]}
                 data={data[30]}
@@ -1205,24 +1293,26 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "15",
@@ -1238,7 +1328,8 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[31]}
@@ -1252,24 +1343,26 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "15",
@@ -1285,7 +1378,8 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Pts",
-                    accessor: "Pts",
+                    accessor: "pts",
+                    linkTemplate: "/games/{{game_id}}"
                   },
                 ]}
                 data={data[32]}
@@ -1299,28 +1393,30 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                     border: "right",
                   },
                   {
@@ -1338,7 +1434,8 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Tossups",
-                    accessor: "Tossups",
+                    accessor: "tossups",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[33]}
@@ -1350,28 +1447,30 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Season",
-                    accessor: "Season",
+                    accessor: "season",
                   },
                   {
                     Header: "Tournament",
-                    accessor: "Tournament",
+                    accessor: "tournament",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
-                    accessor: "Team",
+                    accessor: "team",
                     align: "left",
                   },
                   {
                     Header: "Player",
-                    accessor: "Player",
+                    accessor: "player",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/players/{{player_slug}}",
                   },
                   {
                     Header: "TUH",
-                    accessor: "TUH",
+                    accessor: "tuh",
                     border: "right",
                   },
                   {
@@ -1385,6 +1484,7 @@ export default function Records({ result }) {
                   {
                     Header: "-5",
                     accessor: "-5",
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[34]}
@@ -1399,13 +1499,14 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "School",
-                    accessor: "School",
+                    accessor: "school",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/schools/{{slug}}"
                   },
                   {
                     Header: "Tournaments",
-                    accessor: "Tournaments",
+                    accessor: "tournaments",
                   },
                 ]}
                 data={data[35]}
@@ -1417,7 +1518,7 @@ export default function Records({ result }) {
                 columns={[
                   {
                     Header: "Year",
-                    accessor: "Year",
+                    accessor: "year",
                     align: "left",
                     border: "right",
                   },
@@ -1429,13 +1530,15 @@ export default function Records({ result }) {
                   },
                   {
                     Header: "Host",
-                    accessor: "Host",
+                    accessor: "host",
                     align: "left",
                     border: "right",
+                    linkTemplate: "/schools/{{slug}}"
                   },
                   {
                     Header: "Teams",
-                    accessor: "Teams",
+                    accessor: "teams",
+                    linkTemplate: "/tournaments/{{tournament_id}}"
                   },
                 ]}
                 data={data[36]}
