@@ -68,9 +68,7 @@ from sites
  and sites.lat is not null
  GROUP BY 1, 2, 3, 4
  `;
-  const champs_res = await client.sql`
 
-`;
   const tournament_res = await client.sql`
   SELECT 
   sites.circuit as Circuit,
@@ -113,13 +111,132 @@ LEFT JOIN tournaments on team_games.tournament_id = tournaments.tournament_id
  ORDER by Date desc
  `;
 
+ const team_wins = await client.sql`
+ SELECT 
+ school_name as \"School\", 
+ slug,
+ count(distinct tournament_id) as Tournaments,
+ sum(case result when 1 then 1 else 0 end) as Wins
+ from team_games
+ left join schools on team_games.school_id = schools.school_id
+ left join sets on team_games.set_id = sets.set_id
+ left join sites on team_games.site_id = sites.site_id
+ where team_games.school_id is not null
+ and school_name is not null
+ and sites.circuit_slug = ${params.id}
+ GROUP BY 1, 2
+ ORDER BY Wins desc
+ LIMIT 10`;
+
+ const team_pct = await client.sql`
+ SELECT 
+ a.*
+ FROM (SELECT team as \"Team\", 
+count(distinct tournament_id) as Tournaments,
+avg(result) as \"Win%\"
+from team_games
+left join schools on team_games.school_id = schools.school_id
+left join teams on team_games.team_id = teams.team_id
+left join sets on team_games.set_id = sets.set_id
+left join sites on team_games.site_id = sites.site_id
+where schools.open is null and schools.high_school is null
+and team_games.school_id is not null
+and sites.circuit_slug = ${params.id}
+GROUP BY 1) a
+WHERE Tournaments >= 10
+ORDER BY 3 desc
+LIMIT 10`;
+ const team_ts = await client.sql`
+ SELECT 
+  school_name as \"School\", 
+  slug,
+  count(distinct tournament_results.tournament_id) as Tournaments,
+  sum(case rank when 1 then 1 else 0 end) as Wins
+  from tournament_results
+  left join teams on tournament_results.team_id = teams.team_id
+  left join schools on teams.school_id = schools.school_id
+  left join tournaments on tournament_results.tournament_id = tournaments.tournament_id
+  left join sets on tournaments.set_id = sets.set_id
+  left join sites on tournaments.site_id = sites.site_id
+  where teams.school_id is not null
+  and sites.circuit_slug = ${params.id}
+  GROUP BY 1, 2
+  ORDER BY Wins desc
+  LIMIT 10`;
+
+ const player_pts = await client.sql`
+ SELECT fname || ' ' || lname as Player, 
+ slug,
+ replace(string_agg(distinct teams.school, ', '), ',', ', ') as Schools,
+ count(distinct tournament_id) as Ts,
+ count(tournament_id) as GP,
+ sum(pts) as Pts
+ from player_games
+ left join teams on player_games.team_id = teams.team_id
+ left join sets on player_games.set_id = sets.set_id
+ LEFT JOIN players on player_games.player_id = players.player_id
+ LEFT JOIN people on players.person_id = people.person_id
+ left join sites on player_games.site_id = sites.site_id
+ where teams.school_id is not null
+ and sites.circuit_slug = ${params.id}
+ and fname is not null
+ GROUP BY 1, 2
+ ORDER BY Pts desc
+ LIMIT 10`;
+ const player_pct = await client.sql`
+ select a.* from (
+  SELECT fname || ' ' || lname as Player, 
+  slug,
+  replace(string_agg(distinct teams.school, ', '), ',', ', ') as Schools,
+  count(player_games.game_id) as GP,
+  avg(result) as \"Win%\"
+  from player_games
+  left join (select game_id, team_id, result from team_games) results on player_games.team_id = results.team_id and player_games.game_id = results.game_id
+  left join teams on player_games.team_id = teams.team_id
+  left join sets on player_games.set_id = sets.set_id
+  LEFT JOIN players on player_games.player_id = players.player_id
+  LEFT JOIN people on players.person_id = people.person_id
+  left join sites on player_games.site_id = sites.site_id
+  where teams.school_id is not null
+  and sites.circuit_slug = ${params.id}
+  and fname is not null
+  GROUP BY 1, 2
+  ORDER BY 5 desc) a
+  where GP >= 50
+  LIMIT 10`;
+ const player_ts = await client.sql`
+ SELECT 
+ fname || ' ' || lname as Player, 
+ slug,
+ replace(string_agg(distinct teams.school, ', '), ',', ', ') as Schools,
+ count(distinct tournament_id) as Ts
+ from player_games
+ left join teams on player_games.team_id = teams.team_id
+ left join sets on player_games.set_id = sets.set_id
+ LEFT JOIN players on player_games.player_id = players.player_id
+ LEFT JOIN people on players.person_id = people.person_id
+ left join sites on player_games.site_id = sites.site_id
+ where teams.school_id is not null
+ and sites.circuit_slug = ${params.id}
+ and fname is not null
+ GROUP BY 1, 2
+ ORDER BY Ts desc
+ LIMIT 10`;
+
   return {
     props: {
       result: {
         Schools: schools_res.rows,
         Sites: sites_res.rows,
-        Champions: champs_res.rows,
         Tournaments: tournament_res.rows,
+        Records: {
+          "Most Wins": team_wins.rows,
+          "Highest Winning %": team_pct.rows,
+          "Most Tournament Wins": team_ts.rows,
+          "Most Player Pts": player_pts.rows,
+          "Highest Player Winning %": player_pct.rows,
+          "Most Tournaments Played": player_ts.rows,
+        }
       },
     },
   };

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import _ from "lodash";
 import GroupedPaginatedTable from "../../../components/grouped_paginated_table";
 import PaginatedTable from "../../../components/paginated_table";
+import NormalTable from "../../../components/normal_table"
 import NestedSideNav from "../../../components/nested_side_nav";
 import dynamic from "next/dynamic";
 import { slugify, sanitize, formatPercent, formatComma, formatDecimal } from "../../../lib/utils";
@@ -150,14 +151,16 @@ export default function Circuit({ result }) {
       accessor: "School",
       align: "left",
       border: "right",
+      linkTemplate: "/schools/{{slug}}"
     },
     {
       Header: "Ts",
-      accessor: "Tournaments",
+      accessor: "tournaments",
     },
     {
       Header: "Wins",
-      accessor: "Wins",
+      accessor: "wins",
+      format: formatComma,
     },
   ]);
 
@@ -170,82 +173,90 @@ export default function Circuit({ result }) {
     },
     {
       Header: "Ts",
-      accessor: "Tournaments",
+      accessor: "tournaments",
     },
     {
       Header: "Win%",
       accessor: "Win%",
+      format: formatPercent,
+      digits: 2
     },
   ]);
 
   const playerPtsColumns = useMemo(() => [
     {
       Header: "Player",
-      accessor: "Player",
+      accessor: "player",
       align: "left",
       border: "right",
+      linkTemplate: "/players/{{slug}}"
     },
     {
       Header: "Schools",
-      accessor: "Schools",
+      accessor: "schools",
       align: "left",
       border: "right",
     },
     {
       Header: "Ts",
-      accessor: "Ts",
+      accessor: "ts",
     },
     {
       Header: "GP",
-      accessor: "GP",
+      accessor: "gp",
       border: "right",
     },
     {
       Header: "Pts",
-      accessor: "Pts",
+      accessor: "pts",
+      format: formatComma
     },
   ]);
 
   const playerPctColumns = useMemo(() => [
     {
       Header: "Player",
-      accessor: "Player",
+      accessor: "player",
       align: "left",
       border: "right",
+      linkTemplate: "/players/{{slug}}"
     },
     {
       Header: "Schools",
-      accessor: "Schools",
+      accessor: "schools",
       align: "left",
       border: "right",
     },
     {
       Header: "GP",
-      accessor: "GP",
+      accessor: "gp",
       border: "right",
     },
     {
       Header: "Win%",
       accessor: "Win%",
+      format: formatPercent,
+      digits: 2
     },
   ]);
 
   const playerTsColumns = useMemo(() => [
     {
       Header: "Player",
-      accessor: "Player",
+      accessor: "player",
       align: "left",
       border: "right",
+      linkTemplate: "/players/{{slug}}"
     },
     {
       Header: "Schools",
-      accessor: "Schools",
+      accessor: "schools",
       align: "left",
       border: "right",
     },
     {
       Header: "Ts",
-      accessor: "Ts",
+      accessor: "ts",
     }
   ]);
 
@@ -288,7 +299,7 @@ export default function Circuit({ result }) {
             itemsPerPage={10}
           />
           <hr />
-          {/* <h2 id="records">Records</h2>
+          <h2 id="records">Records</h2>
           <h3
             style={{
               textDecoration: "underline",
@@ -353,7 +364,7 @@ export default function Circuit({ result }) {
                 data={data.Records["Most Tournaments Played"]}
               />
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </>
