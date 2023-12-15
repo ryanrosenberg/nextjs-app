@@ -12,7 +12,7 @@ export default function Tournament({ result }) {
   const tournament_id = data.Summary[0].tournament_id;
 
   data.Standings.map((item) => {
-    item.team_slug = slugify(item.team);
+    item.team_slug = slugify(sanitize(item.team));
     return item;
   });
   data.Players.map((item) => {
