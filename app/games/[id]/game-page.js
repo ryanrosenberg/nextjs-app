@@ -7,6 +7,7 @@ import _ from "lodash";
 import NormalTable from "../../../components/normal_table";
 import styles from "./games.module.css";
 import Scoresheet from "../../../components/scoresheet";
+import { slugify, sanitize } from "../../../lib/utils";
 
 export default function Game({ result }) {
   const url = usePathname();
@@ -15,6 +16,11 @@ export default function Game({ result }) {
   const finals2 = require("../../../sample2.json");
   const packet1 = require("../../../packet1.json");
   const packet2 = require("../../../packet2.json");
+  data.Players.map((item) => {
+    item.team_slug = slugify(sanitize(item.team));
+    item.player_slug = slugify(sanitize(item.player));
+    return item;
+  });
   const teamColumns = useMemo(
     () => [
       {
@@ -22,6 +28,7 @@ export default function Game({ result }) {
         accessor: "player",
         align: "left",
         border: "right",
+        linkTemplate: "/tournaments/{{tournament_id}}/player-detail#{{player_slug}}-{{team_slug}}"
       },
       {
         Header: "15",

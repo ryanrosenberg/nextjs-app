@@ -25,9 +25,12 @@ export async function getData(params) {
   tournament_id,
 game_id,
 team, 
-coalesce(fname|| ' ' || lname, player_games.player) as Player, 
+coalesce(fname|| ' ' || lname, player_games.player) as Player,
 coalesce(tuh, 20) as TUH,
-powers as \"15\", tens as \"10\", negs as \"-5\", pts as Pts
+powers as \"15\", 
+tens as \"10\", 
+negs as \"-5\", 
+pts as Pts
 from player_games
 LEFT JOIN teams on player_games.team_id = teams.team_id
 LEFT JOIN players on player_games.player_id = players.player_id
