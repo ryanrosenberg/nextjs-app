@@ -213,7 +213,7 @@ export default function Tournament({ result }) {
               <a href=".">Tournament Page</a>
             </li>
             <li>
-              <a href="./team-detail">Team Detail</a>
+              <a href="./player-detail">Player Detail</a>
             </li>
           </ul>
           <br></br>
