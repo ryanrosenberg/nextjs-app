@@ -1,14 +1,21 @@
 import SeasonsIndex from "./seasons-index";
-import { db } from "../../lib/firestore";
-import { doc, getDoc } from "firebase/firestore";
+import { db } from "@vercel/postgres";
 
 export async function getData() {
-  const docRef = doc(db, "adhoc", "champions");
-  const docSnap = await getDoc(docRef);
+  const client = await db.connect();
+  const data = await client.sql`
+  SELECT * from ((SELECT distinct champions.year from champions
+    WHERE champions.year not in ('08-09', '09-10', '10-11')) champions
+    LEFT JOIN (select year, school as "ACF Nationals" from champions where tournament = 'ACF Nationals') nats
+    on champions.year = nats.year
+    LEFT JOIN (select year, school as "DI ICT" from champions where tournament = 'DI ICT') ict
+    on champions.year = ict.year)
+    order by 1
+    `;
 
   return {
     props: {
-      result: docSnap.data().Champions,
+      result: data.rows,
     },
   };
 }

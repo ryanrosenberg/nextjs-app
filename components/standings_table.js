@@ -1,37 +1,116 @@
 import tables from "./tables.module.css";
 import _ from "lodash";
 import classnames from "classnames";
-import RawHtml from "./rawHtml";
 import { useSortableData } from "../hooks/useSortableData";
 import tournaments from "./tournaments.module.css";
+import { renderCell, formatDecimal, formatPercent } from "../lib/utils";
+import { useMemo } from "react";
 
 export default function StandingsTable({
-  columns,
   data,
+  id,
   grouping_column,
   full_width = null,
 }) {
   const { items, requestSort, sortConfig } = useSortableData(data);
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Rank",
+        accessor: "rank",
+        border: "right",
+      },
+      {
+        Header: "Team",
+        accessor: "team",
+        align: "left",
+        border: "right",
+        linkTemplate: id + "/team-detail#{{team_slug}}",
+      },
+      {
+        Header: "School",
+        accessor: "school",
+        align: "left",
+        border: "right",
+        linkTemplate: "/schools/{{slug}}",
+      },
+      {
+        Header: "GP",
+        accessor: "gp",
+      },
+      {
+        Header: "W-L",
+        accessor: "W-L",
+      },
+      {
+        Header: "TUH",
+        accessor: "tuh",
+        border: "right",
+      },
+      {
+        Header: "15",
+        accessor: "15",
+      },
+      {
+        Header: "10",
+        accessor: "10",
+      },
+      {
+        Header: "-5",
+        accessor: "-5",
+        border: "right",
+      },
+      {
+        Header: "15/G",
+        accessor: "15/G",
+        format: formatDecimal,
+      },
+      {
+        Header: "10/G",
+        accessor: "10/G",
+        format: formatDecimal,
+      },
+      {
+        Header: "-5/G",
+        accessor: "-5/G",
+        border: "right",
+        format: formatDecimal,
+      },
+      {
+        Header: "TU%",
+        accessor: "TU%",
+        format: formatPercent,
+      },
+      {
+        Header: "PPG",
+        accessor: "ppg",
+        format: formatDecimal,
+      },
+      {
+        Header: "PPB",
+        accessor: "ppb",
+        format: formatDecimal,
+        border: "right",
+      },
+      {
+        Header: "A-Value",
+        accessor: "A-Value",
+        format: formatDecimal,
+        Tooltip:
+          "A-Value is a measure of a team's performance on a set compared to all other teams that played the set. It approximates how many points a team would be expected to score against the average team playing the set.",
+      },
+    ],
+    []
+  );
+
   const getClassNamesFor = (name) => {
     if (!sortConfig) {
       return;
     }
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
-  // columns = columns.filter(column => column.accessor != grouping_column)
   let rowGroups = _.groupBy(items, grouping_column);
-
-  // if(grouping_column == 'category'){
-  //   rowGroups = {
-  //     'Literature': rowGroups['Literature'],
-  //     'History': rowGroups['History'],
-  //     'Science': rowGroups['Science'],
-  //     'Arts': rowGroups['Arts'],
-  //     'Beliefs': rowGroups['Beliefs'],
-  //     'Thought': rowGroups['Thought'],
-  //     'Other': rowGroups['Other'],
-  //   }
-  // }
 
   return (
     <div>
@@ -44,7 +123,7 @@ export default function StandingsTable({
       >
         <thead className={tables.header}>
           <tr className={tables.headerRow}>
-            {columns.map((column) => (
+            {columns.map((column, i) => (
               <th
                 className={classnames(
                   tables.tableHeader,
@@ -55,7 +134,8 @@ export default function StandingsTable({
                     ? tables.borderRight
                     : tables.noBorder
                 )}
-                title = {column.Tooltip}
+                title={column.Tooltip}
+                key={i}
               >
                 <button
                   className={classnames(
@@ -70,13 +150,13 @@ export default function StandingsTable({
             ))}
           </tr>
         </thead>
-        {Object.keys(rowGroups).map((group) => {
+        {Object.keys(rowGroups).map((group, i) => {
           return (
-            <tbody className={tournaments.bracketGroups}>
+            <tbody className={tournaments.bracketGroups} key={i}>
               {rowGroups[group].map((row, i) => {
                 return (
-                  <tr>
-                    {columns.map((column) => {
+                  <tr key={i}>
+                    {columns.map((column, i) => {
                       var rowHTML =
                         column.align == "left" ? (
                           <td
@@ -86,8 +166,9 @@ export default function StandingsTable({
                                 ? tables.borderRight
                                 : tables.noBorder
                             )}
+                            key={i}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         ) : (
                           <td
@@ -100,8 +181,9 @@ export default function StandingsTable({
                                 ? tables.cellRight
                                 : tables.cellNumber
                             )}
+                            key={i}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         );
                       return rowHTML;

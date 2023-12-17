@@ -7,6 +7,7 @@ import _ from "lodash";
 import NormalTable from "../../../components/normal_table";
 import styles from "./games.module.css";
 import Scoresheet from "../../../components/scoresheet";
+import { slugify, sanitize } from "../../../lib/utils";
 
 export default function Game({ result }) {
   const url = usePathname();
@@ -15,13 +16,19 @@ export default function Game({ result }) {
   const finals2 = require("../../../sample2.json");
   const packet1 = require("../../../packet1.json");
   const packet2 = require("../../../packet2.json");
+  data.Players.map((item) => {
+    item.team_slug = slugify(sanitize(item.team));
+    item.player_slug = slugify(sanitize(item.player));
+    return item;
+  });
   const teamColumns = useMemo(
     () => [
       {
         Header: "Player",
-        accessor: "Player",
+        accessor: "player",
         align: "left",
         border: "right",
+        linkTemplate: "/tournaments/{{tournament_id}}/player-detail#{{player_slug}}-{{team_slug}}"
       },
       {
         Header: "15",
@@ -38,7 +45,7 @@ export default function Game({ result }) {
       },
       {
         Header: "Pts",
-        accessor: "Pts",
+        accessor: "pts",
       },
     ],
     []
@@ -62,9 +69,9 @@ export default function Game({ result }) {
         <p className="page-subtitle"></p>
         <hr />
         <div className={styles.playerStatsRow}>
-          {Object.keys(player_stats).map((team_name) => {
+          {Object.keys(player_stats).map((team_name, i) => {
             return (
-              <div className={styles.teamDiv}>
+              <div className={styles.teamDiv} key={i}>
                 <h2 className={styles.teamName}>{team_name}</h2>
                 <p className={styles.teamScore}>
                   {team_stats[team_name][0]["total_pts"]}

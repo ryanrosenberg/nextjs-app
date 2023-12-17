@@ -1,4 +1,4 @@
-import { Inter, Signika, Signika_Negative, Source_Sans_Pro, Alegreya_Sans} from "next/font/google";
+import { Inter, Signika, Signika_Negative, Alegreya_Sans, Source_Sans_3} from "next/font/google";
  
 // define your variable fonts
 const inter = Inter({
@@ -23,12 +23,12 @@ const alegreya_sans = Alegreya_Sans({
   });
 
 // define 2 weights of a non-variable font
-const sourceCodePro400 = Source_Sans_Pro({
+const sourceCodePro400 = Source_Sans_3({
     weight: '400',
     subsets: ['latin'],
     display: 'swap',
   });
-const sourceCodePro700 = Source_Sans_Pro({
+const sourceCodePro700 = Source_Sans_3({
     weight: '700',
     subsets: ['latin'],
     display: 'swap',
