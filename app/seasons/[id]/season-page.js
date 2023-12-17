@@ -67,6 +67,7 @@ export default function Season({ result }) {
       accessor: "tournament",
       align: "left",
       border: "right",
+      linkTemplate: "/tournaments/{{tournament_id}}",
     },
     {
       Header: "Teams",
