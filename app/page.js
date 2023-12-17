@@ -1,14 +1,17 @@
 import Home from "./home-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export const metadata = {
   title: "Home | College Quizbowl Stats",
 };
 
-export async function getData(params) {
-  const client = await dbi.connect();
-  const rt_res = await client.sql`
-  SELECT tournaments.*, results.Champion FROM (SELECT 
+export async function getData() {
+  const sql = neon(process.env.DATABASE_URL);
+
+  const rt_res = await sql`
+  SELECT 
+  tournaments.*, 
+  results.Champion FROM (SELECT 
     date as Date,
     sets.year, \"set\" as \"Set\", site as Site,
     \"set\" || ' at ' || site as Tournament, tournaments.tournament_id,
@@ -42,7 +45,7 @@ export async function getData(params) {
     on tournaments.Tournament = results.Tournament
            `;
 
-  const tty_res = await client.sql`
+  const tty_res = await sql`
   SELECT 
   team as Team,
   school as School, slug,
@@ -67,9 +70,10 @@ sum(bonus_pts)/sum(bonuses_heard)::numeric as PPB
   and teams.school_id is not null
   GROUP BY 1,2,3
   ORDER BY GP desc`;
+
   const all = {
-    teamsThisYear: tty_res.rows,
-    recentTournaments: rt_res.rows,
+    teamsThisYear: tty_res,
+    recentTournaments: rt_res,
   };
   return {
     props: {

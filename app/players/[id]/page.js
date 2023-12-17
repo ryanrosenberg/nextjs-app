@@ -1,5 +1,5 @@
 import Player from "./player-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 
 export async function generateStaticParams() {
@@ -23,9 +23,9 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const client = await dbi.connect();
+  const sql = neon(process.env.DATABASE_URL);
 
-  const years_res = await client.sql`
+  const years_res = await sql`
   SELECT
   sets.year as Year,
   people.player as Player,
@@ -55,7 +55,7 @@ export async function getData(params) {
   GROUP BY 1, 2, 3, 4
   ORDER BY 1`;
 
-  const tournaments_res = await client.sql`
+  const tournaments_res = await sql`
   SELECT
   sets.year as Year,
   date as Date,
@@ -92,7 +92,7 @@ export async function getData(params) {
   GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
   ORDER BY 2 desc`;
 
-  const editing_res = await client.sql`
+  const editing_res = await sql`
   SELECT 
   year as Year, \"set\" as \"Set\", 
   sets.set_slug, 
@@ -106,9 +106,9 @@ export async function getData(params) {
   return {
     props: {
       result: {
-        Years: years_res.rows,
-        'Tournaments': tournaments_res.rows,
-        'Editing': editing_res.rows
+        Years: years_res,
+        'Tournaments': tournaments_res,
+        'Editing': editing_res
       },
     },
   };

@@ -1,11 +1,11 @@
 import SetsIndex from "./sets-index";
-import { db } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export const dynamicParams = false;
 
 export async function getData() {
-  const client = await db.connect();
-  const data = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const data = await sql`
   SELECT 
   sets.\"set\",
   case sets.difficulty 
@@ -28,7 +28,7 @@ export async function getData() {
 
   return {
     props: {
-      result: data.rows,
+      result: data,
     },
   };
 }

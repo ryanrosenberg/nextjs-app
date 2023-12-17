@@ -1,9 +1,9 @@
 import SeasonsIndex from "./seasons-index";
-import { db } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function getData() {
-  const client = await db.connect();
-  const data = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const data = await sql`
   SELECT * from ((SELECT distinct champions.year from champions
     WHERE champions.year not in ('08-09', '09-10', '10-11')) champions
     LEFT JOIN (select year, school as "ACF Nationals" from champions where tournament = 'ACF Nationals') nats
@@ -15,7 +15,7 @@ export async function getData() {
 
   return {
     props: {
-      result: data.rows,
+      result: data,
     },
   };
 }

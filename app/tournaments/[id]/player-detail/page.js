@@ -1,13 +1,13 @@
 import Tournament from "./tournament-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function generateStaticParams() {
-  const client = await dbi.connect();
-  const tournaments = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const tournaments = await sql`
   SELECT distinct tournament_id
            from tournaments 
            `;
-  return tournaments.rows;
+  return tournaments;
 }
 
 export async function generateMetadata({ params }) {
@@ -19,8 +19,8 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const client = await dbi.connect();
-  const summary_res = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const summary_res = await sql`
   SELECT 
            date, tournaments.tournament_name, naqt_id
            from tournaments 
@@ -29,7 +29,7 @@ export async function getData(params) {
            WHERE tournaments.tournament_id::varchar = ${params.id}
            `;
 
-  const players_res = await client.sql`
+  const players_res = await sql`
            SELECT *, rawPPG as PPG from (
              SELECT
                 coalesce(fname|| ' ' || lname, player_games.player) as Player,
@@ -59,7 +59,7 @@ export async function getData(params) {
                 GROUP BY 1, 2, 3, 4
                 ORDER BY rawPPG desc) e
                    `;
-  const player_detail_res = await client.sql`
+  const player_detail_res = await sql`
   SELECT
   coalesce(fname|| ' ' || lname, player_games.player) as player, team,
   CAST(REPLACE(games.round, 'Round ', '') as int) as Round,
@@ -80,9 +80,9 @@ export async function getData(params) {
              order by team, player, Round
           `;
   const all = {
-    Summary: summary_res.rows,
-    Players: players_res.rows,
-    "Player Detail": player_detail_res.rows,
+    Summary: summary_res,
+    Players: players_res,
+    "Player Detail": player_detail_res,
   };
   return {
     props: {

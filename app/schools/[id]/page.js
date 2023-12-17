@@ -1,9 +1,9 @@
 import School from "./school-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function generateStaticParams() {
-  const client = await dbi.connect();
-  const schools = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const schools = await sql`
   SELECT slug from 
   team_games
   left join teams on team_games.team_id = teams.team_id
@@ -12,7 +12,7 @@ export async function generateStaticParams() {
               and school_name is not null
            `;
 
-  return schools.rows;
+  return schools;
 }
 
 export async function generateMetadata({ params }) {
@@ -23,8 +23,8 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const client = await dbi.connect();
-  const summary_res = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const summary_res = await sql`
   SELECT school_name as School, schools.circuit as Circuit,
   sets.year as Year,
   count(distinct player_games.tournament_id) as Tmnts,
@@ -67,7 +67,7 @@ export async function getData(params) {
   ORDER BY 3 desc
          `;
 
-  const teams_res = await client.sql`SELECT 
+  const teams_res = await sql`SELECT 
   team as Team,
   count(distinct team_games.tournament_id) as Tmnts,
   count(result) as GP,
@@ -94,7 +94,7 @@ export async function getData(params) {
   GROUP BY 1
   ORDER BY 3 desc`;
 
-  const tournament_res = await client.sql`
+  const tournament_res = await sql`
   SELECT 
   tournaments.date || ': ' || tournaments.tournament_name as Tournament, 
   team_games.tournament_id,
@@ -140,7 +140,7 @@ export async function getData(params) {
   GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
   ORDER BY date desc`;
 
-  const player_res = await client.sql`
+  const player_res = await sql`
   SELECT 
      fname || ' ' || lname as Player, 
      schools.slug, people.slug as person_slug,
@@ -164,7 +164,7 @@ export async function getData(params) {
      WHERE schools.slug = ${params.id}
      GROUP BY 1, 2, 3`;
 
-  const hosting_res = await client.sql`
+  const hosting_res = await sql`
   SELECT 
      tournaments.tournament_id,
      sets.year as Year,
@@ -186,11 +186,11 @@ export async function getData(params) {
   return {
     props: {
       result: {
-        Summary: summary_res.rows,
-        'Teams': teams_res.rows,
-        'Players': player_res.rows,
-        'Tournaments': tournament_res.rows,
-        'Hosting': hosting_res.rows
+        Summary: summary_res,
+        'Teams': teams_res,
+        'Players': player_res,
+        'Tournaments': tournament_res,
+        'Hosting': hosting_res
       },
     },
   };

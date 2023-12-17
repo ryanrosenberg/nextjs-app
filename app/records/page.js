@@ -1,11 +1,11 @@
 import Records from "./records-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 import { cache } from 'react'
 
 export async function getData() {
-  const client = await dbi.connect();
+  const sql = neon(process.env.DATABASE_URL);
   // Most Wins -- School
-  const summary1 = client.sql`
+  const summary1 = sql`
   SELECT 
   school_name as \"School\", 
   slug,
@@ -21,7 +21,7 @@ export async function getData() {
   ORDER BY Wins desc
   LIMIT 10`;
   // Highest Winning Percentage -- Team
-  const summary2 = client.sql`
+  const summary2 = sql`
   SELECT 
   a.*
   FROM (SELECT team as \"Team\", 
@@ -39,7 +39,7 @@ WHERE Tournaments >= 10
 ORDER BY 3 desc
 LIMIT 10`;
   // Most Tournaments Won -- School
-  const summary3 = client.sql`SELECT 
+  const summary3 = sql`SELECT 
   school_name as \"School\", 
   slug,
   count(distinct tournament_results.tournament_id) as Tournaments,
@@ -55,7 +55,7 @@ LIMIT 10`;
   ORDER BY 3 desc
   LIMIT 10`;
   // Most ACF Nationals and DI ICT Titles -- School
-  const summary4 = client.sql`
+  const summary4 = sql`
   SELECT 
   coalesce(nats.school, ict.school) as school,
   coalesce(nats.slug, ict.slug) as slug,
@@ -87,7 +87,7 @@ LIMIT 10`;
   ON nats.slug = ict.slug
   ORDER BY Total desc`;
   // Most Wins in a Season -- Team
-  const summary5 = client.sql`
+  const summary5 = sql`
   SELECT 
   year as Season, 
   team as \"Team\", 
@@ -103,7 +103,7 @@ GROUP BY 1, 2
 ORDER BY 4 desc
 LIMIT 10`;
   // Most Tournaments Won in a Season -- School
-  const summary6 = client.sql`
+  const summary6 = sql`
   SELECT 
   sets.year as Season, 
   team as \"Team\", 
@@ -120,7 +120,7 @@ LIMIT 10`;
   ORDER BY 4 desc
   LIMIT 10`;
   // Highest National Tournament PP20TUH -- Team
-  const summary7 = client.sql`SELECT *
+  const summary7 = sql`SELECT *
   FROM (
   SELECT sets.year as Season,
   \"set\" as Tournament, 
@@ -140,7 +140,7 @@ LIMIT 10`;
   ORDER BY 7 desc
   LIMIT 10) a`;
   // Highest National Tournament TU% -- Team
-  const summary8 = client.sql`
+  const summary8 = sql`
   SELECT 
   sets.year as Season,
   \"set\" as Tournament, 
@@ -160,7 +160,7 @@ LIMIT 10`;
   ORDER BY 7 desc
   LIMIT 10`;
   // Highest National Tournament PPB (normalized) -- Team
-  const summary9 = client.sql`
+  const summary9 = sql`
   Select 
   teams.*,
   summ.mean,
@@ -212,7 +212,7 @@ LIMIT 10`;
   ORDER BY z desc
   LIMIT 10`;
   // Highest Tournament PP20TUH -- Team
-  const summary10 = client.sql`
+  const summary10 = sql`
   SELECT 
   sets.year as Season,
   \"set\" as Tournament, 
@@ -232,7 +232,7 @@ LIMIT 10`;
   ORDER BY 7 desc
   LIMIT 10`;
   // Highest Tournament TU% -- Team
-  const summary11 = client.sql`
+  const summary11 = sql`
   SELECT sets.year as Season,
   \"set\" as Tournament, 
   \"set\", 
@@ -251,7 +251,7 @@ LIMIT 10`;
   ORDER BY 7 desc
   LIMIT 10`;
   // Highest Tournament PPB (normalized) -- Team
-  const summary12 = client.sql`
+  const summary12 = sql`
   Select 
   teams.*,
   summ.mean,
@@ -302,7 +302,7 @@ LIMIT 10`;
   ORDER BY z desc
   LIMIT 10`;
   // Most Points in a Game, Winning Team
-  const summary13 = client.sql`
+  const summary13 = sql`
   SELECT 
   sets.year as Season,
   \"set\" as Tournament, 
@@ -323,7 +323,7 @@ LIMIT 10`;
   ORDER BY total_pts desc
   LIMIT 10`;
   // Most PP20TUH in a Full Game, Winning Team
-  const summary14 = client.sql`
+  const summary14 = sql`
   SELECT 
   sets.year as Season,
   \"set\" as Tournament, 
@@ -346,7 +346,7 @@ LIMIT 10`;
   ORDER BY PP20TUH desc
   LIMIT 10`;
   // Most Points in a Game, Both Teams
-  const summary15 = client.sql`
+  const summary15 = sql`
   SELECT
   sets.year as Season,
   \"set\" as Tournament, 
@@ -369,7 +369,7 @@ LIMIT 10`;
   ORDER BY Pts desc
   LIMIT 10`;
   // Most PP20TUH in a Game, Both Teams
-  const summary16 = client.sql`
+  const summary16 = sql`
   SELECT sets.year as Season,
   \"set\" as Tournament, 
   \"set\", site,
@@ -392,7 +392,7 @@ LIMIT 10`;
   ORDER BY PP20TUH desc
   LIMIT 10`;
   // Most Negs in a Game -- Team
-  const summary17 = client.sql`
+  const summary17 = sql`
   SELECT sets.year as Season,
   \"set\" as Tournament, 
   \"set\", 
@@ -417,7 +417,7 @@ LIMIT 10`;
   ORDER BY negs desc
   LIMIT 10`;
   // Highest PPB in a Game
-  const summary18 = client.sql`
+  const summary18 = sql`
   SELECT 
   sets.year as Season,
   \"set\" as Tournament, 
@@ -445,7 +445,7 @@ LIMIT 10`;
   order by PPB desc
   LIMIT 10`;
   // Most Grails
-  const summary19 = client.sql`
+  const summary19 = sql`
   SELECT 
   sets.year as Season,
   \"set\" as Tournament, 
@@ -472,7 +472,7 @@ LIMIT 10`;
   and coalesce(tuh, 20) > 12
   ORDER BY Pts desc`;
   // Most Points Scored -- Player
-  const summary20 = client.sql`
+  const summary20 = sql`
   SELECT fname || ' ' || lname as Player, 
   slug,
   count(distinct tournament_id) as Ts,
@@ -490,7 +490,7 @@ LIMIT 10`;
   ORDER BY Pts desc
   LIMIT 10`;
   // Most Tournaments Played -- Player
-  const summary21 = client.sql`
+  const summary21 = sql`
   SELECT fname || ' ' || lname as Player, 
   slug,
   replace(string_agg(distinct school, ', '), ',', ', ') as Schools,
@@ -507,7 +507,7 @@ LIMIT 10`;
   ORDER BY Ts desc
   LIMIT 10`;
   // Most National Tournaments Played
-  const summary22 = client.sql`
+  const summary22 = sql`
   SELECT fname || ' ' || lname as Player, 
   slug,
   replace(string_agg(distinct school, ', '), ',', ', ') as Schools,
@@ -525,7 +525,7 @@ GROUP BY 1, 2
 ORDER BY Ts desc
 LIMIT 10`;
   // Most Wins -- Player
-  const summary23 = client.sql`
+  const summary23 = sql`
   SELECT 
   fname || ' ' || lname as Player, 
   slug,
@@ -544,7 +544,7 @@ LIMIT 10`;
   ORDER BY Wins desc
   LIMIT 10`;
   // Most Tournament Wins -- Player
-  const summary24 = client.sql`
+  const summary24 = sql`
   SELECT 
   fname || ' ' || lname as Player, 
   slug,
@@ -565,7 +565,7 @@ LIMIT 10`;
   ORDER BY Wins desc
   LIMIT 10`;
   // Highest Winning Percentage -- Player
-  const summary25 = client.sql`
+  const summary25 = sql`
   select a.* from (
     SELECT fname || ' ' || lname as Player, 
     slug,
@@ -586,7 +586,7 @@ LIMIT 10`;
     where GP >= 50
     LIMIT 10`;
   // Most Points in a Season -- Player
-  const summary26 = client.sql`
+  const summary26 = sql`
   SELECT 
   sets.year as Season, 
   school as School,
@@ -609,7 +609,7 @@ GROUP BY 1, 2, 3, 4, 5
 ORDER BY Pts desc
 LIMIT 10`;
   // Highest PP20TUH in a Season -- Player
-  const summary27 = client.sql`
+  const summary27 = sql`
   Select * from (
     SELECT 
     sets.year as Season, 
@@ -635,7 +635,7 @@ LIMIT 10`;
     where Ts >= 5
     LIMIT 10`;
   // Highest Winning Percentage in a Season -- Player
-  const summary28 = client.sql` 
+  const summary28 = sql` 
   Select * from (
     SELECT 
     sets.year as Season,
@@ -661,7 +661,7 @@ ORDER BY \"Win%\" desc) a
 where Ts >= 5
 LIMIT 10`;
   // Highest PP20TUH in a Tournament -- Player
-  const summary29 = client.sql`
+  const summary29 = sql`
   Select 
   a.*,
   a.rawPP20TUH as PP20TUH from 
@@ -694,7 +694,7 @@ LIMIT 10`;
     where rawPP20TUH is not null
     LIMIT 10`;
   // Highest PP20TUH in a National Tournament -- Player
-  const summary30 = client.sql`
+  const summary30 = sql`
   Select 
   a.*, 
   a.rawPP20TUH as PP20TUH 
@@ -727,7 +727,7 @@ LIMIT 10`;
     ORDER BY rawPP20TUH desc) a
     LIMIT 10`;
   // Most Negs per 20 TUH in a Tournament -- Player
-  const summary31 = client.sql`
+  const summary31 = sql`
   Select a.* from (
     SELECT 
     sets.year as Season, 
@@ -759,7 +759,7 @@ LIMIT 10`;
     and \"-5P20TUH\" is not null
     LIMIT 10`;
   // Most Points in a Game
-  const summary32 = client.sql`
+  const summary32 = sql`
   Select a.* from (
     SELECT 
     sets.year as Season,
@@ -789,7 +789,7 @@ LIMIT 10`;
     ORDER BY Pts desc) a
     LIMIT 10`;
   // Most Points in a National Tournament Game
-  const summary33 = client.sql`
+  const summary33 = sql`
   Select a.* from (
     SELECT sets.year as Season,
     \"set\" as Tournament,
@@ -819,7 +819,7 @@ LIMIT 10`;
     ORDER BY Pts desc) a
     LIMIT 10`;
   // Most Tossups in a Game
-  const summary34 = client.sql`Select a.* from (
+  const summary34 = sql`Select a.* from (
     SELECT 
     sets.year as Season,
     \"set\" as Tournament, 
@@ -848,7 +848,7 @@ LIMIT 10`;
     ORDER BY Tossups desc) a
     LIMIT 10`;
   // Most Negs in a Game
-  const summary35 = client.sql`
+  const summary35 = sql`
   Select a.* from (
     SELECT sets.year as Season,
     \"set\" as Tournament, 
@@ -876,7 +876,7 @@ LIMIT 10`;
     ORDER BY negs desc) a
     LIMIT 10`;
   // Most Tournaments Hosted
-  const summary36 = client.sql`
+  const summary36 = sql`
   SELECT 
   school as School, 
   slug,
@@ -889,7 +889,7 @@ LIMIT 10`;
   ORDER BY 3 desc
   LIMIT 10`;
   // Largest Tournaments Hosted
-  const summary37 = client.sql`
+  const summary37 = sql`
   SELECT 
   tournaments.tournament_id,
   sets.year as Year, 
@@ -950,7 +950,7 @@ LIMIT 10`;
   ])
   return {
     props: {
-      result: all.map((i)=>i.rows)
+      result: all
     },
   };
 }

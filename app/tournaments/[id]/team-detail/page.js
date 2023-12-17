@@ -1,13 +1,13 @@
 import Tournament from "./tournament-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function generateStaticParams() {
-  const client = await dbi.connect();
-  const tournaments = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const tournaments = await sql`
   SELECT distinct tournament_id
            from tournaments 
            `;
-  return tournaments.rows;
+  return tournaments;
 }
 
 export async function generateMetadata({ params }) {
@@ -19,9 +19,9 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const client = await dbi.connect();
+  const sql = neon(process.env.DATABASE_URL);
 
-  const summary_res = await client.sql`
+  const summary_res = await sql`
   SELECT 
            date, tournaments.tournament_name, naqt_id
            from tournaments 
@@ -29,7 +29,7 @@ export async function getData(params) {
            LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar
            WHERE tournaments.tournament_id::varchar = ${params.id}
            `;
-  const team_detail_team_res = await client.sql`
+  const team_detail_team_res = await sql`
   SELECT
   REPLACE(round, 'Round ', '')::numeric as Round,
   team as Team,
@@ -48,7 +48,7 @@ export async function getData(params) {
   order by Team, Round
           `;
 
-  const team_detail_player_res = await client.sql`
+  const team_detail_player_res = await sql`
   SELECT 
   coalesce(fname|| ' ' || lname, player_games.player) as Player, 
   team as Team,
@@ -74,9 +74,9 @@ export async function getData(params) {
           `;
 
   const all = {
-    Summary: summary_res.rows,
-    "Team Detail Teams": team_detail_team_res.rows,
-    "Team Detail Players": team_detail_player_res.rows,
+    Summary: summary_res,
+    "Team Detail Teams": team_detail_team_res,
+    "Team Detail Players": team_detail_player_res,
   };
   return {
     props: {

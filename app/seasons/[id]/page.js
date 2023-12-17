@@ -1,13 +1,13 @@
 import Season from "./season-page";
-import { db } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function generateStaticParams() {
-  const client = await db.connect();
-  const data = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const data = await sql`
   SELECT distinct sets.year from sets
     `;
 
-  return data.rows;
+  return data;
 }
 
 export async function generateMetadata({ params }) {
@@ -17,8 +17,8 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const client = await db.connect();
-  const champs_res = await client.sql`SELECT 
+  const sql = neon(process.env.DATABASE_URL);
+  const champs_res = await sql`SELECT 
   sets.year as Season, 
   tournament as Tournament, 
   champions.tournament_id, 
@@ -44,7 +44,7 @@ export async function getData(params) {
              and champions.team_id = player_games.team_id
   where champions.year = ${params.id}`;
 
-  const tournament_res = await client.sql`
+  const tournament_res = await sql`
   SELECT tournaments.*, 
   results.Champion 
   FROM (SELECT 
@@ -82,7 +82,7 @@ export async function getData(params) {
     ) results
     on tournaments.tournament_id = results.tournament_id`;
 
-  const sets_res = await client.sql`SELECT 
+  const sets_res = await sql`SELECT 
   sets.\"set\" as \"Set\", set_slug, difficulty, 
   case difficulty when 'easy' then 1 when 'medium' then 2 when 'regionals' then 3 when 'nationals' then 4 end as diffnum,
                       count(distinct team_games.site_id) as Sites,
@@ -101,9 +101,9 @@ export async function getData(params) {
   return {
     props: {
       result: {
-        Champions: champs_res.rows,
-        Tournaments: tournament_res.rows,
-        Sets: sets_res.rows,
+        Champions: champs_res,
+        Tournaments: tournament_res,
+        Sets: sets_res,
       },
     },
   };

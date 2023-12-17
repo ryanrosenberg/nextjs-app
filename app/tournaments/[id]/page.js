@@ -1,13 +1,13 @@
 import Tournament from "./tournament-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function generateStaticParams() {
-  const client = await dbi.connect();
-  const tournaments = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const tournaments = await sql`
   SELECT distinct tournament_id
            from tournaments 
            `;
-  return tournaments.rows;
+  return tournaments;
 }
 
 export async function generateMetadata({ params }) {
@@ -18,8 +18,8 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const client = await dbi.connect();
-  const summary_res = client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const summary_res = sql`
   SELECT 
            date, 
            tournaments.tournament_id,
@@ -31,7 +31,7 @@ export async function getData(params) {
            WHERE tournaments.tournament_id::varchar = ${params.id}
            `;
 
-  const standings_res = client.sql`
+  const standings_res = sql`
   SELECT 
   rank as Rank,
   teams.team as Team,
@@ -63,7 +63,7 @@ export async function getData(params) {
   ORDER BY Rank
           `;
 
-  const players_res = client.sql`
+  const players_res = sql`
   SELECT *, rawPPG as PPG from (
     SELECT
        coalesce(fname|| ' ' || lname, player_games.player) as Player,
@@ -101,9 +101,9 @@ export async function getData(params) {
   return {
     props: {
       result: {
-        Summary: all[0].rows,
-        Standings: all[1].rows,
-        Players: all[2].rows,
+        Summary: all[0],
+        Standings: all[1],
+        Players: all[2],
       },
     },
   };

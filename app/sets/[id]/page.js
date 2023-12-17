@@ -1,10 +1,10 @@
 import Set from "./set-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function generateStaticParams() {
-  const client = await dbi.connect();
-  const sets = await client.sql`SELECT distinct set_slug from sets`;
-  return sets.rows;
+  const sql = neon(process.env.DATABASE_URL);
+  const sets = await sql`SELECT distinct set_slug from sets`;
+  return sets;
 }
 
 
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const client = await dbi.connect();
-  const summary_res = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const summary_res = await sql`
   SELECT 
   sets.year as Year,
   sets.\"set\" as \"Set\", 
@@ -30,7 +30,7 @@ export async function getData(params) {
    WHERE sets.set_slug = ${params.id}
          `;
 
-  const editor_res = await client.sql`
+  const editor_res = await sql`
   SELECT 
   sets.year as Year,
   sets.\"set\" as \"Set\", 
@@ -48,7 +48,7 @@ export async function getData(params) {
    and category != 'Head'
    GROUP BY 1,2,3,4,5, 6, 7`;
 
-  const tournament_res = await client.sql`
+  const tournament_res = await sql`
   SELECT 
 sets.year as Year, 
 tournaments.date as Date, 
@@ -67,7 +67,7 @@ LEFT JOIN tournaments on team_games.tournament_id = tournaments.tournament_id
  WHERE sets.set_slug = ${params.id}
  GROUP BY 1,2,3,4, 5`;
 
-  const teams_res = await client.sql`
+  const teams_res = await sql`
   SELECT 
   sets.year as Year,
   coalesce(teams.team, school_name) as Team, 
@@ -99,7 +99,7 @@ LEFT JOIN tournaments on team_games.tournament_id = tournaments.tournament_id
              WHERE sets.set_slug = ${params.id}
    GROUP BY 1,2,3,4,5, 6`;
 
-  const player_res = await client.sql`
+  const player_res = await sql`
   SELECT
   sets.year as Year, 
   \"set\" as \"Set\", 
@@ -133,11 +133,11 @@ ORDER BY Player`;
   return {
     props: {
       result: {
-        Summary: summary_res.rows,
-        'Teams': teams_res.rows,
-        'Players': player_res.rows,
-        'Tournaments': tournament_res.rows,
-        'Editors': editor_res.rows
+        Summary: summary_res,
+        'Teams': teams_res,
+        'Players': player_res,
+        'Tournaments': tournament_res,
+        'Editors': editor_res
       },
     },
   };

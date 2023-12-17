@@ -1,13 +1,13 @@
 import Game from "./game-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function generateStaticParams() {
   return [];
 }
 
 export async function getData(params) {
-  const client = await dbi.connect();
-  const summary = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const summary = await sql`
     SELECT 
     team_games.round, 
     teams.team, 
@@ -21,7 +21,7 @@ export async function getData(params) {
     LEFT JOIN sites on tournaments.site_id = sites.site_id
     WHERE team_games.game_id = ${params.id}
       `;
-  const players = await client.sql`SELECT
+  const players = await sql`SELECT
   tournament_id,
 game_id,
 team, 
@@ -37,7 +37,7 @@ LEFT JOIN players on player_games.player_id = players.player_id
 LEFT JOIN people on players.person_id = people.person_id
       WHERE game_id = ${params.id}
         `;
-  const teams = await client.sql`
+  const teams = await sql`
   SELECT
   game_id,
   team,
@@ -50,9 +50,9 @@ LEFT JOIN people on players.person_id = people.person_id
   return {
     props: {
       result: {
-        Summary: summary.rows,
-        Players: players.rows,
-        Teams: teams.rows,
+        Summary: summary,
+        Players: players,
+        Teams: teams,
       },
     },
   };

@@ -1,16 +1,16 @@
 // Import your Client Component
 import Circuit from "./circuit-page";
-import { db as dbi } from "@vercel/postgres";
+import { neon } from '@neondatabase/serverless';
 
 export async function generateStaticParams() {
-  const client = await dbi.connect();
-  const circuits = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const circuits = await sql`
   SELECT distinct circuit_slug from schools 
   where circuit is not null
   and circuit <> 'National'
   and circuit <> 'Asia'`;
 
-  return circuits.rows;
+  return circuits;
 }
 
 export async function generateMetadata({ params }) {
@@ -21,8 +21,8 @@ export async function generateMetadata({ params }) {
 }
 
 export async function getData(params) {
-  const client = await dbi.connect();
-  const schools_res = await client.sql`
+  const sql = neon(process.env.DATABASE_URL);
+  const schools_res = await sql`
   SELECT 
   school_name as School, 
   slug as school_slug, 
@@ -55,7 +55,7 @@ export async function getData(params) {
    GROUP BY 1, 2, 3, 4, 5
          `;
 
-  const sites_res = await client.sql`
+  const sites_res = await sql`
   SELECT 
   sites.site, 
   sites.lat, 
@@ -69,7 +69,7 @@ from sites
  GROUP BY 1, 2, 3, 4
  `;
 
-  const tournament_res = await client.sql`
+  const tournament_res = await sql`
   SELECT 
   sites.circuit as Circuit,
 sets.year as Year, 
@@ -111,7 +111,7 @@ LEFT JOIN tournaments on team_games.tournament_id = tournaments.tournament_id
  ORDER by Date desc
  `;
 
- const team_wins = await client.sql`
+ const team_wins = await sql`
  SELECT 
  school_name as \"School\", 
  slug,
@@ -128,7 +128,7 @@ LEFT JOIN tournaments on team_games.tournament_id = tournaments.tournament_id
  ORDER BY Wins desc
  LIMIT 10`;
 
- const team_pct = await client.sql`
+ const team_pct = await sql`
  SELECT 
  a.*
  FROM (SELECT team as \"Team\", 
@@ -146,7 +146,7 @@ GROUP BY 1) a
 WHERE Tournaments >= 10
 ORDER BY 3 desc
 LIMIT 10`;
- const team_ts = await client.sql`
+ const team_ts = await sql`
  SELECT 
   school_name as \"School\", 
   slug,
@@ -164,7 +164,7 @@ LIMIT 10`;
   ORDER BY Wins desc
   LIMIT 10`;
 
- const player_pts = await client.sql`
+ const player_pts = await sql`
  SELECT fname || ' ' || lname as Player, 
  slug,
  replace(string_agg(distinct teams.school, ', '), ',', ', ') as Schools,
@@ -183,7 +183,7 @@ LIMIT 10`;
  GROUP BY 1, 2
  ORDER BY Pts desc
  LIMIT 10`;
- const player_pct = await client.sql`
+ const player_pct = await sql`
  select a.* from (
   SELECT fname || ' ' || lname as Player, 
   slug,
@@ -204,7 +204,7 @@ LIMIT 10`;
   ORDER BY 5 desc) a
   where GP >= 50
   LIMIT 10`;
- const player_ts = await client.sql`
+ const player_ts = await sql`
  SELECT 
  fname || ' ' || lname as Player, 
  slug,
@@ -226,16 +226,16 @@ LIMIT 10`;
   return {
     props: {
       result: {
-        Schools: schools_res.rows,
-        Sites: sites_res.rows,
-        Tournaments: tournament_res.rows,
+        Schools: schools_res,
+        Sites: sites_res,
+        Tournaments: tournament_res,
         Records: {
-          "Most Wins": team_wins.rows,
-          "Highest Winning %": team_pct.rows,
-          "Most Tournament Wins": team_ts.rows,
-          "Most Player Pts": player_pts.rows,
-          "Highest Player Winning %": player_pct.rows,
-          "Most Tournaments Played": player_ts.rows,
+          "Most Wins": team_wins,
+          "Highest Winning %": team_pct,
+          "Most Tournament Wins": team_ts,
+          "Most Player Pts": player_pts,
+          "Highest Player Winning %": player_pct,
+          "Most Tournaments Played": player_ts,
         }
       },
     },
