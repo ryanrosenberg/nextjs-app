@@ -75,7 +75,7 @@ export async function getData(params) {
   sum(powers)/NULLIF(count(tens), 0)::numeric as \"15/G\",
   sum(tens)/NULLIF(count(tens), 0)::numeric as \"10/G\",
   sum(negs)/NULLIF(count(tens), 0)::numeric as \"-5/G\",
-  sum(powers)/sum(negs)::numeric as \"P/N\",
+  sum(powers)/NULLIF(sum(negs), 0)::numeric as \"P/N\",
   (sum(coalesce(powers, 0)) + sum(tens))/NULLIF(sum(negs), 0)::numeric as \"G/N\",
   avg(pts) as PPG from
   player_games
