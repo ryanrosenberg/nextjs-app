@@ -42,8 +42,8 @@ export default function GroupedTable({
                     ? tables.borderRight
                     : tables.noBorder
                 )}
-                title={column.Tooltip}
-                key={i}
+                title = {column.Tooltip}
+                key = {i}
               >
                 <button
                   className={classnames(
