@@ -40,7 +40,6 @@ export default function BonusPage({ params }: { params: { slug:string, round:str
     const directs = getDirectsByBonusQuery.all(tournament.id, params.round, params.number) as BonusDirect[];
     const tournamentRounds = getRoundsForTournamentQuery.all(tournament.id) as Round[];
     const navOptions = getNavOptions(parseInt(params.round), parseInt(params.number), tournamentRounds);
-    console.log(navOptions);
     
     return (
         <Layout tournament={tournament}>
