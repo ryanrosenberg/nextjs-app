@@ -2,7 +2,7 @@ import tables from "./tables.module.css";
 import group_tables from "./grouped_table.module.css";
 import _ from "lodash";
 import classnames from "classnames";
-import RawHtml from "./rawHtml";
+import { renderCell } from "../lib/utils";
 import { useSortableData } from "../hooks/useSortableData";
 
 export default function GroupedTable({
@@ -18,20 +18,7 @@ export default function GroupedTable({
     }
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
-  // columns = columns.filter(column => column.accessor != grouping_column)
   let rowGroups = _.groupBy(items, grouping_column);
-
-  // if(grouping_column == 'category'){
-  //   rowGroups = {
-  //     'Literature': rowGroups['Literature'],
-  //     'History': rowGroups['History'],
-  //     'Science': rowGroups['Science'],
-  //     'Arts': rowGroups['Arts'],
-  //     'Beliefs': rowGroups['Beliefs'],
-  //     'Thought': rowGroups['Thought'],
-  //     'Other': rowGroups['Other'],
-  //   }
-  // }
 
   return (
     <div>
@@ -56,7 +43,7 @@ export default function GroupedTable({
                     : tables.noBorder
                 )}
                 title = {column.Tooltip}
-                key={i}
+                key = {i}
               >
                 <button
                   className={classnames(
@@ -74,14 +61,14 @@ export default function GroupedTable({
         {Object.keys(rowGroups).map((group, i) => {
           return (
             <tbody key={i}>
-              <tr className={group_tables.rowGroup}>
-                <td className={tables.cell} colSpan={columns.length}>
-                  <RawHtml html={rowGroups[group][0][grouping_column]} />
+              <tr className={group_tables.rowGroup} key={i}>
+                <td className={tables.cell} colSpan={columns.length} key={i}>
+                  {renderCell(rowGroups[group][0], {'accessor': grouping_column, 'html': true})}
                 </td>
               </tr>
               {rowGroups[group].map((row, i) => {
                 return (
-                  <tr>
+                  <tr key={i}>
                     {columns.map((column, i) => {
                       var rowHTML =
                         column.align == "left" ? (
@@ -92,9 +79,9 @@ export default function GroupedTable({
                                 ? tables.borderRight
                                 : tables.noBorder
                             )}
-                            key = {i}
+                            key={i}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         ) : (
                           <td
@@ -107,9 +94,9 @@ export default function GroupedTable({
                                 ? tables.cellRight
                                 : tables.cellNumber
                             )}
-                            key = {i}
+                            key={i}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         );
                       return rowHTML;

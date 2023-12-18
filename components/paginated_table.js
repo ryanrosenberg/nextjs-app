@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import tables from "./tables.module.css";
 import paginated_table from "./paginated_table.module.css";
@@ -5,7 +7,7 @@ import ReactPaginate from "react-paginate";
 import { useSortableData } from "../hooks/useSortableData";
 import _ from "lodash";
 import classnames from "classnames";
-import RawHtml from "./rawHtml";
+import { renderCell } from "../lib/utils";
 
 const PaginatedTable = ({
   columns,
@@ -21,9 +23,7 @@ const PaginatedTable = ({
     }
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
-  const [page, setPage] = useState(1);
+  
   const [itemOffset, setItemOffset] = useState(0);
 
   // Simulate fetching items from another resources.
@@ -96,7 +96,7 @@ const PaginatedTable = ({
                                 : tables.noBorder
                             )}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         ) : (
                           <td
@@ -111,7 +111,7 @@ const PaginatedTable = ({
                                 : tables.cellNumber
                             )}
                           >
-                            <RawHtml html={row[column.accessor]} />
+                            {renderCell(row, column)}
                           </td>
                         );
                       return rowHTML;

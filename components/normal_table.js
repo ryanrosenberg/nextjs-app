@@ -4,7 +4,7 @@ import tables from "./tables.module.css";
 import Link from "next/link";
 import * as _ from 'radash';
 import classnames from "classnames";
-import RawHtml from "./rawHtml";
+import { renderCell } from "../lib/utils.js";
 import { useSortableData } from "../hooks/useSortableData.js";
 
 const NormalTable = ({
@@ -96,7 +96,7 @@ const NormalTable = ({
                             : tables.noBorder
                         )}
                       >
-                        <RawHtml html={renderCell(row, column)} />
+                        {renderCell(row, column)}
                       </td>
                     ) : (
                       <td
@@ -113,7 +113,7 @@ const NormalTable = ({
                             : tables.cellNumber
                         )}
                       >
-                        <RawHtml html={renderCell(row, column)} />
+                        {renderCell(row, column)}
                       </td>
                     );
                   return rowHTML;

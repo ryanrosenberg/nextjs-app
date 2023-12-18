@@ -4,24 +4,28 @@ import editor_styles from './editor_table.module.css';
 import { useMemo } from "react";
 import _ from "lodash";
 import classnames from "classnames";
+import { renderCell } from "../lib/utils";
 
 const EditorTable = ({ data }) => {
+  
   const columns = useMemo(() => [
     {
       Header: "Set",
-      accessor: "Set",
+      accessor: "set",
       align: "left",
       border: "right",
+      linkTemplate: "/sets/{{set_slug}}"
     },
     {
       Header: "Difficulty",
-      accessor: "Difficulty",
+      accessor: "difficulty",
       align: "left",
       border: "right",
+      html: 'true'
     },
     {
       Header: "Head Editor",
-      accessor: "Head Editor",
+      accessor: "Head",
       align: "left",
       border: "right",
     },
@@ -68,15 +72,27 @@ const EditorTable = ({ data }) => {
     },
   ]);
 
-  const grouping_column = "Season";
-  let rowGroups = _.groupBy(data, grouping_column);
+  const makeEditorLink = (row) => {
+    const set = row[0]
+    if (set) {
+      let editor_list = set.editors.split('; ')
+      let subcat_list = set.subcats.split('; ')
+      let slug_list = set.slugs ? set.slugs.split('; ') : null
+      let link_list = slug_list ? slug_list.map((item, i) => `<a href = '/players/${item}'>${editor_list[i]}</a> <i style="font-size:80%">${subcat_list[i]}</i>`) : editor_list
+      return link_list.join('<br>')
+    } else {
+      return ''
+    }
+  };
 
+  const grouping_column = "season";
+  let rowGroups = _.groupBy(data, grouping_column);
   return (
     <div>
       <table className={editor_styles.EditorTable}>
         <thead className={tables.header}>
           <tr className={tables.headerRow}>
-            {columns.map((column) => (
+            {columns.map((column, i) => (
               <th
                 className={classnames(
                   column.align == "left"
@@ -86,64 +102,76 @@ const EditorTable = ({ data }) => {
                     ? tables.borderRight
                     : tables.noBorder
                 )}
+                key={i}
               >
                 {column.Header}
               </th>
             ))}
           </tr>
         </thead>
-        {Object.keys(rowGroups).map((group) => {
+        {Object.keys(rowGroups).map((group, i) => {
           return (
-            <tbody>
-              <tr className={grouped_table.rowGroup}>
+            <tbody key={i}>
+              <tr className={grouped_table.rowGroup} key={i}>
                 <td
                   className={tables.cell}
-                  colSpan={Object.keys(rowGroups[group][0]).length}
+                  colSpan={columns.length}
                 >
                   {rowGroups[group][0][grouping_column]}
                 </td>
               </tr>
-              {rowGroups[group].map((row, i) => {
-                return (
-                  <tr>
-                    {columns.map((column) => {
-                      var rowHTML =
-                        column.align == "left" ? (
-                          <td
-                            className={classnames(
-                              tables.cell,
-                              column.border == "right"
-                                ? tables.borderRight
-                                : tables.noBorder
-                            )}
-                          >
-                            <span
-                              dangerouslySetInnerHTML={{
-                                __html: row[column.accessor],
-                              }}
-                            />
-                          </td>
-                        ) : (
-                          <td
-                            className={classnames(
-                              tables.cellRight,
-                              column.border == "right"
-                                ? tables.borderRight
-                                : tables.noBorder
-                            )}
-                          >
-                            <span
-                              dangerouslySetInnerHTML={{
-                                __html: row[column.accessor],
-                              }}
-                            />
-                          </td>
-                        );
-                      return rowHTML;
-                    })}
-                  </tr>
-                );
-              })}
+              {_.map(
+                _.groupBy(rowGroups[group], "set"),
+                (set_rows, i) => {
+                  return (
+                    <tr key={i}>
+                      {columns.map((column, i) => {
+                        // console.log(set_rows[0]);
+                        var rowHTML =
+                          column.align == "left" ? (
+                            <td
+                              className={classnames(
+                                tables.cell,
+                                column.border == "right"
+                                  ? tables.borderRight
+                                  : tables.noBorder
+                              )}
+                              key={i}
+                            >
+                              {
+                                column.accessor === "set" | column.accessor === "difficulty" ?
+                                  renderCell(set_rows[0], column) :
+                                  <span
+                                    dangerouslySetInnerHTML={{
+                                      __html: makeEditorLink(set_rows.filter((set_row) => set_row.category === column.accessor)),
+                                    }}
+                                  />
+                              }
+                            </td>
+                          ) : (
+                            <td
+                              className={classnames(
+                                tables.cellRight,
+                                column.border == "right"
+                                  ? tables.borderRight
+                                  : tables.noBorder
+                              )}
+                              key={i}
+                            >
+                              <span
+                                dangerouslySetInnerHTML={{
+                                  __html: column.accessor === "set" | column.accessor === "Difficulty" ?
+                                    renderCell(set_rows[0], column) :
+                                    makeEditorLink(set_rows.filter((set_row) => set_row.category === column.accessor)),
+                                }}
+                              />
+                            </td>
+                          );
+                        return rowHTML;
+                      })}
+                    </tr>
+                  );
+                })}
             </tbody>
           );
         })}

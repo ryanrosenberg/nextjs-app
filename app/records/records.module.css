@@ -1,3 +1,7 @@
+.sideNav {
+    width: 255px;
+}
+
 .row {
     display: flex;
     column-gap: 2em;

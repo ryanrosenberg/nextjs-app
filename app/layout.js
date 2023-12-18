@@ -7,6 +7,7 @@ import {
 } from "../styles/fonts";
 import styles from "./layout.module.css";
 import Navbar from "./navbar.js";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: "College Quizbowl Stats",
@@ -24,6 +25,7 @@ export default function RootLayout({
       className={`${signika_neg.variable} ${alegreya_sans.variable} ${inter.variable}`}
       lang="en"
     >
+      <SpeedInsights />
       <body data-bs-spy="scroll" data-bs-target="#toc">
         <div className={styles.container}>
           <header className={styles.header}>

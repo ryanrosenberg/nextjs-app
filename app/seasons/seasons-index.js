@@ -5,11 +5,13 @@ import { useMemo } from "react";
 
 export default function Home({ result }) {
   const data = result.props.result;
+  
   const cols = useMemo(() => [
     {
       Header: "Season",
       accessor: "year",
-      border: "right"
+      border: "right",
+      linkTemplate: "/seasons/{{year}}"
     },
     {
       Header: "ACF Nationals",

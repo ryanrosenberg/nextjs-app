@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import styles from "./search_bar.module.css";
 import Fuse from "fuse.js";
-import { slug } from "../lib/utils";
+import { slugify } from "../lib/utils";
 
 export default function SearchBar({ value }) {
   var json = require("../refresh-index.json");
@@ -38,7 +38,7 @@ export default function SearchBar({ value }) {
       />
       <div className={result.length > 0 ? styles.searchResult : ""}>
         {result.map((en) => (
-          <a href={`https://quizbowlstats.com/${slug(en.item.type)}/${en.item.slug}`}>
+          <a href={`https://quizbowlstats.com/${slugify(en.item.type)}/${en.item.slug}`}>
             <div className={styles.searchResultEntry}>
               {en.item.name}{" "}
               <i className={styles.description}>{en.item.description}</i>

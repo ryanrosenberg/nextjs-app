@@ -14,15 +14,18 @@ export default function Map({ school_markers, host_markers }) {
   return (
     <MapContainer
       center={[
-        _.filter(host_markers, (o) => o.last_active >= 2021)[0]["lat"],
-        _.filter(host_markers, (o) => o.last_active >= 2021)[0]["lon"],
+        _.filter(host_markers, (o) => o.last_host >= 2021)[0]["lat"],
+        _.filter(host_markers, (o) => o.last_host >= 2021)[0]["lon"],
       ]}
       zoom={6}
       style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
-        url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.png"
-        attribution='Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://tiles.stadiamaps.com/tiles/stamen_toner_lite/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>
+        &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a>
+        &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
+        &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>'
       />
       {filtered_school_markers.map((marker) => {
         return (
@@ -34,7 +37,7 @@ export default function Map({ school_markers, host_markers }) {
             opacity={marker.last_active >= 2021 ? 1 : 0.1}
             weight={2}
           >
-            <Tooltip>{marker.school_name}</Tooltip>
+            <Tooltip>{marker.school}</Tooltip>
           </CircleMarker>
         );
       })}
@@ -44,8 +47,8 @@ export default function Map({ school_markers, host_markers }) {
             center={[marker["lat"], marker["lon"]]}
             color="black"
             fillColor="#001aff"
-            fillOpacity={marker.last_active >= 2021 ? 0.8 : 0.1}
-            opacity={marker.last_active >= 2021 ? 1 : 0.1}
+            fillOpacity={marker.last_host >= 2021 ? 0.8 : 0.1}
+            opacity={marker.last_host >= 2021 ? 1 : 0.1}
             weight={2}
           >
             <Tooltip>{marker.site}</Tooltip>
