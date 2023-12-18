@@ -1,5 +1,5 @@
 import Layout from "../../../../../../components/Layout";
-import { get, getBuzzesByTossupQuery, getRoundsForTournamentQuery, getTossupForDetailQuery, getTossupsByTournamentQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../../../lib/queries";
+import { sql, getBuzzesByTossupQuery, getRoundsForTournamentQuery, getTossupForDetailQuery, getTossupsByTournamentQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../../../lib/queries";
 import { Buzz, Round, Tossup, Tournament } from "../../../../../../types";
 import TossupDisplay from "../../../../../../components/TossupDisplay";
 import { Metadata } from "next";
@@ -26,8 +26,8 @@ export const generateStaticParams = () => {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string, round: string, number: string } }): Promise<Metadata> {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const tossup = getTossupForDetailQuery.get(tournament.id, params.round, params.number) as Tossup;
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const [tossup] = await sql(getTossupForDetailQuery, [tournament.id, params.round, params.number]);
 
     return {
         title: `${removeTags(shortenAnswerline(tossup.answer))} - ${tournament.name} - Buzzpoints App`,
@@ -35,12 +35,13 @@ export async function generateMetadata({ params }: { params: { slug: string, rou
     };
 }
 
-export default function TossupPage({ params }: { params: { slug: string, round: string, number: string } }) {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const tossup = getTossupForDetailQuery.get(tournament.id, params.round, params.number) as Tossup;
-    const buzzes = getBuzzesByTossupQuery.all(tossup.id, tournament.id) as Buzz[];
-    const tournamentRounds = getRoundsForTournamentQuery.all(tournament.id) as Round[];
+export default async function TossupPage({ params }: { params: { slug: string, round: string, number: string } }) {
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const [tossup] = await sql(getTossupForDetailQuery, [tournament.id, params.round, params.number]) as Tossup[];
+    const buzzes = await sql(getBuzzesByTossupQuery, [tossup.id, tournament.id]) as Buzz[];
+    const tournamentRounds = await sql(getRoundsForTournamentQuery, [tournament.id]) as Round[];
     const navOptions = getNavOptions(parseInt(params.round), parseInt(params.number), tournamentRounds);
+
 
     return (
         <div>

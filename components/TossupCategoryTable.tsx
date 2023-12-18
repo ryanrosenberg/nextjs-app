@@ -1,7 +1,7 @@
 'use client';
 
 import { TossupCategory } from "../types";
-import { formatDecimal, formatPercent } from "../lib/jordan_utils";
+import { formatDecimal, formatPercent } from "../lib/utils";
 import NormalTable from "./normal_table";
 
 type TossupCategoryTableProps = {
@@ -14,6 +14,7 @@ export default function TossupCategoryTable({ tossupCategoryStats }: TossupCateg
             accessor: "category",
             Header: "Category",
             border: "right",
+            linkTemplate: "/buzzpoints/{{tournament_slug}}/category-tossup/{{category_slug}}",
             align: 'left'
         },
         {

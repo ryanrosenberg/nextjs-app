@@ -2,7 +2,7 @@ import BonusDisplay from "../../../../../../components/BonusDisplay";
 import Layout from "../../../../../../components/Layout";
 import { Bonus, BonusDirect, BonusPart, Round, Tournament } from "../../../../../../types";
 import { getNavOptions, removeTags, shortenAnswerline } from "../../../../../../lib/jordan_utils";
-import { get, all, getBonusesByTournamentQuery, getTournamentBySlugQuery, getTournamentsQuery, getBonusPartsQuery, getDirectsByBonusQuery, getRoundsForTournamentQuery } from "../../../../../../lib/queries";
+import { sql, getBonusesByTournamentQuery, getTournamentBySlugQuery, getTournamentsQuery, getBonusPartsQuery, getDirectsByBonusQuery, getRoundsForTournamentQuery } from "../../../../../../lib/queries";
 import { Metadata } from "next";
 
 export const generateStaticParams = () => {
@@ -26,8 +26,8 @@ export const generateStaticParams = () => {
 }
 
 export async function generateMetadata({ params }: { params: { slug:string, round:string, number:string }}): Promise<Metadata> {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const bonusParts = getBonusPartsQuery.all(tournament.id, params.round, params.number) as BonusPart[];
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const bonusParts = await sql(getBonusPartsQuery, [tournament.id, params.round, params.number]) as BonusPart[];
     
     return {
         title: `${removeTags(shortenAnswerline(bonusParts[0].answer))} - ${tournament.name} - Buzzpoints App`,
@@ -35,11 +35,11 @@ export async function generateMetadata({ params }: { params: { slug:string, roun
     };
 }
 
-export default function BonusPage({ params }: { params: { slug:string, round:string, number:string }}) {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const parts = getBonusPartsQuery.all(tournament.id, params.round, params.number) as BonusPart[];
-    const directs = getDirectsByBonusQuery.all(tournament.id, params.round, params.number) as BonusDirect[];
-    const tournamentRounds = getRoundsForTournamentQuery.all(tournament.id) as Round[];
+export default async function BonusPage({ params }: { params: { slug:string, round:string, number:string }}) {
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const parts = await sql(getBonusPartsQuery, [tournament.id, params.round, params.number]) as BonusPart[];
+    const directs = await sql(getDirectsByBonusQuery, [tournament.id, params.round, params.number]) as BonusDirect[];
+    const tournamentRounds = await sql(getRoundsForTournamentQuery, [tournament.id]) as Round[];
     const navOptions = getNavOptions(parseInt(params.round), parseInt(params.number), tournamentRounds);
     
     return (

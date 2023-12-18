@@ -1,14 +1,14 @@
 import TeamCategoryTable from "../../../../../components/TeamCategoryTable";
 import Layout from "../../../../../components/Layout";
-import { get, getCategoriesForTournamentQuery, getTeamCategoryLeaderboard, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../../lib/queries";
+import { sql, getCategoriesForTournamentQuery, getTeamCategoryLeaderboard, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../../lib/queries";
 import { Metadata } from "next";
 import { BonusCategory, Tournament } from "../../../../../types";
 
 export async function generateStaticParams() {
-    const tournaments = getTournamentsQuery.all() as Tournament[];
+    const tournaments = await sql(getTournamentsQuery) as Tournament[];
     const paths = [];
     for (const tournament of tournaments) {
-        const categories = getCategoriesForTournamentQuery.all(tournament.id) as any[];
+        const categories = await sql(getCategoriesForTournamentQuery, [tournament.id]) as any[];
         for (const { category_slug } of categories) {
             if (category_slug) {
                 paths.push({
@@ -23,7 +23,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    let tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
+    let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
         title: `${tournament.name} - Buzzpoints App`,
@@ -31,9 +31,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default function TeamPage({ params }: { params: { slug: string, category: string } }) {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const bonusTeamCategoryStats = getTeamCategoryLeaderboard.all(tournament.id, params.category) as BonusCategory[];
+export default async function TeamPage({ params }: { params: { slug: string, category: string } }) {
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const bonusTeamCategoryStats = await sql(getTeamCategoryLeaderboard, [tournament.id, params.category]) as BonusCategory[];
 
     return (
         <Layout tournament={tournament}>

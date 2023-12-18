@@ -3,6 +3,7 @@
 import { BonusCategory } from "../types";
 import Table from "./Table";
 import { formatDecimal, formatPercent } from "../lib/utils";
+import NormalTable from "./normal_table";
 
 type TeamCategoryTableProps = {
     bonusCategoryStats: BonusCategory[]
@@ -11,35 +12,38 @@ type TeamCategoryTableProps = {
 export default function TeamCategoryTable({ bonusCategoryStats }: TeamCategoryTableProps) {
     const columns = [
         {
-            key: "name",
-            label: "Team Name",
-            linkTemplate: "/tournament/{{slug}}/team/{{teamSlug}}"
+            accessor: "name",
+            Header: "Team Name",
+            linkTemplate: "/buzzpoints/{{slug}}/team/{{team_slug}}",
+            border: "right"
         },
         {
-            key: "heard",
-            label: "Heard"
+            accessor: "heard",
+            Header: "Heard",
+            border: "right"
         },
         {
-            key: "ppb",
-            label: "PPB",
-            format: formatDecimal
+            accessor: "ppb",
+            Header: "PPB",
+            format: formatDecimal,
+            border: "right"
         },
         {
-            key: "easy_conversion",
-            label: "Easy %",
+            accessor: "easy_conversion",
+            Header: "Easy %",
             format: formatPercent
         },
         {
-            key: "medium_conversion",
-            label: "Medium %",
+            accessor: "medium_conversion",
+            Header: "Medium %",
             format: formatPercent
         },
         {
-            key: "hard_conversion",
-            label: "Hard %",
+            accessor: "hard_conversion",
+            Header: "Hard %",
             format: formatPercent
         }
     ];
 
-    return <Table columns={columns} data={bonusCategoryStats} />;
+    return <NormalTable columns={columns} data={bonusCategoryStats} />;
 }

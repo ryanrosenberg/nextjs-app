@@ -61,6 +61,11 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
+          <Link className={styles.navbarLink} href="/buzzpoints/">
+            Detailed Stats
+          </Link>
+        </li>
+        <li>
           <Link className={styles.navbarLink} href="/about/">
             About
           </Link>

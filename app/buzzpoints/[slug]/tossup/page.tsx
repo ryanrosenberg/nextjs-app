@@ -1,17 +1,17 @@
 import Layout from "../../../../components/Layout";
 import { TossupTable } from "../../../../components/common/TossupTable";
 import { Tossup, Tournament } from "../../../../types";
-import { get, getTossupsByTournamentQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../lib/queries";
+import { sql, getTossupsByTournamentQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../lib/queries";
 import { Metadata } from "next";
 
-export const generateStaticParams = () => {
-    const tournaments: Tournament[] = getTournamentsQuery.all() as Tournament[];
+export async function generateStaticParams() {
+    const tournaments = await sql(getTournamentsQuery) as Tournament[];
 
     return tournaments.map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    let tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
+    let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
         title: `${tournament.name} Tossups - Buzzpoints App`,
@@ -19,9 +19,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default function TossupPage({ params }: { params: { slug: string } }) {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const tossups = getTossupsByTournamentQuery.all(tournament!.id) as Tossup[];
+export default async function TossupPage({ params }: { params: { slug: string } }) {
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const tossups = await sql(getTossupsByTournamentQuery, [tournament!.id]) as Tossup[];
 
     return <Layout tournament={tournament}>
         <TossupTable tossups={tossups} />

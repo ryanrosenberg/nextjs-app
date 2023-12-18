@@ -1,8 +1,8 @@
-import { getTournamentsQuery } from "../../lib/queries";
+import { sql, getTournamentsQuery } from "../../lib/queries";
 import NormalTable from "../../components/normal_table";
 
-export default function Home() {
-  const tournaments = getTournamentsQuery.all();
+export default async function Home() {
+  const tournaments = await sql(getTournamentsQuery);
   
   const columns = [
     {

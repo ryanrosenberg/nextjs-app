@@ -1,21 +1,20 @@
 import Link from "next/link";
-import TournamentSummary from "../../../components/TournamentSummary";
 import TossupCategoryTable from "../../../components/TossupCategoryTable";
 import Layout from "../../../components/Layout";
-import { get, getBonusCategoryStatsQuery, getQuestionSetQuery, getTossupCategoryStatsQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../lib/queries";
+import { sql, getBonusCategoryStatsQuery, getQuestionSetQuery, getTossupCategoryStatsQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../lib/queries";
 import { Metadata } from "next";
 import { BonusCategory, QuestionSet, TossupCategory, Tournament } from "../../../types";
 import BonusCategoryTable from "../../../components/BonusCategoryTable";
 import styles from "../buzzpoints.module.css"
 
 export async function generateStaticParams() {
-    const tournaments = getTournamentsQuery.all() as Tournament[];
+    const tournaments = await sql(getTournamentsQuery) as Tournament[];
 
     return tournaments.map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    let tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
+    let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
         title: `${tournament.name} - Buzzpoints App`,
@@ -23,16 +22,17 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default function Tournament({ params }: { params: { slug: string } }) {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const questionSet = getQuestionSetQuery.get(tournament.question_set_edition_id) as QuestionSet;
-    const tossupCategoryStats = getTossupCategoryStatsQuery.all(tournament.id) as TossupCategory[];
-    const bonusCategoryStats = getBonusCategoryStatsQuery.all(tournament.id) as BonusCategory[];
+export default async function Tournament({ params }: { params: { slug: string } }) {
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[] as Tournament[];
+    const [questionSet] = await sql(getQuestionSetQuery, [tournament.question_set_edition_id]) as QuestionSet[];
+    const tossupCategoryStats = await sql(getTossupCategoryStatsQuery, [tournament.id]) as TossupCategory[];
+    const bonusCategoryStats = await sql(getBonusCategoryStatsQuery, [tournament.id]) as BonusCategory[];
     const startDate = new Date(tournament.start_date).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
     });
+    
 
     return (
         <Layout tournament={tournament}>

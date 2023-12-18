@@ -1,7 +1,7 @@
 'use client';
 
 import { BonusCategory } from "../types";
-import { formatDecimal, formatPercent } from "../lib/jordan_utils";
+import { formatDecimal, formatPercent } from "../lib/utils";
 import NormalTable from "./normal_table";
 
 type BonusCategoryTableProps = {
@@ -14,6 +14,7 @@ export default function BonusCategoryTable({ bonusCategoryStats }: BonusCategory
             accessor: "category",
             Header: "Category",
             border: "right",
+            linkTemplate: "/buzzpoints/{{tournament_slug}}/category-bonus/{{category_slug}}",
             align: 'left'
         },
         {

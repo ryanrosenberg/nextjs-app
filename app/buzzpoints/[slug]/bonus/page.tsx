@@ -1,17 +1,17 @@
 import Layout from "../../../../components/Layout";
-import { get, getBonusesByTournamentQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../lib/queries";
+import { sql, getBonusesByTournamentQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../lib/queries";
 import { Bonus, Tournament } from "../../../../types";
 import { BonusTable } from "../../../../components/common/BonusTable";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-    const tournaments = getTournamentsQuery.all() as Tournament[];
+    const tournaments = await sql(getTournamentsQuery) as Tournament[];
 
     return tournaments.map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    let tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
+    let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
         title: `${tournament.name} Bonuses - Buzzpoints App`,
@@ -19,9 +19,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default function BonusesPage({ params }: { params: { slug: string } }) {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const bonuses = getBonusesByTournamentQuery.all(tournament!.id) as Bonus[];
+export default async function BonusesPage({ params }: { params: { slug: string } }) {
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const bonuses = await sql(getBonusesByTournamentQuery, [tournament!.id]) as Bonus[];
 
     return (
         <Layout tournament={tournament}>

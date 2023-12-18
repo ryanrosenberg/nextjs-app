@@ -1,14 +1,14 @@
 import Layout from "../../../../../components/Layout";
 import { PlayerTable } from "../../../../../components/common/PlayerTable";
 import { Tossup, Tournament } from "../../../../../types";
-import { get, getCategoriesForTournamentQuery, getPlayerCategoryLeaderboard, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../../lib/queries";
+import { sql, getCategoriesForTournamentQuery, getPlayerCategoryLeaderboard, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../../lib/queries";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-    const tournaments = getTournamentsQuery.all() as Tournament[];
+    const tournaments = await sql(getTournamentsQuery) as Tournament[];
     const paths = [];
     for (const tournament of tournaments) {
-        const categories = getCategoriesForTournamentQuery.all(tournament.id) as any[];
+        const categories = await sql(getCategoriesForTournamentQuery, [tournament.id]) as any[];
         for (const { category_slug } of categories) {
             if (category_slug) {
                 paths.push({
@@ -23,7 +23,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    let tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
+    let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
         title: `${tournament.name} Players - Buzzpoints App`,
@@ -31,9 +31,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default function CategoryTossupPage({ params }: { params: { slug: string, category: string } }) {
-    const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const players = getPlayerCategoryLeaderboard.all(tournament!.id, tournament!.id, params.category) as Tossup[];
+export default async function CategoryTossupPage({ params }: { params: { slug: string, category: string } }) {
+    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const players = await sql(getPlayerCategoryLeaderboard, [tournament!.id, tournament!.id, params.category]) as Tossup[];
 
     return <Layout tournament={tournament}>
         <h3 className="text-xl text-center mb-3"><b>{players[0]?.category || "N/A"}</b></h3>

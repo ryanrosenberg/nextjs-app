@@ -1,8 +1,8 @@
 'use client';
 
 import { Bonus } from "../../types";
-import Table from "../Table";
-import { formatDecimal, formatPercent, shortenAnswerline } from "../../lib/jordan_utils";
+import { shortenAnswerline } from "../../lib/jordan_utils";
+import { formatDecimal, formatPercent } from "../../lib/utils";
 import Link from "next/link";
 import NormalTable from "../normal_table";
 

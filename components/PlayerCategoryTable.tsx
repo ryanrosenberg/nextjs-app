@@ -12,7 +12,8 @@ export default function PlayerCategoryTable({ categories }: PlayerCategoryTableP
     const columns = [
         {
             accessor: "category",
-            Header: "Category"
+            Header: "Category",
+            linkTemplate: "/buzzpoints/2023-acf-winter-columbia/category-tossup/{{category_slug}}"
         },
         {
             accessor: "powers",

@@ -79,6 +79,7 @@ export type TossupCategory = {
 
 export type BonusCategory = {
     name: string;
+    players: string;
     category: string;
 } & BonusConversion
 
