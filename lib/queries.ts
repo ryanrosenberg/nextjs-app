@@ -405,10 +405,10 @@ SELECT  buzzpoints_question.category_main AS category,
         buzzpoints_question.category_main_slug AS category_slug,
         buzzpoints_tournament.slug as tournament_slug,
         COUNT(DISTINCT easy_part_direct.id) AS heard,
-        CAST(SUM(easy_part_direct.value + medium_part_direct.value + hard_part_direct.value) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id) AS ppb,
-        ROUND(CAST(SUM(CASE WHEN easy_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS easy_conversion,
-        ROUND(CAST(SUM(CASE WHEN medium_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS medium_conversion,
-        ROUND(CAST(SUM(CASE WHEN hard_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS hard_conversion
+        CAST(SUM(easy_part_direct.value + medium_part_direct.value + hard_part_direct.value) AS NUMERIC) / NULLIF(COUNT(DISTINCT easy_part_direct.id), 0) AS ppb,
+        ROUND(CAST(SUM(CASE WHEN easy_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / NULLIF(COUNT(DISTINCT easy_part_direct.id), 0), 3) AS easy_conversion,
+        ROUND(CAST(SUM(CASE WHEN medium_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / NULLIF(COUNT(DISTINCT easy_part_direct.id), 0), 3) AS medium_conversion,
+        ROUND(CAST(SUM(CASE WHEN hard_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / NULLIF(COUNT(DISTINCT easy_part_direct.id), 0), 3) AS hard_conversion
 FROM    buzzpoints_tournament
 JOIN    buzzpoints_round ON buzzpoints_tournament.id = buzzpoints_round.tournament_id
 JOIN    buzzpoints_packet ON buzzpoints_round.packet_id = buzzpoints_packet.id
