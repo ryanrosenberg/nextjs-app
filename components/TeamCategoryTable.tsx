@@ -1,8 +1,8 @@
 'use client';
 
-import { BonusCategory } from "@/types";
+import { BonusCategory } from "../types";
 import Table from "./Table";
-import { formatDecimal, formatPercent } from "@/utils";
+import { formatDecimal, formatPercent } from "../lib/utils";
 
 type TeamCategoryTableProps = {
     bonusCategoryStats: BonusCategory[]
