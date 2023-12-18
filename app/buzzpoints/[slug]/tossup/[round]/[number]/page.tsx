@@ -6,22 +6,23 @@ import { Metadata } from "next";
 import { getNavOptions, removeTags, shortenAnswerline } from "../../../../../../lib/jordan_utils";
 
 export const generateStaticParams = () => {
-    const tournaments: Tournament[] = getTournamentsQuery.all() as Tournament[];
-    const paths = [];
+    return [];
+    // const tournaments: Tournament[] = getTournamentsQuery.all() as Tournament[];
+    // const paths = [];
 
-    for (let { id, slug } of tournaments) {
-        const tossups: Tossup[] = getTossupsByTournamentQuery.all(id) as Tossup[];
+    // for (let { id, slug } of tournaments) {
+    //     const tossups: Tossup[] = getTossupsByTournamentQuery.all(id) as Tossup[];
 
-        for (let { round, question_number } of tossups) {
-            paths.push({
-                slug,
-                round: String(round),
-                number: String(question_number)
-            });
-        }
-    }
+    //     for (let { round, question_number } of tossups) {
+    //         paths.push({
+    //             slug,
+    //             round: String(round),
+    //             number: String(question_number)
+    //         });
+    //     }
+    // }
 
-    return paths;
+    // return paths;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string, round: string, number: string } }): Promise<Metadata> {

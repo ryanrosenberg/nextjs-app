@@ -5,20 +5,21 @@ import { Player, TossupConversion, Tournament } from "../../../../../types";
 import PlayerCategoryTable from "../../../../../components/PlayerCategoryTable";
 
 export async function generateStaticParams() {
-    const tournaments = getTournamentsQuery.all() as Tournament[];
-    const paths = [];
+    return [];
+    // const tournaments = getTournamentsQuery.all() as Tournament[];
+    // const paths = [];
 
-    for (let { id, slug } of tournaments) {
-        const players = getPlayersByTournamentQuery.all(id) as Player[];
-        for (const { slug: player_slug } of players) {
-            paths.push({
-                slug,
-                player_slug
-            });
-        }
-    }
+    // for (let { id, slug } of tournaments) {
+    //     const players = getPlayersByTournamentQuery.all(id) as Player[];
+    //     for (const { slug: player_slug } of players) {
+    //         paths.push({
+    //             slug,
+    //             player_slug
+    //         });
+    //     }
+    // }
 
-    return paths;
+    // return paths;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
