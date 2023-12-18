@@ -16,9 +16,6 @@ export async function generateMetadata({ params }) {
   };
 }
 
-async function getData(params) {
-  const docRef = doc(db, "seasons", params.id);
-  const docSnap = await getDoc(docRef);
 export async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   const champs_res = await sql`SELECT 
