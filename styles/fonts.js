@@ -6,6 +6,10 @@ const inter = Inter({
     display: 'swap',
     variable: '--table-header-font',
   });
+const signika = Signika({
+      subsets: ['latin'],
+      display: 'swap',
+    });
 const signika_neg = Signika_Negative({
     subsets: ['latin'],
     display: 'swap',

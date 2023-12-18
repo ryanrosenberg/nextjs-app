@@ -1,5 +1,6 @@
 'use client';
 
+import { Righteous } from "next/font/google";
 import { formatDecimal } from "../../lib/jordan_utils";
 import NormalTable from "../normal_table";
 
@@ -12,8 +13,14 @@ export function PlayerTable({ players }: PlayerTableProps) {
         {
             accessor: "name",
             Header: "Player",
-            linkTemplate:
-              "/players/{{player_slug}}",
+            linkTemplate: "/buzzpoints/{{tournament_slug}}/player/{{slug}}",
+        },
+        {
+            accessor: "team_name",
+            Header: "Team",
+            linkTemplate: "/buzzpoints/{{tournament_slug}}/team/{{team_slug}}",
+            html: true,
+            border: "right",
         },
         {
             accessor: "powers",
@@ -28,17 +35,20 @@ export function PlayerTable({ players }: PlayerTableProps) {
         {
             accessor: "negs",
             Header: "Negs",
-            defaultDescending: true
+            defaultDescending: true,
+            border: "right",
         },
         {
             accessor: "bouncebacks",
             Header: "Bouncebacks",
-            defaultDescending: true
+            defaultDescending: true,
+            border: "right",
         },
         {
             accessor: "points",
             Header: "Points",
-            defaultDescending: true
+            defaultDescending: true,
+            border: "right",
         },
         {
             accessor: "earliest_buzz",
@@ -47,7 +57,8 @@ export function PlayerTable({ players }: PlayerTableProps) {
         {
             accessor: "average_buzz",
             Header: "Avg. Buzz",
-            format: formatDecimal
+            format: formatDecimal,
+            border: "right",
         },
         {
             accessor: "first_buzzes",

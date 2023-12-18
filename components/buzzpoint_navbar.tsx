@@ -21,6 +21,9 @@ export default function Navbar({ tournament }: NavbarProps) {
     { label: "Tossups", url: `/buzzpoints/${tournament.slug}/tossup` },
     { label: "Bonuses", url: `/buzzpoints/${tournament.slug}/bonus` },
     { label: "Players", url: `/buzzpoints/${tournament.slug}/player` },
+    { label: "Teams", url: `/buzzpoints/${tournament.slug}/team` },
+    { label: "Categories (Tossup)", url: `/buzzpoints/${tournament.slug}/category-tossup` },
+    { label: "Categories (Bonus)", url: `/buzzpoints/${tournament.slug}/category-bonus` },
   ];
 
   return (

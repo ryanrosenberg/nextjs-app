@@ -18,13 +18,13 @@ export default function BonusDisplay({
   navOptions,
 }: BonusDisplayProps) {
   return (
-    <div className="flex flex-col md:flex-row md:space-x-10">
-      <div>
+    <div className={styles.tossupDisplayFlex}>
+      <div style={{'flex': 2}}>
         <h3 className="text-xl font-bold my-3">Question</h3>
         <div className="mb-2">
           {!!navOptions.previous && (
             <Link
-              href={`/buzzpoints/${tournament.slug}/bonus/${navOptions.previous.id}`}
+              href={`/buzzpoints/${tournament.slug}/bonus/${navOptions.previous.round}/${navOptions.previous.number}`}
               className="underline"
             >
               Previous bonus
@@ -33,7 +33,7 @@ export default function BonusDisplay({
           {!!navOptions.previous && !!navOptions.next && " - "}
           {!!navOptions.next && (
             <Link
-              href={`/buzzpoints/${tournament.slug}/bonus/${navOptions.next.id}`}
+              href={`/buzzpoints/${tournament.slug}/bonus/${navOptions.next.round}/${navOptions.next.number}`}
               className="underline"
             >
               Next bonus
@@ -53,8 +53,9 @@ export default function BonusDisplay({
           </Link>
         </p>
       </div>
-      <div className="md:basis-1/2 buzzes">
+      <div style={{'flex': 1}}>
         <h3 className="text-xl font-bold my-3">Data</h3>
+        <br/>
         <BonusData directs={directs} />
       </div>
     </div>

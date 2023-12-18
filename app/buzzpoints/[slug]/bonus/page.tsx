@@ -7,7 +7,7 @@ import { Metadata } from "next";
 export async function generateStaticParams() {
     const tournaments = getTournamentsQuery.all() as Tournament[];
 
-    return tournaments.map(({ slug }) => ({ slug: '2023-bhsu' }));
+    return tournaments.map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default function BonusesPage({ params }: { params: { slug: string } }) {
     const tournament = get<Tournament>(getTournamentBySlugQuery, params.slug);
-    const bonuses = getBonusesByTournamentQuery.all(tournament!.question_set_id) as Bonus[];
+    const bonuses = getBonusesByTournamentQuery.all(tournament!.id) as Bonus[];
 
     return (
         <Layout tournament={tournament}>

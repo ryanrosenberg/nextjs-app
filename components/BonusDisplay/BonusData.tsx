@@ -1,5 +1,4 @@
 import { BonusDirect } from "../../types";
-import Table from "../Table";
 import NormalTable from "../normal_table";
 
 type BonusDataProps = {
