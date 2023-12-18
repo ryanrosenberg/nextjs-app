@@ -5,7 +5,7 @@ export const metadata = {
   title: "Home | College Quizbowl Stats",
 };
 
-export async function getData() {
+async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
 
   const rt_res = await sql`

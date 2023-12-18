@@ -1,7 +1,7 @@
 import SeasonsIndex from "./seasons-index";
 import { neon } from '@neondatabase/serverless';
 
-export async function getData() {
+async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   const data = await sql`
   SELECT * from ((SELECT distinct champions.year from champions

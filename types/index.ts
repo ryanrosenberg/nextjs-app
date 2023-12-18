@@ -33,6 +33,7 @@ export type Question = {
 
 export type TossupConversion = {
     name: string;
+    team: string;
     heard: number;
     conversion_rate: number;
     power_rate: number;

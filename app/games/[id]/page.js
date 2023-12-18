@@ -5,7 +5,7 @@ export async function generateStaticParams() {
   return [];
 }
 
-export async function getData(params) {
+async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   const summary = await sql`
     SELECT 

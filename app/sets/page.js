@@ -3,7 +3,7 @@ import { neon } from '@neondatabase/serverless';
 
 export const dynamicParams = false;
 
-export async function getData() {
+async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   const data = await sql`
   SELECT 

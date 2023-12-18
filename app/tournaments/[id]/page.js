@@ -17,7 +17,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export async function getData(params) {
+async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   const summary_res = sql`
   SELECT 
