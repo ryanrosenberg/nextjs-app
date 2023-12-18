@@ -9,6 +9,7 @@ import {
 import styles from "./layout.module.css";
 import Navbar from "./navbar.js";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
   title: "College Quizbowl Stats",
@@ -28,6 +29,7 @@ export default function RootLayout({
     >
       <SpeedInsights />
       <body data-bs-spy="scroll" data-bs-target="#toc">
+        <Analytics />
         <div className={styles.container}>
           <header className={styles.header}>
             <Navbar />
