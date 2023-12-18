@@ -1,7 +1,7 @@
-import Layout from "@/components/Layout";
-import { TeamTable } from "@/components/common/TeamTable";
-import { Tossup, Tournament } from "@/types";
-import { get, getTeamLeaderboard, getTournamentBySlugQuery, getTournamentsQuery } from "@/utils/queries";
+import Layout from "../../../../components/Layout";
+import { TeamTable } from "../../../../components/common/TeamTable";
+import { Tossup, Tournament } from "../../../../types";
+import { get, getTeamLeaderboard, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../lib/queries";
 import { Metadata } from "next";
 
 export const generateStaticParams = () => {

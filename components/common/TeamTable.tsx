@@ -1,27 +1,20 @@
 'use client';
 
-import { Righteous } from "next/font/google";
-import { formatDecimal } from "../../lib/jordan_utils";
+import Table from "../Table";
+import { formatDecimal } from "../../lib/utils";
 import NormalTable from "../normal_table";
 
-type PlayerTableProps = {
-    players: any[]
+type TeamTableProps = {
+    teams: any[]
 }
 
-export function PlayerTable({ players }: PlayerTableProps) {
+export function TeamTable({ teams }: TeamTableProps) {
     const columns = [
         {
             accessor: "name",
-            Header: "Player",
-            linkTemplate: "/buzzpoints/{{tournament_slug}}/player/{{slug}}",
-            border: "right",
-        },
-        {
-            accessor: "team_name",
             Header: "Team",
-            linkTemplate: "/buzzpoints/{{tournament_slug}}/team/{{team_slug}}",
-            html: true,
-            border: "right",
+            linkTemplate: "/buzzpoints/{{tournament_slug}}/team/{{slug}}",
+            html: true
         },
         {
             accessor: "powers",
@@ -36,20 +29,17 @@ export function PlayerTable({ players }: PlayerTableProps) {
         {
             accessor: "negs",
             Header: "Negs",
-            defaultDescending: true,
-            border: "right",
+            defaultDescending: true
         },
         {
             accessor: "bouncebacks",
             Header: "Bouncebacks",
-            defaultDescending: true,
-            border: "right",
+            defaultDescending: true
         },
         {
             accessor: "points",
             Header: "Points",
-            defaultDescending: true,
-            border: "right",
+            defaultDescending: true
         },
         {
             accessor: "earliest_buzz",
@@ -58,8 +48,7 @@ export function PlayerTable({ players }: PlayerTableProps) {
         {
             accessor: "average_buzz",
             Header: "Avg. Buzz",
-            format: formatDecimal,
-            border: "right",
+            format: formatDecimal
         },
         {
             accessor: "first_buzzes",
@@ -70,11 +59,16 @@ export function PlayerTable({ players }: PlayerTableProps) {
             accessor: "top_three_buzzes",
             Header: "Top 3 Buzzes",
             defaultDescending: true
-        }
+        },
+        // {
+        //     accessor: "ppb",
+        //     Header: "PPB",
+        //     format: formatDecimal
+        // }
     ];
 
     return <NormalTable
         columns={columns}
-        data={players}
+        data={teams}
     />
 }
