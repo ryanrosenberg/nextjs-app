@@ -58,7 +58,9 @@ const SpreadTable = ({ data, columns, grouping_column, spread_column }) => {
                                             <td key={i} className={column.border == "right" ? tables.borderRight : tables.noBorder}>
                                                 {index_columns.includes(column.accessor) ?
                                                     renderCell(rowGroups[group][0], column) :
-                                                    rowGroups[group].filter((row) => row[spread_column] === column.accessor)[0].pts}
+                                                    rowGroups[group].filter((row) => row[spread_column] === column.accessor).length > 0 ?
+                                                    rowGroups[group].filter((row) => row[spread_column] === column.accessor)[0].pts :
+                                                    '0'}
                                             </td>
                                         )
                                     }
