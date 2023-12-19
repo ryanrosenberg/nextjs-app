@@ -16,6 +16,7 @@ export default function Player({ result }) {
     item.team_slug = slugify(sanitize(item.team))
     return item;
   });
+
   const yearsColumns = useMemo(
     () => [
       {
@@ -166,6 +167,20 @@ export default function Player({ result }) {
     },
   ]);
 
+  const buzzpointColumns = useMemo(() => [
+    {
+      Header: "Category",
+      accessor: "category",
+      align: "left",
+      border: "right",
+      linkTemplate: "/buzzpoints/{{tournament_slug}}/category-tossup/{{category_slug}}"
+    },
+    {
+      Header: "Pts",
+      accessor: "pts",
+    }
+  ]);
+
   const editingColumns = useMemo(() => [
     {
       Header: "Set",
@@ -218,6 +233,17 @@ export default function Player({ result }) {
             grouping_column="year"
             itemsPerPage={10}
           />
+          {data.Buzzpoints.length > 0 && (
+            <div>
+              <hr />
+              <h2 id="buzzpoints">Category Stats</h2>
+              <GroupedTable
+                columns={buzzpointColumns}
+                data={data.Buzzpoints}
+                grouping_column="tournament_name"
+              />
+            </div>
+          )}
           {data.Editing.length > 0 && (
             <div>
               <hr />

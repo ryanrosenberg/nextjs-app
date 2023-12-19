@@ -92,6 +92,31 @@ async function getData(params) {
   GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
   ORDER BY 2 desc`;
 
+  const buzzpoints_res = await sql`
+  SELECT
+    buzzpoints_tournament.name as tournament_name,
+    buzzpoints_tournament.slug as tournament_slug,
+  people.slug,
+  category,
+  category_slug,
+  sum(value) as pts
+  FROM    buzzpoints_buzz
+  LEFT JOIN    buzzpoints_tossup ON buzzpoints_tossup.id = buzzpoints_buzz.tossup_id
+  LEFT JOIN    buzzpoints_question ON buzzpoints_tossup.question_id = buzzpoints_question.id
+  LEFT JOIN	  buzzpoints_game ON buzzpoints_buzz.game_id = buzzpoints_game.id
+  LEFT JOIN	  buzzpoints_player ON buzzpoints_buzz.player_id = buzzpoints_player.id
+  LEFT JOIN	  buzzpoints_round ON buzzpoints_game.round_id = buzzpoints_round.id
+  LEFT JOIN	  buzzpoints_tournament ON buzzpoints_round.tournament_id = buzzpoints_tournament.id
+  LEFT JOIN buzzpoints_player_lookup ON buzzpoints_player.slug = buzzpoints_player_lookup.slug
+  LEFT JOIN people on buzzpoints_player_lookup.person_id = people.person_id
+  WHERE people.slug = ${params.id}
+  GROUP BY 
+  buzzpoints_tournament.name,
+  buzzpoints_tournament.slug,
+  people.slug,
+  category,
+  category_slug`;
+
   const editing_res = await sql`
   SELECT 
   year as Year, \"set\" as \"Set\", 
@@ -108,6 +133,7 @@ async function getData(params) {
       result: {
         Years: years_res,
         'Tournaments': tournaments_res,
+        'Buzzpoints': buzzpoints_res,
         'Editing': editing_res
       },
     },
