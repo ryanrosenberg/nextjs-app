@@ -5,6 +5,7 @@ import _ from "lodash";
 import { formatDecimal, sanitize, slugify } from "../../../lib/utils.js";
 import RawHtml from "../../../components/rawHtml";
 import GroupedTable from "../../../components/grouped_table";
+import SpreadTable from "../../../components/spread_table";
 import NestedSideNav from "../../../components/nested_side_nav";
 import GroupedPaginatedTable from "../../../components/grouped_paginated_table.js";
 
@@ -169,15 +170,11 @@ export default function Player({ result }) {
 
   const buzzpointColumns = useMemo(() => [
     {
-      Header: "Category",
-      accessor: "category",
+      Header: "Tournament",
+      accessor: "tournament_name",
       align: "left",
       border: "right",
-      linkTemplate: "/buzzpoints/{{tournament_slug}}/category-tossup/{{category_slug}}"
-    },
-    {
-      Header: "Pts",
-      accessor: "pts",
+      linkTemplate: "/buzzpoints/{{tournament_slug}}"
     }
   ]);
 
@@ -237,10 +234,11 @@ export default function Player({ result }) {
             <div>
               <hr />
               <h2 id="buzzpoints">Category Stats</h2>
-              <GroupedTable
+              <SpreadTable
                 columns={buzzpointColumns}
                 data={data.Buzzpoints}
                 grouping_column="tournament_name"
+                spread_column="category"
               />
             </div>
           )}

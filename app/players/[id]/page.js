@@ -94,6 +94,7 @@ async function getData(params) {
 
   const buzzpoints_res = await sql`
   SELECT
+  sets.year,
     buzzpoints_tournament.name as tournament_name,
     buzzpoints_tournament.slug as tournament_slug,
   people.slug,
@@ -109,8 +110,12 @@ async function getData(params) {
   LEFT JOIN	  buzzpoints_tournament ON buzzpoints_round.tournament_id = buzzpoints_tournament.id
   LEFT JOIN buzzpoints_player_lookup ON buzzpoints_player.slug = buzzpoints_player_lookup.slug
   LEFT JOIN people on buzzpoints_player_lookup.person_id = people.person_id
+  LEFT JOIN buzzpoints_tournament_lookup on buzzpoints_tournament_lookup.id = buzzpoints_tournament.id
+  LEFT JOIN tournaments on buzzpoints_tournament_lookup.cqs_tournament_id = tournaments.tournament_id
+  LEFT JOIN sets on tournaments.set_id = sets.set_id
   WHERE people.slug = ${params.id}
   GROUP BY 
+  sets.year,
   buzzpoints_tournament.name,
   buzzpoints_tournament.slug,
   people.slug,
