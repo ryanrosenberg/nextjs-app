@@ -1,10 +1,6 @@
-import Database, { Statement } from 'better-sqlite3';
-import { cache } from 'react';
 import { neon } from '@neondatabase/serverless';
 
 export const sql = neon(process.env.DATABASE_URL);
-
-const db = new Database('data/database.db');
 
 export const getCategoriesForTournamentQuery = `
     SELECT  DISTINCT category_main_slug AS category_slug
