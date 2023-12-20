@@ -6,21 +6,7 @@ import { sql, getDirectsByBonusQuery, getBonusesByQuestionSetQuery, getQuestionS
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-    const questionSets: QuestionSet[] = await sql(getQuestionSetsQuery) as QuestionSet[];
-    const paths = [];
-
-    for (let { id, slug } of questionSets) {
-        const bonuses: Bonus[] = await sql(getBonusesByQuestionSetQuery, [id]) as Bonus[];
-
-        for (let { slug: bonusSlug } of bonuses) {
-            paths.push({
-                slug,
-                bonusSlug
-            });
-        }
-    }
-
-    return paths;
+    return [];
 }
 
 export async function generateMetadata({ params }: { params: { slug:string, bonusSlug:string }}): Promise<Metadata> {

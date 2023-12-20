@@ -11,21 +11,7 @@ import TossupDisplay from "../../../../../../components/TossupDisplay";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-    const questionSets: QuestionSet[] = await sql(getQuestionSetsQuery) as QuestionSet[];
-    const paths = [];
-
-    for (let { id, slug } of questionSets) {
-        const tossups: Tossup[] = await sql(getTossupsByQuestionSetQuery, [id]) as Tossup[];
-
-        for (let { slug: tossupSlug } of tossups) {
-            paths.push({
-                slug,
-                tossupSlug
-            });
-        }
-    }
-
-    return paths;
+    return [];
 }
 
 export async function generateMetadata({ params }: { params: { slug:string, tossupSlug:string }}): Promise<Metadata> {
