@@ -5,6 +5,8 @@ import { removeTags, shortenAnswerline } from "../../../../../../lib/utils";
 import { sql, getDirectsByBonusQuery, getBonusesByQuestionSetQuery, getQuestionSetsQuery, getQuestionSetBySlugQuery, getBonusPartsBySlugQuery, getBonusSummaryBySite } from "../../../../../../lib/queries";
 import { Metadata } from "next";
 
+export const runtime = 'edge'; 
+
 export async function generateStaticParams() {
     return [];
 }
