@@ -37,6 +37,7 @@ export type Question = {
 
 export type TossupConversion = {
     name: string;
+    team: string;
     heard: number;
     conversion_rate: number;
     power_rate: number;
@@ -82,6 +83,7 @@ export type TossupCategory = {
 
 export type BonusCategory = {
     name: string;
+    players: string;
     category: string;
 } & BonusConversion
 
