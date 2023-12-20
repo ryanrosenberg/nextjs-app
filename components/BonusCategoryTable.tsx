@@ -9,13 +9,13 @@ type BonusCategoryTableProps = {
     categoryLinks?: boolean;
 }
 
-export default function BonusCategoryTable({ bonusCategoryStats }: BonusCategoryTableProps) {
+export default function BonusCategoryTable({ bonusCategoryStats, categoryLinks = true }: BonusCategoryTableProps) {
     const columns = [
         {
             accessor: "category",
             Header: "Category",
             border: "right",
-            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/category-bonus/{{category_slug}}",
+            linkTemplate: categoryLinks ? "/tournament/{{tournament_slug}}/category-bonus/{{category_slug}}" : undefined,
             align: 'left'
         },
         {

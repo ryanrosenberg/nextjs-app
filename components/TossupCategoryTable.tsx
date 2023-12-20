@@ -9,13 +9,13 @@ type TossupCategoryTableProps = {
     categoryLinks?: boolean;
 }
 
-export default function TossupCategoryTable({ tossupCategoryStats }: TossupCategoryTableProps) {
+export default function TossupCategoryTable({ tossupCategoryStats, categoryLinks = true }: TossupCategoryTableProps) {
     const columns = [
         {
             accessor: "category",
             Header: "Category",
             border: "right",
-            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/category-tossup/{{category_slug}}",
+            linkTemplate: categoryLinks ? "/tournament/{{tournament_slug}}/category-tossup/{{category_slug}}" : undefined,
             align: 'left'
         },
         {
