@@ -1,7 +1,7 @@
 'use client';
 
 import { Righteous } from "next/font/google";
-import { formatDecimal } from "../../lib/jordan_utils";
+import { formatDecimal } from "../../lib/utils";
 import NormalTable from "../normal_table";
 
 type PlayerTableProps = {

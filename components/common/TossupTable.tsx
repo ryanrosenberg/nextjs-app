@@ -1,14 +1,12 @@
 "use client";
 
-import { Tossup, Word } from "../../types";
+import { Tossup } from "../../types";
 import {
   formatDecimal,
   formatPercent,
-  removeTags,
   shortenAnswerline,
-} from "../../lib/jordan_utils";
+} from "../../lib/utils";
 import NormalTable from "../normal_table";
-import styles from "../TossupDisplay/tossups.module.css";
 
 type TossupTableProps = {
     tossups: Tossup[]
@@ -31,7 +29,7 @@ export function TossupTable({ tossups }: TossupTableProps) {
         {
             accessor: "answer",
             Header: "Answer",
-            linkTemplate: "/buzzpoints/{{tournament_slug}}/tossup/{{round}}/{{question_number}}",
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/tossup/{{round}}/{{question_number}}",
             html: true
         },
         {

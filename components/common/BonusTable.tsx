@@ -1,7 +1,7 @@
 'use client';
 
 import { Bonus } from "../../types";
-import { shortenAnswerline } from "../../lib/jordan_utils";
+import { shortenAnswerline } from "../../lib/utils";
 import { formatDecimal, formatPercent } from "../../lib/utils";
 import Link from "next/link";
 import NormalTable from "../normal_table";
@@ -44,7 +44,7 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item: Bonus) => (
                 <>
                     <Link
-                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/tournament/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.easy_part }}></span>
@@ -67,7 +67,7 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item: Bonus) => (
                 <>
                     <Link
-                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/tournament/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.medium_part }}></span>
@@ -90,7 +90,7 @@ export function BonusTable({ bonuses }: BonusTableProps) {
             render: (item: Bonus) => (
                 <>
                     <Link
-                        href={`/buzzpoints/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
+                        href={`/buzzpoints/tournament/${item.tournament_slug}/bonus/${item.round}/${item.question_number}`}
                         className="underline"
                     >
                         <span dangerouslySetInnerHTML={{ __html: item.hard_part }}></span>

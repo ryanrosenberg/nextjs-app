@@ -1,6 +1,6 @@
 "use client";
 
-import { Tournament } from "../types";
+import { QuestionSet, Tournament } from "../types";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
@@ -9,22 +9,72 @@ import { FaBars } from "react-icons/fa";
 
 type NavbarProps = {
   tournament?: Tournament;
+  questionSet?: QuestionSet;
 };
 
-export default function Navbar({ tournament }: NavbarProps) {
+export default function Navbar({ tournament, questionSet }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  let mainButton = (
+    <Link className="text-white font-bold" href={"/"}>
+      Buzzpoints
+    </Link>
+  );
+  let menuItems: any[] = [];
 
-  if (!tournament) return <></>;
-
-  let menuItems = [
-    { label: "Tossups", url: `/buzzpoints/${tournament.slug}/tossup` },
-    { label: "Bonuses", url: `/buzzpoints/${tournament.slug}/bonus` },
-    { label: "Players", url: `/buzzpoints/${tournament.slug}/player` },
-    { label: "Teams", url: `/buzzpoints/${tournament.slug}/team` },
-    { label: "Categories (Tossup)", url: `/buzzpoints/${tournament.slug}/category-tossup` },
-    { label: "Categories (Bonus)", url: `/buzzpoints/${tournament.slug}/category-bonus` },
-  ];
+  if (tournament) {
+    menuItems.push(
+      ...[
+        {
+          label: "Tossups",
+          url: `/buzzpoints/tournament/${tournament.slug}/tossup`,
+        },
+        {
+          label: "Bonuses",
+          url: `/buzzpoints/tournament/${tournament.slug}/bonus`,
+        },
+        {
+          label: "Players",
+          url: `/buzzpoints/tournament/${tournament.slug}/player`,
+        },
+        {
+          label: "Teams",
+          url: `/buzzpoints/tournament/${tournament.slug}/team`,
+        },
+        {
+          label: "Categories (Tossup)",
+          url: `/buzzpoints/tournament/${tournament.slug}/category-tossup`,
+        },
+        {
+          label: "Categories (Bonus)",
+          url: `/buzzpoints/tournament/${tournament.slug}/category-bonus`,
+        },
+      ]
+    );
+    mainButton = (
+      <Link
+        className={styles.buzzpointNavLink}
+        href={`/buzzpoints/tournament/${tournament.slug}`}
+      >
+        {tournament.name}
+      </Link>
+    );
+  } else if (questionSet) {
+    menuItems.push(
+      ...[
+        { label: "Tossups", url: `/buzzpoints/set/${questionSet.slug}/tossup` },
+        { label: "Bonuses", url: `/buzzpoints/set/${questionSet.slug}/bonus` },
+      ]
+    );
+    mainButton = (
+      <Link
+        className={styles.buzzpointNavLink}
+        href={`/buzzpoints/set/${questionSet.slug}`}
+      >
+        {questionSet.name}
+      </Link>
+    );
+  }
 
   return (
     <nav className={`${styles.buzzpointNav} sticky`}>
@@ -32,12 +82,7 @@ export default function Navbar({ tournament }: NavbarProps) {
         <div className={styles.buzzpointNavFlex}>
           <div className={styles.buzzpointNavFlex}>
             <div className={styles.buzzpointNavTournament}>
-              <Link
-                className={`${styles.buzzpointNavLink}`}
-                href={`/buzzpoints/${tournament.slug}`}
-              >
-                {tournament.name}
-              </Link>
+              <div className="flex-shrink-0">{mainButton}</div>
             </div>
             <div className="hidden md:block">
               <div className={styles.buzzpointNavFlex}>
@@ -47,7 +92,9 @@ export default function Navbar({ tournament }: NavbarProps) {
                     className={`
                     ${styles.buzzpointNavLink}
                     ${
-                      pathname.includes(url) ? styles.buzzpointNavLinkCurrent : ""
+                      pathname.includes(url)
+                        ? styles.buzzpointNavLinkCurrent
+                        : ""
                     }`}
                     href={url}
                   >

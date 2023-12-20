@@ -1,6 +1,12 @@
 .tossupDisplayFlex {
     display: flex;
     column-gap: 20px;
+    flex-wrap: wrap;
+}
+
+.bonusDisplayFlex {
+    display: flex;
+    column-gap: 20px;
 }
 
 .tossupInfoFlex {

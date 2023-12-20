@@ -1,38 +1,12 @@
-import { sql, getTournamentsQuery } from "../../lib/queries";
-import NormalTable from "../../components/normal_table";
+import Layout from "../../components/Layout";
+import Link from "next/link";
 
-export default async function Home() {
-  const tournaments = await sql(getTournamentsQuery);
-  
-  const columns = [
-    {
-      accessor: "name",
-      Header: "Tournament",
-      border: "right",
-      linkTemplate: "/buzzpoints/{{slug}}"
-    },
-    {
-      accessor: "location",
-      Header: "Location"
-    },
-    {
-      accessor: "level",
-      Header: "Level"
-    },
-    {
-      accessor: "start_date",
-      Header: "Date",
-      defaultSort: "desc" as const
-    }
-  ];
-
+export default function Home() {
   return (
-    <>
-      <h3>Recent Tournaments with Detailed Stats</h3>
-      <NormalTable
-        columns={columns}
-        data={tournaments}
-         />
-    </>
+    <Layout>
+      <div>
+        Welcome to Buzzpoints! Click <Link href="/buzzpoints/tournament" className="underline">here to view stats by tournament</Link> or <Link href="/buzzpoints/set" className="underline">here to view stats by question set</Link>.
+      </div>
+    </Layout>
   );
 }

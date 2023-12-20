@@ -1,4 +1,4 @@
-import { removeTags, sanitize } from "../../lib/jordan_utils";
+import { removeTags, sanitize } from "../../lib/utils";
 import TossupWord from "./TossupWord";
 import { BuzzDictionary, Tossup, Word } from "../../types";
 import styles from "./tossups.module.css"

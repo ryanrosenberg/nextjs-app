@@ -5,7 +5,8 @@ import { formatDecimal, formatPercent } from "../lib/utils";
 import NormalTable from "./normal_table";
 
 type BonusCategoryTableProps = {
-    bonusCategoryStats: BonusCategory[]
+    bonusCategoryStats: BonusCategory[];
+    categoryLinks?: boolean;
 }
 
 export default function BonusCategoryTable({ bonusCategoryStats }: BonusCategoryTableProps) {
@@ -14,7 +15,7 @@ export default function BonusCategoryTable({ bonusCategoryStats }: BonusCategory
             accessor: "category",
             Header: "Category",
             border: "right",
-            linkTemplate: "/buzzpoints/{{tournament_slug}}/category-bonus/{{category_slug}}",
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/category-bonus/{{category_slug}}",
             align: 'left'
         },
         {

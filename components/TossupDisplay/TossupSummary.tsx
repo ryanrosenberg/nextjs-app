@@ -1,27 +1,37 @@
-import { Buzz, Tossup } from "../../types";
-import Table from "../Table";
-import { formatDecimal, formatPercent } from "../../lib/jordan_utils";
+import { TossupSummary, Tournament } from "../../types";
+import { formatDecimal, formatPercent } from "../../lib/utils";
 import NormalTable from "../normal_table";
 
 type TossupSummaryProps = {
-    buzzes: Buzz[];
-    tossup: Tossup;
+    tournament?: Tournament;
+    tossupSummary: TossupSummary[]
 }
-
-export default function TossupSummary({ buzzes, tossup: { heard, average_buzz } }: TossupSummaryProps) {
+export default function TossupSummary({ tournament, tossupSummary }: TossupSummaryProps) {
     let columns = [
+        {
+            accessor: 'tournament_name',
+            Header: 'Tournament',
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/tossup/{{round_number}}/{{question_number}}"
+        },
+        {
+            accessor: 'edition',
+            Header: 'Edition',
+            defaultSort: "asc" as const,
+            linkTemplate: "/buzzpoints/set/{{set_slug}}/tossup/{{question_slug}}"
+        },
+        { accessor: 'exact_match', Header: 'Exact Match?' },
+        { accessor: 'tuh', Header: 'TUH' },
         { accessor: 'conversion_rate', Header: 'Conv. %', format: formatPercent },
         { accessor: 'power_rate', Header: 'Power %', format: formatPercent },
-        { accessor: 'average_buzz', Header: 'Avg. Buzz', format: formatDecimal }
+        { accessor: 'neg_rate', Header: 'Neg %', format: formatPercent },
+        { accessor: 'average_buzz', Header: 'Average Buzz', format: formatDecimal }
     ];
-    let correctBuzzes = buzzes.filter(b => b.value > 0).map(b => b.buzz_position);
-    let items = [{
-        conversion_rate: correctBuzzes.length / heard,
-        power_rate: buzzes.filter(b => b.value > 10).length / heard,
-        average_buzz
-    }];
 
-    return <div className="my-3">
-        <NormalTable columns={columns} data={items} />
+    return <div className="my-3 mt-3">
+        <NormalTable columns={columns} data={tossupSummary}
+            // rowProperties={item => ({
+            //     className: item.tournament_id === tournament?.id ? "highlighted-row zero" : ""
+            // })}
+        />
     </div>;
 }

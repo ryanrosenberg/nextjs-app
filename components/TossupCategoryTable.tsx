@@ -5,7 +5,8 @@ import { formatDecimal, formatPercent } from "../lib/utils";
 import NormalTable from "./normal_table";
 
 type TossupCategoryTableProps = {
-    tossupCategoryStats: TossupCategory[]
+    tossupCategoryStats: TossupCategory[];
+    categoryLinks?: boolean;
 }
 
 export default function TossupCategoryTable({ tossupCategoryStats }: TossupCategoryTableProps) {
@@ -14,7 +15,7 @@ export default function TossupCategoryTable({ tossupCategoryStats }: TossupCateg
             accessor: "category",
             Header: "Category",
             border: "right",
-            linkTemplate: "/buzzpoints/{{tournament_slug}}/category-tossup/{{category_slug}}",
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/category-tossup/{{category_slug}}",
             align: 'left'
         },
         {
