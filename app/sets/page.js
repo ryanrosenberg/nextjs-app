@@ -1,10 +1,11 @@
 import SetsIndex from "./sets-index";
 import { neon } from '@neondatabase/serverless';
+const sql = neon(process.env.DATABASE_URL);
 
 export const dynamicParams = false;
 
 export async function getData() {
-  const sql = neon(process.env.DATABASE_URL);
+  console.log(process.env.DATABASE_URL);
   const data = await sql`
   SELECT 
   sets."set",
