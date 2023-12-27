@@ -6,8 +6,8 @@ import { renderCell } from "../lib/utils";
 
 const SpreadTable = ({ data, columns, grouping_column, spread_column }) => {
     const spread_values = [...new Set(data.map((item) => (item[spread_column])))];
-    const index_columns = columns.map((item) => (item.accessor))
-    console.log(index_columns);
+    const index_columns = columns.map((item) => (item.accessor));
+
     const new_columns = columns.concat(spread_values.map((item) => (
         {
             Header: item,
@@ -52,8 +52,6 @@ const SpreadTable = ({ data, columns, grouping_column, spread_column }) => {
                                 {_.map(
                                     new_columns,
                                     (column, i) => {
-                                        console.log(column.accessor);
-                                        console.log(rowGroups[group].filter((row) => row[spread_column] === column.accessor));
                                         return (
                                             <td key={i} className={column.border == "right" ? tables.borderRight : tables.noBorder}>
                                                 {index_columns.includes(column.accessor) ?

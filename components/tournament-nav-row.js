@@ -1,7 +1,6 @@
 import styles from "./tournaments.module.css";
 
 export default function TournamentNavRow({ id, buzzpoints_slug = null }) {
-  console.log(buzzpoints_slug);
   return (
     <ul className={styles.linkRow}>
       <li>

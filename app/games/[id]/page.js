@@ -5,6 +5,14 @@ export async function generateStaticParams() {
   return [];
 }
 
+
+export async function generateMetadata({ params }) {
+  const pageData = await getData(params);
+  const data = pageData.props.result
+  return {
+    title: `${data.Summary[0]["team"]} vs. ${data.Summary[1]["team"]} | College Quizbowl Stats`,
+  };
+}
 async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   const summary = await sql`
@@ -46,6 +54,29 @@ LEFT JOIN people on players.person_id = people.person_id
   LEFT JOIN teams on team_games.team_id = teams.team_id
   where game_id = ${params.id}
           `;
+  const buzzes = await sql`
+  SELECT
+  buzzpoints_buzz.tossup_id,
+  buzzpoints_tossup.answer_primary,
+  coalesce(people.player, buzzpoints_player.name) as player,
+  buzzpoints_buzz.buzz_position,
+  buzzpoints_buzz.value
+  FROM buzzpoints_buzz
+  LEFT JOIN buzzpoints_player on buzzpoints_buzz.player_id = buzzpoints_player.id
+  LEFT JOIN buzzpoints_player_lookup on buzzpoints_player_lookup.id = buzzpoints_player.id
+  LEFT JOIN people on buzzpoints_player_lookup.person_id = people.person_id
+  LEFT JOIN buzzpoints_game_lookup on buzzpoints_buzz.game_id = buzzpoints_game_lookup.id
+  LEFT JOIN buzzpoints_game ON buzzpoints_buzz.game_id = buzzpoints_game.id
+  LEFT JOIN buzzpoints_round ON buzzpoints_game.round_id = buzzpoints_round.id
+  LEFT JOIN buzzpoints_tournament ON buzzpoints_round.tournament_id = buzzpoints_tournament.id
+  LEFT JOIN buzzpoints_tournament_lookup ON buzzpoints_tournament_lookup.cqs_tournament_id = buzzpoints_tournament.id
+  LEFT JOIN buzzpoints_tossup on buzzpoints_buzz.tossup_id = buzzpoints_tossup.id
+  WHERE cqs_game_id = ${params.id}
+  `
+
+  const bonuses = await sql`
+  
+  `
 
   return {
     props: {
@@ -53,6 +84,7 @@ LEFT JOIN people on players.person_id = people.person_id
         Summary: summary,
         Players: players,
         Teams: teams,
+        Buzzes: buzzes,
       },
     },
   };
