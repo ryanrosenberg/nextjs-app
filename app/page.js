@@ -14,7 +14,8 @@ async function getData(params) {
   results.Champion FROM (SELECT 
     date as Date,
     sets.year, \"set\" as \"Set\", site as Site,
-    \"set\" || ' at ' || site as Tournament, tournaments.tournament_id,
+    tournament_name as Tournament, 
+    tournaments.tournament_id,
     count(distinct team_games.team_id) as Teams
     from team_games
     left join teams on team_games.team_id = teams.team_id
@@ -28,7 +29,7 @@ async function getData(params) {
     (
         SELECT 
         date as Date,
-        \"set\" || ' at ' || site as Tournament,
+        tournament_name as Tournament,
         max(teams.team) as Champion
         from team_games
         left join teams on team_games.team_id = teams.team_id
