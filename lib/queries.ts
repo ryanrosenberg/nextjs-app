@@ -522,6 +522,7 @@ JOIN buzzpoints_team ON buzzpoints_team.id = easy_part_direct.team_id
 WHERE   buzzpoints_tournament.id = $1
 AND     buzzpoints_question.category_main_slug = $2
 GROUP BY buzzpoints_tournament.slug, category_main, buzzpoints_team.name, buzzpoints_team.slug
+ORDER BY ppb desc
 `;
 
 export const getQuestionSetQuery = `
@@ -587,6 +588,7 @@ WITH raw_buzzes AS (
     buzzpoints_team.name,
     buzzpoints_team.slug,
     buzzpoints_tournament.slug
+    ORDER BY points desc
 `;
 
 export const getTeamLeaderboard = `
@@ -632,6 +634,7 @@ SELECT  buzzpoints_team.name,
     WHERE	buzzpoints_tournament.id = $2
     AND	exclude_from_individual = 0
     group by buzzpoints_team.name, buzzpoints_team.slug, buzzpoints_tournament.slug
+    order by points desc
 `;
 
 export const getAllBuzzesByTossupQuery = `

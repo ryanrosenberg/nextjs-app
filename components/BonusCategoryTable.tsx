@@ -15,7 +15,7 @@ export default function BonusCategoryTable({ bonusCategoryStats, categoryLinks =
             accessor: "category",
             Header: "Category",
             border: "right",
-            linkTemplate: categoryLinks ? "/tournament/{{tournament_slug}}/category-bonus/{{category_slug}}" : undefined,
+            linkTemplate: categoryLinks ? "/buzzpoints/tournament/{{tournament_slug}}/category-bonus/{{category_slug}}" : undefined,
             align: 'left'
         },
         {

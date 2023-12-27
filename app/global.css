@@ -182,6 +182,7 @@ nav#toc>ul {
 .page-subtitle {
   font-size: 1.5em;
   font-style: italic;
+  padding-top: 4px;
 }
 
 .page-subtitle a {

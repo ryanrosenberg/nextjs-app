@@ -13,13 +13,13 @@ export function PlayerTable({ players }: PlayerTableProps) {
         {
             accessor: "name",
             Header: "Player",
-            linkTemplate: "/buzzpoints/{{tournament_slug}}/player/{{slug}}",
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/player/{{slug}}",
             border: "right",
         },
         {
             accessor: "team_name",
             Header: "Team",
-            linkTemplate: "/buzzpoints/{{tournament_slug}}/team/{{team_slug}}",
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/team/{{team_slug}}",
             html: true,
             border: "right",
         },

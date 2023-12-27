@@ -174,7 +174,7 @@ export default function Player({ result }) {
       accessor: "tournament_name",
       align: "left",
       border: "right",
-      linkTemplate: "/buzzpoints/{{tournament_slug}}"
+      linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}"
     }
   ]);
 

@@ -13,8 +13,9 @@ export function TeamTable({ teams }: TeamTableProps) {
         {
             accessor: "name",
             Header: "Team",
-            linkTemplate: "/buzzpoints/{{tournament_slug}}/team/{{slug}}",
-            html: true
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/team/{{slug}}",
+            html: true,
+            border: "right"
         },
         {
             accessor: "powers",
@@ -29,17 +30,20 @@ export function TeamTable({ teams }: TeamTableProps) {
         {
             accessor: "negs",
             Header: "Negs",
-            defaultDescending: true
+            defaultDescending: true,
+            border: "right"
         },
         {
             accessor: "bouncebacks",
             Header: "Bouncebacks",
-            defaultDescending: true
+            defaultDescending: true,
+            border: "right"
         },
         {
             accessor: "points",
             Header: "Points",
-            defaultDescending: true
+            defaultDescending: true,
+            border: "right"
         },
         {
             accessor: "earliest_buzz",
@@ -48,7 +52,8 @@ export function TeamTable({ teams }: TeamTableProps) {
         {
             accessor: "average_buzz",
             Header: "Avg. Buzz",
-            format: formatDecimal
+            format: formatDecimal,
+            border: "right"
         },
         {
             accessor: "first_buzzes",

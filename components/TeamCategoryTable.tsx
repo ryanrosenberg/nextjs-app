@@ -14,7 +14,7 @@ export default function TeamCategoryTable({ bonusCategoryStats }: TeamCategoryTa
         {
             accessor: "name",
             Header: "Team Name",
-            linkTemplate: "/buzzpoints/{{slug}}/team/{{team_slug}}",
+            linkTemplate: "/buzzpoints/tournament/{{slug}}/team/{{team_slug}}",
             border: "right"
         },
         {

@@ -14,13 +14,13 @@ export default function BonusSummary({ tournament, bonusSummary }: BonusSummaryP
         {
             accessor: 'tournament_name',
             Header: 'Tournament',
-            linkTemplate: "/tournament/{{tournament_slug}}/bonus/{{round_number}}/{{question_number}}"
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/bonus/{{round_number}}/{{question_number}}"
         },
         {
             accessor: 'edition',
             Header: 'Edition',
             defaultSort: "asc" as const,
-            linkTemplate: "/set/{{set_slug}}/bonus/{{question_slug}}"
+            linkTemplate: "/buzzpoints/set/{{set_slug}}/bonus/{{question_slug}}"
         },
         { accessor: 'exact_match', Header: 'Exact Match?' },
         { accessor: 'heard', Header: 'Heard' },

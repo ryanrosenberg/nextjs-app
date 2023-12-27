@@ -1,6 +1,7 @@
 import styles from "./tournaments.module.css";
 
-export default function TournamentNavRow({id}) {
+export default function TournamentNavRow({ id, buzzpoints_slug = null }) {
+  console.log(buzzpoints_slug);
   return (
     <ul className={styles.linkRow}>
       <li>
@@ -9,6 +10,12 @@ export default function TournamentNavRow({id}) {
       <li>
         <a href={`${id}/player-detail`}>Player Detail</a>
       </li>
+      {
+        buzzpoints_slug ?
+          <li>
+            <a href={`/buzzpoints/tournament/${buzzpoints_slug}`}>Detailed Stats</a>
+          </li> : ""
+      }
     </ul>
   );
 }

@@ -94,8 +94,14 @@ async function getData(params) {
        ORDER BY rawPPG desc) e
           `;
 
+  const buzzpoints_res = sql`
+  SELECT slug 
+  FROM buzzpoints_tournament_lookup
+  WHERE cqs_tournament_id = ${params.id}
+  `
+
   const all = await Promise.all([
-    summary_res, standings_res, players_res
+    summary_res, standings_res, players_res, buzzpoints_res
   ])
 
   return {
@@ -104,6 +110,7 @@ async function getData(params) {
         Summary: all[0],
         Standings: all[1],
         Players: all[2],
+        Buzzpoints: all[3],
       },
     },
   };
