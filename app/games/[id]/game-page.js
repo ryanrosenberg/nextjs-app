@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useMemo } from "react";
 import _ from "lodash";
@@ -10,12 +9,7 @@ import Scoresheet from "../../../components/scoresheet";
 import { slugify, sanitize } from "../../../lib/utils";
 
 export default function Game({ result }) {
-  const url = usePathname();
   const data = result.props.result;
-  const finals1 = require("../../../sample.json");
-  const finals2 = require("../../../sample2.json");
-  const packet1 = require("../../../packet1.json");
-  const packet2 = require("../../../packet2.json");
   data.Players.map((item) => {
     item.team_slug = slugify(sanitize(item.team));
     item.player_slug = slugify(sanitize(item.player));
@@ -95,21 +89,6 @@ export default function Game({ result }) {
             );
           })}
         </div>
-        <hr></hr>
-        {url.search(/95739/g) > -1 ? (
-          <div>
-            <Scoresheet qbj={finals2} packet={packet1} />
-          </div>
-        ) : (
-          <></>
-        )}
-        {url.search(/95741/g) > -1 ? (
-          <div>
-            <Scoresheet qbj={finals1} packet={packet2} />
-          </div>
-        ) : (
-          <></>
-        )}
       </div>
     </div>
   );
