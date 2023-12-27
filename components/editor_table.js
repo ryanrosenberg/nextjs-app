@@ -75,11 +75,11 @@ const EditorTable = ({ data }) => {
   const makeEditorLink = (row) => {
     const set = row[0]
     if (set) {
-      let editor_list = set.editors.split('; ')
-      let subcat_list = set.subcats.split('; ')
-      let slug_list = set.slugs ? set.slugs.split('; ') : null
-      let link_list = slug_list ? slug_list.map((item, i) => `<a href = '/players/${item}'>${editor_list[i]}</a> <i style="font-size:80%">${subcat_list[i]}</i>`) : editor_list
-      return link_list.join('<br>')
+      if (set.editors){
+        let editor_list = set.editors.split('; ').map((item) => item.split(',,'))
+        let link_list = editor_list.map((item, i) => `<a href = '/players/${item[1]}'>${item[0]}</a> <i style="font-size:80%">${item[2]}</i>`)
+        return link_list.join('<br>')
+      }
     } else {
       return ''
     }
