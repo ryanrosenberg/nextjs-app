@@ -2,8 +2,11 @@ import styles from "../components/scoresheet.module.css";
 import _ from "lodash";
 
 export default function BuzzpointScoresheet({ buzzes, bonuses = null, players }) {
+    const tournament_slug = buzzes[0].slug;
+    const round_number = buzzes[0].round_number;
+    
     const player_teams = _.partition(players, (player) => player.team === players[0].team);
-    console.log(player_teams);
+
     const team1_name = player_teams[0][0].team;
     const team1_players = player_teams[0].map((player) => player.player);
 
@@ -12,7 +15,7 @@ export default function BuzzpointScoresheet({ buzzes, bonuses = null, players })
 
     var team1_score = 0;
     var team2_score = 0;
-    
+    var tuh = Math.max(...players.map(player => player.tuh));
     return (
         <div className={styles.scoresheet}>
             <div className={styles.teamDiv}>
@@ -43,14 +46,40 @@ export default function BuzzpointScoresheet({ buzzes, bonuses = null, players })
                         </tr>
                     </thead>
                     <tbody>
-                        {buzzes.map((item, i) => (
-                            <tr key={i}>
-                                <td>{item.player}</td>
-                                <td>{item.answer_primary}</td>
-                                <td>{item.value}</td>
-                                <td>{item.buzz_position}</td>
-                            </tr>
-                        ))}
+                        {_.range(1, tuh + 1).map((i) => {
+                            const tu_buzzes = buzzes.filter(buzz => buzz.question_number === String(i));
+                            const team1_buzzes = team1_players.map(
+                                (player) => (
+                                    tu_buzzes.filter(item => item.player === player).length > 0 ?
+                                        tu_buzzes.filter(item => item.player === player) :
+                                        []))
+                            const team2_buzzes = team2_players.map(
+                                (player) => (
+                                    tu_buzzes.filter(item => item.player === player).length > 0 ?
+                                        tu_buzzes.filter(item => item.player === player) :
+                                        []))
+                            return (
+                                <tr key={i}>
+                                    {team1_buzzes.map((item, num) => (
+                                        item.length > 0 ?
+                                            <td className={styles.player} key={`team-one-player-${num}`}>
+                                                <span className={item[0].value < 0 ?
+                                                    styles.buzzNeg : item[0].value > 10 ? styles.buzzPower : item[0].value > 0 ? styles.buzzGet : ""}>{item[0].value}</span> <span className={styles.buzzPosition}>{item[0].buzz_position}</span></td> :
+                                            <td className={styles.player} key={`team-one-player-${num}`}></td>
+                                    )).concat(
+                                        [1, 2, 3, 4].map(item => <td key={item}></td>)
+                                    ).concat(
+                                        <td className={styles.tuNumberCell} key='tu'><a href={`/buzzpoints/tournament/${tournament_slug}/tossup/${round_number}/${i}`} className={styles.tuNumber}>{i}</a></td>
+                                    ).concat(team2_buzzes.map((item, num) => (
+                                        item.length > 0 ?
+                                            <td key={`team-two-player-${num}`}>
+                                            <span className={item[0].value < 0 ? styles.buzzNeg : item[0].value > 10 ? styles.buzzPower : item[0].value > 0 ? styles.buzzGet : ""}>{item[0].value}</span> <span className={styles.buzzPosition}>{item[0].buzz_position}</span></td> :
+                                            <td key={`team-two-player-${num}`}></td>
+                                    ))).concat(
+                                        [5, 6, 7, 8].map(item => <td key={item}></td>)
+                                    )}
+                                </tr>)
+                        })}
                     </tbody>
                 </table>
             </div>

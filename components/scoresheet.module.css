@@ -35,5 +35,24 @@
 
 .tuNumber {
     font-weight: 600;
-    color: black;
+}
+
+.buzzPosition {
+    font-size: 12px;
+    color: gray;
+}
+
+.buzzNeg {
+    color: red;
+    font-weight: 600;
+}
+
+.buzzGet {
+    color: green;
+    font-weight: 600;
+}
+
+.buzzPower {
+    color: blue;
+    font-weight: 600;
 }

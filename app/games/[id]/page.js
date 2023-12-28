@@ -56,7 +56,9 @@ LEFT JOIN people on players.person_id = people.person_id
           `;
   const buzzes = await sql`
   SELECT
-  buzzpoints_buzz.tossup_id,
+  buzzpoints_tournament.slug,
+  buzzpoints_round.number as round_number,
+  buzzpoints_packet_question.question_number,
   buzzpoints_tossup.answer_primary,
   coalesce(people.player, buzzpoints_player.name) as player,
   buzzpoints_buzz.buzz_position,
@@ -71,6 +73,9 @@ LEFT JOIN people on players.person_id = people.person_id
   LEFT JOIN buzzpoints_tournament ON buzzpoints_round.tournament_id = buzzpoints_tournament.id
   LEFT JOIN buzzpoints_tournament_lookup ON buzzpoints_tournament_lookup.cqs_tournament_id = buzzpoints_tournament.id
   LEFT JOIN buzzpoints_tossup on buzzpoints_buzz.tossup_id = buzzpoints_tossup.id
+  LEFT JOIN buzzpoints_question ON buzzpoints_tossup.question_id = buzzpoints_question.id
+  LEFT JOIN buzzpoints_packet_question ON buzzpoints_question.id = buzzpoints_packet_question.question_id
+  LEFT JOIN buzzpoints_packet ON buzzpoints_packet_question.packet_id = buzzpoints_packet.id
   WHERE cqs_game_id = ${params.id}
   `
 

@@ -8,7 +8,7 @@ import { slugify, sanitize } from "../../../lib/utils";
 
 export default function Game({ result }) {
   const data = result.props.result;
-  console.log(data.Buzzes);
+  
   data.Players.map((item) => {
     item.team_slug = slugify(sanitize(item.team));
     item.player_slug = slugify(sanitize(item.player));
