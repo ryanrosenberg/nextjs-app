@@ -8,47 +8,54 @@ export const metadata = {
 export async function getData() {
   const sql = neon(process.env.DATABASE_URL);
 
+  // const test = await sql`
+  // SELECT * FROM tournaments
+  // ORDER BY date desc
+  // LIMIT 10`
+
   const rt_res = await sql`
   SELECT 
   tournaments.*, 
   results.Champion FROM (SELECT 
     date as Date,
-    sets.year, \"set\" as \"Set\", site as Site,
-    \"set\" || ' at ' || site as Tournament, tournaments.tournament_id,
+    tournament_name as Tournament, 
+    tournaments.tournament_id,
     count(distinct team_games.team_id) as Teams
     from team_games
     left join teams on team_games.team_id = teams.team_id
     left join tournaments on team_games.tournament_id = tournaments.tournament_id
-    LEFT JOIN sets on tournaments.set_id = sets.set_id
+    LEFT JOIN sets on tournaments.set_id = sets.set_id::numeric
     LEFT JOIN sites on tournaments.site_id = sites.site_id
-    GROUP BY 1, 2, 3, 4, 5, 6
+    GROUP BY 1, 2, 3
     ORDER BY Date desc
     LIMIT 10) tournaments
     LEFT JOIN
     (
         SELECT 
         date as Date,
-        \"set\" || ' at ' || site as Tournament,
+        tournament_name as Tournament,
+        tournaments.tournament_id,
         max(teams.team) as Champion
         from team_games
         left join teams on team_games.team_id = teams.team_id
         left join tournaments on team_games.tournament_id = tournaments.tournament_id
-        LEFT JOIN sets on tournaments.set_id = sets.set_id
+        LEFT JOIN sets on tournaments.set_id = sets.set_id::numeric
         LEFT JOIN sites on tournaments.site_id = sites.site_id
         LEFT JOIN tournament_results on team_games.tournament_id = tournament_results.tournament_id
         and team_games.team_id = tournament_results.team_id
         where rank = 1
-        GROUP BY 1, 2
+        GROUP BY 1, 2, 3
         ORDER BY Date desc
         LIMIT 10
     ) results
-    on tournaments.Tournament = results.Tournament
+    on tournaments.tournament_id = results.tournament_id
            `;
 
   const tty_res = await sql`
   SELECT 
   team as Team,
-  school as School, slug,
+  school as School, 
+  slug,
   count(distinct team_games.tournament_id) as Ts,
   count(result) as GP,
   sum(case result when 1 then 1 else 0 end) as W,
@@ -66,15 +73,16 @@ sum(bonus_pts)/sum(bonuses_heard)::numeric as PPB
   left join schools on teams.school_id = schools.school_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
   left join sets on tournaments.set_id = sets.set_id
-  where sets.year = '22-23'
+  where sets.year = '23-24'
   and teams.school_id is not null
   GROUP BY 1,2,3
-  ORDER BY GP desc`;
+  ORDER BY W desc`;
 
   const all = {
     teamsThisYear: tty_res,
     recentTournaments: rt_res,
   };
+  // console.log(all);
   return {
     props: {
       result: all,
