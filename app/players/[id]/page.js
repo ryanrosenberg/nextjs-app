@@ -98,7 +98,7 @@ export async function getData(params) {
   sets.set_slug, 
   string_agg(subcategory, ', ') as Categories
   from editors
-  LEFT JOIN sets on editors.set_id = sets.set_id
+  LEFT JOIN sets on editors.set_id = sets.set_id::varchar
   LEFT JOIN people on editors.person_id = people.person_id
   WHERE slug = ${params.id}
   GROUP BY 1, 2, 3`;

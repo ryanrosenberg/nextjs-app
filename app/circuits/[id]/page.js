@@ -29,8 +29,8 @@ export async function getData(params) {
   schools.lat, 
   schools.lon, 
   schools.school_id,
-  min(EXTRACT(YEAR FROM tournaments.date)) || '-' || max(EXTRACT(YEAR FROM tournaments.date)) as Yrs,
-  coalesce(cast(EXTRACT(YEAR FROM max(tournaments.date)) as int), 2000) as last_active,
+  min(EXTRACT(YEAR FROM tournaments.date::date)) || '-' || max(EXTRACT(YEAR FROM tournaments.date::date)) as Yrs,
+  coalesce(cast(EXTRACT(YEAR FROM max(tournaments.date::date)) as int), 2000) as last_active,
   count(distinct tournaments.tournament_id) as Ts,
   count(game_id) as GP,
    sum(case result when 1 then 1 else 0 end) || '-' ||
@@ -61,7 +61,7 @@ export async function getData(params) {
   sites.lat, 
   sites.lon, 
   sites.school_id,
-coalesce(cast(EXTRACT(YEAR FROM max(tournaments.date)) as int), 2000) as last_host
+coalesce(cast(EXTRACT(YEAR FROM max(tournaments.date::date)) as int), 2000) as last_host
 from sites
  LEFT JOIN tournaments on sites.site_id = tournaments.site_id
  WHERE sites.circuit_slug = ${params.id}
@@ -82,9 +82,9 @@ site as Site,
 Champion,
 count(distinct team_id) as Teams,
 count(distinct(team_games.school_id)) as Schools,
-round(sum(powers)/sum(coalesce(tuh, 20)), 3) as pct_power,
-round((sum(coalesce(powers,0))+sum(tens))/sum(coalesce(tuh, 20)/2), 3) as pct_conv,
-round(sum(bonus_pts)/sum(bonuses_heard), 2) as PPB
+sum(powers)/sum(coalesce(tuh, 20)) as pct_power,
+(sum(coalesce(powers,0))+sum(tens))/sum(coalesce(tuh, 20)/2) as pct_conv,
+sum(bonus_pts)/sum(bonuses_heard) as PPB
 from team_games
 LEFT JOIN tournaments on team_games.tournament_id = tournaments.tournament_id
  LEFT JOIN sets on tournaments.set_id = sets.set_id

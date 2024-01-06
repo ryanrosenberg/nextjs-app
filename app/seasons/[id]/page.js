@@ -33,7 +33,7 @@ export async function getData(params) {
   LEFT JOIN (SELECT player_games.tournament_id, team_id, 
              string_agg(distinct ' ' || coalesce(fname|| ' ' || lname, player_games.player), ', ') as players
               from player_games
-              LEFT JOIN schools on player_games.school_id = schools.school_id
+              LEFT JOIN schools on player_games.school_id = schools.school_id::varchar
               LEFT JOIN players on player_games.player_id = players.player_id
               LEFT JOIN people on players.person_id = people.person_id
               LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
@@ -91,7 +91,7 @@ export async function getData(params) {
   from team_games
    LEFT JOIN sets on team_games.set_id = sets.set_id
    LEFT JOIN sites on team_games.site_id = sites.site_id
-  left join editors on sets.set_id = editors.set_id
+  left join editors on sets.set_id::varchar = editors.set_id
    LEFT JOIN schools on team_games.school_id = schools.school_id
    LEFT JOIN teams on team_games.team_id = teams.team_id
    WHERE sets.year = ${params.id}
