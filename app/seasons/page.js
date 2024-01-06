@@ -4,15 +4,18 @@ import { neon } from '@neondatabase/serverless';
 export async function getData() {
   const sql = neon(process.env.DATABASE_URL);
   const data = await sql`
-  SELECT * from ((SELECT distinct champions.year from champions
-    WHERE champions.year not in ('08-09', '09-10', '10-11')) champions
+  SELECT champions.year, nats."ACF Nationals", ict."DI ICT"
+   from ((SELECT distinct sets.year from sets
+    WHERE sets.year not in ('98-99', '99-00', '00-01', '01-02', '02-03', 
+    '03-04', '04-05', '05-06', '06-07', '07-08', '08-09', '09-10', '10-11')
+    and sets.year is not null) champions
     LEFT JOIN (select year, school as "ACF Nationals" from champions where tournament = 'ACF Nationals') nats
     on champions.year = nats.year
     LEFT JOIN (select year, school as "DI ICT" from champions where tournament = 'DI ICT') ict
     on champions.year = ict.year)
     order by 1
     `;
-
+    console.log(data);
   return {
     props: {
       result: data,
