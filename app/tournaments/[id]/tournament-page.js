@@ -10,6 +10,7 @@ import { Suspense } from "react";
 export default function Tournament({ result }) {
   const data = result.props.result;
   const tournament_id = data.Summary[0].tournament_id;
+  console.log(data.Summary[0]["date"]);
 
   data.Standings.map((item) => {
     item.team_slug = slugify(sanitize(item.team));
@@ -34,7 +35,11 @@ export default function Tournament({ result }) {
         <div className="main-content">
           <h1 className="page-title">{data.Summary[0]["tournament_name"]}</h1>
           <p className="page-subtitle">
-            {data.Summary[0]["date"].toLocaleDateString("en-US")}
+            {new Date(data.Summary[0]["date"]).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
           </p>
           {data.Summary[0]["naqt_id"] ? (
             <p className="naqt-disclaimer">

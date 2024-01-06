@@ -23,6 +23,7 @@ export default function Team({ result }) {
     });
     return item;
   });
+
   const tournamentsColumns = useMemo(() => [
     {
       Header: "Team",
@@ -49,6 +50,7 @@ export default function Team({ result }) {
     {
       Header: "W-L",
       accessor: "W-L",
+      border: "right",
     },
     {
       Header: "TUH",
@@ -306,11 +308,12 @@ export default function Team({ result }) {
       border: "right",
     },
     {
-      Header: "ACF Nationals",
+      Header: "Nats",
       accessor: "ACF Nats",
+      border: "right",
     },
     {
-      Header: "DI ICT",
+      Header: "ICT",
       accessor: "DI ICT",
     },
   ]);

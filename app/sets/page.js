@@ -19,8 +19,9 @@ export async function getData() {
   string_agg(editor || ',,' || people.slug || ',,' || subcategory, '; ') as editors
   from 
   (SELECT set_id, category, person_id, editor, string_agg(REPLACE(subcategory, ' ' || category, ''), ', ') as subcategory from editors group by 1, 2, 3, 4) editors
-  left join sets on editors.set_id = sets.set_id
+  left join sets on editors.set_id = sets.set_id::varchar
   left join people on editors.person_id = people.person_id
+  WHERE sets."set" is not null
   GROUP BY 1, 2, 3, 4, 5
   ORDER BY Season desc, difficulty
     `;
