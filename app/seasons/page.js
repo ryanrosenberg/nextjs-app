@@ -15,7 +15,6 @@ export async function getData() {
     on champions.year = ict.year)
     order by 1
     `;
-    console.log(data);
   return {
     props: {
       result: data,
