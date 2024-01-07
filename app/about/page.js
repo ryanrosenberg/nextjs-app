@@ -37,7 +37,7 @@ export default function About() {
         <h3 className={styles.header}>Set difficulty</h3>
         <p className={styles.paragraph}>
           This site uses the same set difficulty notation as{" "}
-          <a href="collegequizbowlcalendar.com">collegequizbowlcalendar.com</a>.
+          <a href="https://collegequizbowlcalendar.com/difficulty-scale/">collegequizbowlcalendar.com</a>.
         </p>
         <h3 className={styles.header}>Future plans</h3>
         <p className={styles.paragraph}>
