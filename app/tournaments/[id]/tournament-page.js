@@ -10,7 +10,6 @@ import { Suspense } from "react";
 export default function Tournament({ result }) {
   const data = result.props.result;
   const tournament_id = data.Summary[0].tournament_id;
-  console.log(data.Summary[0]["date"]);
 
   data.Standings.map((item) => {
     item.team_slug = slugify(sanitize(item.team));

@@ -5,7 +5,6 @@ import _ from "lodash";
 
 export default function SetsIndex({ result }) {
   const data = result.props.result;
-  console.log(data);
   data.map((item) => {
     switch (item.difficulty) {
       case 1:
