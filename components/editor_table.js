@@ -73,6 +73,7 @@ const EditorTable = ({ data }) => {
 
   const makeEditorLink = (row) => {
     const set = row[0];
+    // console.log(set.editors);
     if (set) {
       if (set.editors) {
         let editor_list = set.editors
@@ -81,12 +82,12 @@ const EditorTable = ({ data }) => {
         let link_list =
           set.category === "Head"
             ? editor_list.map(
-                (item, i) =>
-                  `<a href = '/players/${item[1]}'>${item[0]}</a>`
+                (item, i) => `<a href = '/players/${item[1]}'>${item[0]}</a>`
               )
-            : editor_list.map(
-                (item, i) =>
-                  `<a href = '/players/${item[1]}'>${item[0]}</a> <i style="font-size:80%">${item[2]}</i>`
+            : editor_list.map((item, i) =>
+                item[1] === "none"
+                  ? `${item[0]} <i style="font-size:80%">${item[2]}</i>`
+                  : `<a href = '/players/${item[1]}'>${item[0]}</a> <i style="font-size:80%">${item[2]}</i>`
               );
         return link_list.join("<br>");
       }

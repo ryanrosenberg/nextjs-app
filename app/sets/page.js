@@ -16,7 +16,7 @@ export async function getData() {
   sets.set_slug as set_slug,
   sets.year as Season,
   editors.category,
-  string_agg(editor || ',,' || people.slug || ',,' || subcategory, '; ') as editors
+  string_agg(editor || ',,' || coalesce(people.slug, 'none') || ',,' || subcategory, '; ') as editors
   from 
   (SELECT set_id, category, person_id, editor, string_agg(REPLACE(subcategory, ' ' || category, ''), ', ') as subcategory from editors group by 1, 2, 3, 4) editors
   left join sets on editors.set_id = sets.set_id::varchar

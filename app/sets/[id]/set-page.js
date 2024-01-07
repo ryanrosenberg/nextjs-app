@@ -9,10 +9,11 @@ import { formatDecimal, formatPercent, sanitize, slugify } from "../../../lib/ut
 
 export default function Set({ result }) {
   const data = result.props.result;
+  
   const mergeEditorSlugs = (editors, slugs) => {
     let editor_list = editors.split(', ')
-    let slug_list = slugs.split(', ')
-    let link_list = slug_list.map((item, i) => `<a href = '/players/${item}'>${editor_list[i]}</a>`)
+    let slug_list = slugs ? slugs.split(', ') : [null]
+    let link_list = slug_list.map((item, i) => item ? `<a href = '/players/${item}'>${editor_list[i]}</a>`: editor_list[i])
     return link_list.join(', ')
   }
   data.Editors.map((item) => {
