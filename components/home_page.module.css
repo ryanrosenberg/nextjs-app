@@ -9,6 +9,10 @@
   width: 60%;
 }
 
+.homepageTeams div {
+  width: auto !important;
+}
+
 .homepageTournaments {
   width: 40%;
 }
