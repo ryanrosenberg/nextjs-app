@@ -42,7 +42,7 @@ const PaginatedTable = ({
   let rowGroups = _.groupBy(currentItems, grouping_column);
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", width: "fit-content", maxWidth: "1600px" }}>
       <table
         className={classnames(
           tables.dataframe,
