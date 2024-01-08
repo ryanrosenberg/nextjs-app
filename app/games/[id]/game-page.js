@@ -91,7 +91,11 @@ export default function Game({ result }) {
         <hr></hr>
         {
           data.Buzzes.length > 0 ?
-          <BuzzpointScoresheet buzzes={data.Buzzes} players={data.Players} /> : ""
+          <BuzzpointScoresheet 
+          buzzes={data.Buzzes} 
+          bonuses={data.Bonuses} 
+          packet={data.Packet}
+          players={data.Players} /> : ""
         }
       </div>
     </div>

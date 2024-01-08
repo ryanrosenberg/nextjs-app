@@ -58,6 +58,7 @@ LEFT JOIN people on players.person_id = people.person_id
   SELECT
   buzzpoints_tournament.slug,
   buzzpoints_round.number as round_number,
+  buzzpoints_tossup.question_id,
   buzzpoints_packet_question.question_number,
   buzzpoints_tossup.answer_primary,
   coalesce(people.player, buzzpoints_player.name) as player,
@@ -74,15 +75,49 @@ LEFT JOIN people on players.person_id = people.person_id
   LEFT JOIN buzzpoints_tournament_lookup ON buzzpoints_tournament_lookup.cqs_tournament_id = buzzpoints_tournament.id
   LEFT JOIN buzzpoints_tossup on buzzpoints_buzz.tossup_id = buzzpoints_tossup.id
   LEFT JOIN buzzpoints_question ON buzzpoints_tossup.question_id = buzzpoints_question.id
-  LEFT JOIN buzzpoints_packet_question ON buzzpoints_question.id = buzzpoints_packet_question.question_id
-  LEFT JOIN buzzpoints_packet ON buzzpoints_packet_question.packet_id = buzzpoints_packet.id
+  LEFT JOIN buzzpoints_packet_question ON buzzpoints_question.id = buzzpoints_packet_question.question_id and buzzpoints_round.packet_id = buzzpoints_packet_question.packet_id
   WHERE cqs_game_id = ${params.id}
   `
 
   const bonuses = await sql`
-  
+  SELECT
+  buzzpoints_tournament.slug,
+  buzzpoints_round.number as round_number,
+  buzzpoints_packet_question.question_number,
+  teams.team,
+  buzzpoints_bonus_part_direct.value
+  FROM buzzpoints_bonus_part_direct
+  LEFT JOIN buzzpoints_team on buzzpoints_bonus_part_direct.team_id = buzzpoints_team.id
+  LEFT JOIN buzzpoints_team_lookup on buzzpoints_team_lookup.id = buzzpoints_team.id
+  LEFT JOIN teams on buzzpoints_team_lookup.cqs_team_id = teams.team_id
+  LEFT JOIN buzzpoints_game_lookup on buzzpoints_bonus_part_direct.game_id = buzzpoints_game_lookup.id
+  LEFT JOIN buzzpoints_game ON buzzpoints_bonus_part_direct.game_id = buzzpoints_game.id
+  LEFT JOIN buzzpoints_round ON buzzpoints_game.round_id = buzzpoints_round.id
+  LEFT JOIN buzzpoints_tournament ON buzzpoints_round.tournament_id = buzzpoints_tournament.id
+  LEFT JOIN buzzpoints_tournament_lookup ON buzzpoints_tournament_lookup.cqs_tournament_id = buzzpoints_tournament.id
+  LEFT JOIN buzzpoints_bonus_part on buzzpoints_bonus_part_direct.bonus_part_id = buzzpoints_bonus_part.id
+  LEFT JOIN buzzpoints_bonus on buzzpoints_bonus.id = buzzpoints_bonus_part.bonus_id
+  LEFT JOIN buzzpoints_question ON buzzpoints_bonus.question_id = buzzpoints_question.id
+  LEFT JOIN buzzpoints_packet_question ON buzzpoints_question.id = buzzpoints_packet_question.question_id and buzzpoints_round.packet_id = buzzpoints_packet_question.packet_id
+  WHERE cqs_game_id = ${params.id}
   `
 
+  const packet = await sql`
+  SELECT  buzzpoints_tossup.id,
+            buzzpoints_tournament.slug AS tournament_slug,
+            buzzpoints_round.number AS round,
+            buzzpoints_packet_question.question_number,
+            buzzpoints_tossup.answer
+    FROM    buzzpoints_tournament
+    JOIN    buzzpoints_round ON buzzpoints_tournament.id = tournament_id
+    JOIN    buzzpoints_packet ON buzzpoints_round.packet_id = buzzpoints_packet.id
+    JOIN    buzzpoints_packet_question ON buzzpoints_packet.id = buzzpoints_packet_question.packet_id
+    JOIN    buzzpoints_question ON buzzpoints_packet_question.question_id = buzzpoints_question.id
+    JOIN    buzzpoints_tossup ON buzzpoints_question.id = buzzpoints_tossup.question_id
+    JOIN    buzzpoints_game ON buzzpoints_round.id = buzzpoints_game.round_id
+    JOIN    buzzpoints_game_lookup ON buzzpoints_game_lookup.id = buzzpoints_game.id
+    WHERE   cqs_game_id = ${params.id}
+  `
   return {
     props: {
       result: {
@@ -90,6 +125,8 @@ LEFT JOIN people on players.person_id = people.person_id
         Players: players,
         Teams: teams,
         Buzzes: buzzes,
+        Bonuses: bonuses,
+        Packet: packet,
       },
     },
   };
