@@ -42,6 +42,7 @@ export default function Set({ result }) {
       accessor: "site",
       align: "left",
       border: "right",
+      linkTemplate: "/tournaments/{{tournament_id}}/"
     },
     {
       Header: "Teams",
