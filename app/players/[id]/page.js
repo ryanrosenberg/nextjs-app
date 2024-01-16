@@ -43,7 +43,7 @@ async function getData(params) {
   (sum(coalesce(powers, 0)) + sum(tens))/NULLIF(count(negs), 0)::numeric as \"G/N\",
   avg(pts) as PPG from
   player_games
-  LEFT JOIN schools on player_games.school_id = schools.school_id::varchar
+  LEFT JOIN schools on player_games.school_id = schools.school_id
   LEFT JOIN teams on player_games.team_id = teams.team_id
   LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
   LEFT JOIN sets on tournaments.set_id = sets.set_id
@@ -82,7 +82,7 @@ async function getData(params) {
   (sum(coalesce(powers, 0)) + sum(tens))/NULLIF(sum(negs), 0)::numeric as \"G/N\",
   avg(pts) as PPG from
   player_games
-  LEFT JOIN schools on player_games.school_id = schools.school_id::varchar
+  LEFT JOIN schools on player_games.school_id = schools.school_id
   LEFT JOIN teams on player_games.team_id = teams.team_id
   LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
   LEFT JOIN tournament_results on player_games.tournament_id = tournament_results.tournament_id
@@ -102,32 +102,50 @@ async function getData(params) {
   const buzzpoints_res = await sql`
   SELECT
   sets.year,
-    buzzpoints_tournament.name as tournament_name,
-    buzzpoints_tournament.slug as tournament_slug,
+  tournaments.date,
+  buzzpoints_tournament.name as tournament_name,
+  buzzpoints_tournament.slug as tournament_slug,
   people.slug,
-  category,
-  category_slug,
-  sum(value) as pts
-  FROM    buzzpoints_buzz
-  LEFT JOIN    buzzpoints_tossup ON buzzpoints_tossup.id = buzzpoints_buzz.tossup_id
-  LEFT JOIN    buzzpoints_question ON buzzpoints_tossup.question_id = buzzpoints_question.id
+  pg.games,
+  sum(case when category_recoding.category_clean = 'Literature' then value else 0 end)/pg.games as Literature,
+  sum(case when category_recoding.category_clean = 'History' then value else 0 end)/pg.games as History,
+  sum(case when category_recoding.category_clean = 'Science' then value else 0 end)/pg.games as Science,
+  sum(case when category_recoding.category_clean = 'Arts' then value else 0 end)/pg.games as Arts,
+  sum(case when category_recoding.category_clean = 'Beliefs' then value else 0 end)/pg.games as Beliefs,
+  sum(case when category_recoding.category_clean = 'Thought' then value else 0 end)/pg.games as Thought,
+  sum(case when category_recoding.category_clean = 'Other' then value else 0 end)/pg.games as Other
+  FROM        buzzpoints_buzz
+  LEFT JOIN   buzzpoints_tossup ON buzzpoints_tossup.id = buzzpoints_buzz.tossup_id
+  LEFT JOIN   buzzpoints_question ON buzzpoints_tossup.question_id = buzzpoints_question.id
   LEFT JOIN	  buzzpoints_game ON buzzpoints_buzz.game_id = buzzpoints_game.id
   LEFT JOIN	  buzzpoints_player ON buzzpoints_buzz.player_id = buzzpoints_player.id
   LEFT JOIN	  buzzpoints_round ON buzzpoints_game.round_id = buzzpoints_round.id
   LEFT JOIN	  buzzpoints_tournament ON buzzpoints_round.tournament_id = buzzpoints_tournament.id
-  LEFT JOIN buzzpoints_player_lookup ON buzzpoints_player.slug = buzzpoints_player_lookup.slug
-  LEFT JOIN people on buzzpoints_player_lookup.person_id = people.person_id
-  LEFT JOIN buzzpoints_tournament_lookup on buzzpoints_tournament_lookup.id = buzzpoints_tournament.id
-  LEFT JOIN tournaments on buzzpoints_tournament_lookup.cqs_tournament_id = tournaments.tournament_id
-  LEFT JOIN sets on tournaments.set_id = sets.set_id
+  LEFT JOIN   buzzpoints_player_lookup ON buzzpoints_player.id = buzzpoints_player_lookup.id
+  LEFT JOIN   people on buzzpoints_player_lookup.person_id = people.person_id
+  LEFT JOIN   buzzpoints_tournament_lookup on buzzpoints_tournament_lookup.id = buzzpoints_tournament.id
+  LEFT JOIN   tournaments on buzzpoints_tournament_lookup.cqs_tournament_id = tournaments.tournament_id
+  LEFT JOIN   sets on tournaments.set_id = sets.set_id
+  LEFT JOIN   category_recoding on buzzpoints_question.category = category_recoding.category
+  LEFT JOIN   (
+    SELECT 
+    tournament_id,
+    person_id, 
+    count(distinct game_id) as games
+    from player_games
+    left join players on player_games.player_id = players.player_id
+    group by 1, 2) pg
+    on buzzpoints_tournament_lookup.cqs_tournament_id = pg.tournament_id
+    and people.person_id = pg.person_id
   WHERE people.slug = ${params.id}
   GROUP BY 
   sets.year,
+  tournaments.date,
   buzzpoints_tournament.name,
   buzzpoints_tournament.slug,
   people.slug,
-  category,
-  category_slug`;
+  pg.games
+  ORDER BY tournaments.date`;
 
   const editing_res = await sql`
   SELECT 
@@ -135,7 +153,7 @@ async function getData(params) {
   sets.set_slug, 
   string_agg(subcategory, ', ') as Categories
   from editors
-  LEFT JOIN sets on editors.set_id = sets.set_id::varchar
+  LEFT JOIN sets on editors.set_id = sets.set_id
   LEFT JOIN people on editors.person_id = people.person_id
   WHERE slug = ${params.id}
   GROUP BY 1, 2, 3`;
