@@ -26,12 +26,7 @@ export default function BuzzpointScoresheet({ buzzes, bonuses = null, packet, pl
                                     <th className={styles.playerName} key={`team-one-player-${i}`}>{player}</th>
                                 );
                             })}
-                            {bonuses ?
-                                <>
-                                    <th key="bonus-1-team-one">B1</th>
-                                    <th key="bonus-2-team-one">B2</th>
-                                    <th key="bonus-3-team-one">B3</th>
-                                </> : ""
+                            {bonuses ? <th key="bonus-1-team-one" colSpan={3}>Bonuses</th> : ""
                             }
                             <th>Total</th>
                             <th>
@@ -42,12 +37,7 @@ export default function BuzzpointScoresheet({ buzzes, bonuses = null, packet, pl
                                     <th className={styles.playerName} key={`team-two-player-${i}`}>{player}</th>
                                 );
                             })}
-                            {bonuses ?
-                                <>
-                                    <th key="bonus-1-team-two">B1</th>
-                                    <th key="bonus-2-team-two">B2</th>
-                                    <th key="bonus-3-team-two">B3</th>
-                                </> : ""
+                            {bonuses ? <th key="bonus-1-team-two" colSpan={3}>Bonuses</th> : ""
                             }
                             <th>Total</th>
                         </tr>
@@ -162,7 +152,7 @@ export default function BuzzpointScoresheet({ buzzes, bonuses = null, packet, pl
                     </tbody>
                 </table>
             </div>
-            <div>
+            {/* <div>
                 <h3>Key</h3>
                 <table className={styles.demoTotal}>
                     <tr>
@@ -194,7 +184,7 @@ export default function BuzzpointScoresheet({ buzzes, bonuses = null, packet, pl
                         </td>
                     </tr>
                 </table>
-            </div>
+            </div> */}
         </div>
     )
 }

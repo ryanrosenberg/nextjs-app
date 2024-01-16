@@ -23,6 +23,10 @@
     background-color: #e4e1e2;
 }
 
+.playerName {
+    min-width: 48px;
+}
+
 .playerRow {
     border-bottom: 1px solid #555555;
     margin: 0px;
