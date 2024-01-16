@@ -139,6 +139,7 @@ LIMIT 10`;
   GROUP BY 1, 2, 3, 4, 5, 6
   ORDER BY 7 desc
   LIMIT 10) a`;
+
   // Highest National Tournament TU% -- Team
   const summary8 = sql`
   SELECT 
@@ -159,6 +160,7 @@ LIMIT 10`;
   GROUP BY 1, 2, 3, 4, 5, 6
   ORDER BY 7 desc
   LIMIT 10`;
+  
   // Highest National Tournament PPB (normalized) -- Team
   const summary9 = sql`
   Select 
@@ -379,7 +381,7 @@ LIMIT 10`;
   string_agg(cast(total_pts as text), ' - ') as Score, 
   sum(total_pts) as Pts,
   coalesce(max(tuh), 20) as TUH,
-  round(sum(total_pts)*20/coalesce(avg(tuh), 20), 2) as PP20TUH
+  sum(total_pts::numeric)*20/coalesce(avg(tuh), 20) as PP20TUH
   from team_games
   left join teams on team_games.team_id = teams.team_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
@@ -711,7 +713,7 @@ LIMIT 10`;
     schools.slug as school_slug,
     count(game_id) as GP,
     sum(pts) as Pts,
-    round(sum(pts)*20/nullif(sum(coalesce(tuh, 20)), 0), 2) as rawPP20TUH
+    sum(pts::numeric)*20/nullif(sum(coalesce(tuh, 20)), 0) as rawPP20TUH
     from player_games
     left join teams on player_games.team_id = teams.team_id
     left join schools on teams.school_id = schools.school_id

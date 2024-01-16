@@ -43,7 +43,7 @@ async function getData(params) {
   (sum(coalesce(powers, 0)) + sum(tens))/NULLIF(count(negs), 0)::numeric as \"G/N\",
   avg(pts) as PPG from
   player_games
-  LEFT JOIN schools on player_games.school_id = schools.school_id
+  LEFT JOIN schools on player_games.school_id = schools.school_id::varchar
   LEFT JOIN teams on player_games.team_id = teams.team_id
   LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
   LEFT JOIN sets on tournaments.set_id = sets.set_id
@@ -79,7 +79,7 @@ async function getData(params) {
   (sum(coalesce(powers, 0)) + sum(tens))/NULLIF(sum(negs), 0)::numeric as \"G/N\",
   avg(pts) as PPG from
   player_games
-  LEFT JOIN schools on player_games.school_id = schools.school_id
+  LEFT JOIN schools on player_games.school_id = schools.school_id::varchar
   LEFT JOIN teams on player_games.team_id = teams.team_id
   LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
   LEFT JOIN tournament_results on player_games.tournament_id = tournament_results.tournament_id
@@ -128,7 +128,7 @@ async function getData(params) {
   sets.set_slug, 
   string_agg(subcategory, ', ') as Categories
   from editors
-  LEFT JOIN sets on editors.set_id = sets.set_id
+  LEFT JOIN sets on editors.set_id = sets.set_id::varchar
   LEFT JOIN people on editors.person_id = people.person_id
   WHERE slug = ${params.id}
   GROUP BY 1, 2, 3`;

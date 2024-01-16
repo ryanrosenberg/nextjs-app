@@ -26,7 +26,7 @@ async function getData(params) {
   set_name, 
   headitor
   from sets
-  left join editors on sets.set_id = editors.set_id
+  left join editors on sets.set_id::varchar = editors.set_id
    WHERE sets.set_slug = ${params.id}
          `;
 
@@ -42,7 +42,7 @@ async function getData(params) {
   string_agg(distinct editor, ', ') as Editors,
   string_agg(distinct slug, ', ') as slugs
   from sets
-  LEFT JOIN editors on sets.set_id = editors.set_id
+  LEFT JOIN editors on sets.set_id::varchar = editors.set_id
   LEFT JOIN people on editors.person_id = people.person_id
    WHERE sets.set_slug = ${params.id}
    and category != 'Head'

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { useMemo } from "react";
 import _ from "lodash";

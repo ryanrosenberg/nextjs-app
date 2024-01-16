@@ -31,4 +31,4 @@ yarn-error.log*
 errors.txt
 .vercel
 .env
-.eslintrc.js
+.env

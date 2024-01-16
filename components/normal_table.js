@@ -15,6 +15,7 @@ const NormalTable = ({
   full_width = null,
 }) => {
   const { items, requestSort, sortConfig } = useSortableData(data);
+  
   const getClassNamesFor = (name) => {
     if (!sortConfig) {
       return;
@@ -70,9 +71,7 @@ const NormalTable = ({
                     tables.headerButton,
                     tables[getClassNamesFor(column.Header)]
                   )}
-                  onClick={() => {
-                    requestSort(column.accessor)
-                  }}
+                  onClick={() => requestSort(column.accessor)}
                 >
                   {column.Header}
                 </button>

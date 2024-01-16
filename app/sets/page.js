@@ -1,10 +1,10 @@
 import SetsIndex from "./sets-index";
 import { neon } from '@neondatabase/serverless';
+const sql = neon(process.env.DATABASE_URL);
 
 export const dynamicParams = false;
 
 async function getData() {
-  const sql = neon(process.env.DATABASE_URL);
   const data = await sql`
   SELECT 
   sets."set",
@@ -16,11 +16,12 @@ async function getData() {
   sets.set_slug as set_slug,
   sets.year as Season,
   editors.category,
-  string_agg(editor || ',,' || people.slug || ',,' || subcategory, '; ') as editors
+  string_agg(editor || ',,' || coalesce(people.slug, 'none') || ',,' || subcategory, '; ') as editors
   from 
-  (SELECT set_id, category, person_id, editor, string_agg(subcategory, ', ') as subcategory from editors group by 1, 2, 3, 4) editors
-  left join sets on editors.set_id = sets.set_id
+  (SELECT set_id, category, person_id, editor, string_agg(REPLACE(subcategory, ' ' || category, ''), ', ') as subcategory from editors group by 1, 2, 3, 4) editors
+  left join sets on editors.set_id = sets.set_id::varchar
   left join people on editors.person_id = people.person_id
+  WHERE sets."set" is not null
   GROUP BY 1, 2, 3, 4, 5
   ORDER BY Season desc, difficulty
     `;
