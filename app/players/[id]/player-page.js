@@ -11,7 +11,7 @@ import GroupedPaginatedTable from "../../../components/grouped_paginated_table.j
 
 export default function Player({ result }) {
   const data = result.props.result;
-  
+  console.log(data.Buzzpoints);
   data.Tournaments.map((item) => {
     item.date = new Date(item.date).toLocaleDateString("en-US");
     item.team_slug = slugify(sanitize(item.team))
@@ -164,7 +164,13 @@ export default function Player({ result }) {
     {
       Header: "PPG",
       accessor: "ppg",
+      border: "right",
       format: formatDecimal,
+    },
+    {
+      Header: "Detailed Stats",
+      accessor: "link",
+      linkTemplate: "/buzzpoints/tournament/{{buzzpoint_slug}}/player/{{buzzpoint_player}}"
     },
   ]);
 
@@ -233,13 +239,20 @@ export default function Player({ result }) {
           {data.Buzzpoints.length > 0 && (
             <div>
               <hr />
-              <h2 id="buzzpoints">Category Stats</h2>
-              <SpreadTable
+              <h2 id="buzzpoints">Detailed Stats</h2>
+              <ul>
+              {
+                data.Buzzpoints.map(
+                  i => <li>{i.tournament}</li>
+                )
+              }
+              </ul>
+              {/* <SpreadTable
                 columns={buzzpointColumns}
                 data={data.Buzzpoints}
                 grouping_column="tournament_name"
                 spread_column="category"
-              />
+              /> */}
             </div>
           )}
           {data.Editing.length > 0 && (

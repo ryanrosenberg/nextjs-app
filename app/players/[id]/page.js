@@ -61,10 +61,13 @@ async function getData(params) {
   date as Date,
   \"set\" as \"Set\", 
   tournaments.tournament_id,
+  case when buzzpoints_tournament_lookup.slug is null then null else 'Link' end as link,
   site as Site,
   teams.school as School, 
   schools.slug as school_slug, 
   sets.set_slug as set_slug,
+  buzzpoints_tournament_lookup.slug as buzzpoint_slug,
+  buzzpoints_player_lookup.slug as buzzpoint_player,
   coalesce(teams.team, school_name) as Team,
   rank || '/' || CAST(num_teams as int) as Finish,
   count(tens) as GP,
@@ -84,12 +87,16 @@ async function getData(params) {
   LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
   LEFT JOIN tournament_results on player_games.tournament_id = tournament_results.tournament_id
   and player_games.team_id = tournament_results.team_id
+  LEFT JOIN buzzpoints_tournament_lookup on player_games.tournament_id = buzzpoints_tournament_lookup.cqs_tournament_id
   LEFT JOIN sets on tournaments.set_id = sets.set_id
   LEFT JOIN sites on tournaments.site_id = sites.site_id
   INNER JOIN players on player_games.player_id = players.player_id
   LEFT JOIN people on players.person_id = people.person_id
+  LEFT JOIN buzzpoints_team_lookup on teams.team_id = buzzpoints_team_lookup.cqs_team_id
+  LEFT JOIN buzzpoints_player_lookup on people.person_id = buzzpoints_player_lookup.person_id
+  and buzzpoints_tournament_lookup.id = buzzpoints_team_lookup.tournament_id
   WHERE people.slug = ${params.id}
-  GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+  GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
   ORDER BY 2 desc`;
 
   const buzzpoints_res = await sql`
