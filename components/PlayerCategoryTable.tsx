@@ -13,6 +13,7 @@ export default function PlayerCategoryTable({ categories }: PlayerCategoryTableP
         {
             accessor: "category",
             Header: "Category",
+            border: "right",
             linkTemplate: "/buzzpoints/2023-acf-winter-columbia/category-tossup/{{category_slug}}"
         },
         {
@@ -28,16 +29,19 @@ export default function PlayerCategoryTable({ categories }: PlayerCategoryTableP
         {
             accessor: "negs",
             Header: "Negs",
+            border: "right",
             defaultDescending: true
         },
         {
             accessor: "bouncebacks",
-            Header: "Bouncebacks",
+            Header: "BBs",
+            border: "right",
             defaultDescending: true
         },
         {
             accessor: "points",
             Header: "Points",
+            border: "right",
             defaultDescending: true
         },
         {
@@ -47,6 +51,7 @@ export default function PlayerCategoryTable({ categories }: PlayerCategoryTableP
         {
             accessor: "average_buzz",
             Header: "Avg. Buzz",
+            border: "right",
             format: formatDecimal
         },
         {
