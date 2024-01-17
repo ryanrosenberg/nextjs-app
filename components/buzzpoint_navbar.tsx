@@ -4,7 +4,7 @@ import { QuestionSet, Tournament } from "../types";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import styles from "./navbar.module.css";
+import styles from "../app/buzzpoints/buzzpoints.module.css";
 import { FaBars } from "react-icons/fa";
 
 type NavbarProps = {
@@ -15,6 +15,7 @@ type NavbarProps = {
 export default function Navbar({ tournament, questionSet }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+
   let mainButton = (
     <Link className="text-white font-bold" href={"/"}>
       Buzzpoints
@@ -76,7 +77,9 @@ export default function Navbar({ tournament, questionSet }: NavbarProps) {
     );
   }
 
-  return (
+  return ["/buzzpoints", "/buzzpoints/set"].includes(pathname) ? (
+    ""
+  ) : (
     <nav className={`${styles.buzzpointNav} sticky`}>
       <div className="min-w-screen mx-auto px-4 sm:px-6 lg:px-8">
         <div className={styles.buzzpointNavFlex}>

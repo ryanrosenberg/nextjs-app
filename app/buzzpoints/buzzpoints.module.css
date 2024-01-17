@@ -3,3 +3,47 @@
     column-gap: 55px;
     justify-content: space-evenly;
 }
+
+.mainPage {
+    font-size: 20px;
+}
+
+.buzzpointNav {
+    padding: 12px 8px;
+    margin-bottom: 20px;
+
+    background-color: var(--light-background);
+}
+
+.buzzpointNavFlex {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+}
+
+.buzzpointNavTournament {
+    border-right: 2px solid black;
+    padding-right: 8px;
+}
+
+.buzzpointNavTournament > .buzzpointNavLink {
+    font-size: 24px;
+}
+
+.buzzpointNavLink {
+    font-size: 20px;
+    padding-right: 8px;
+}
+
+.buzzpointNavLinkCurrent {
+    color: var(--line-color);
+}
+
+.buzzpointNavMobile {
+    display: flex;
+    flex-direction: column;
+}
+
+.buzzpointNavBars {
+    display: none;
+}

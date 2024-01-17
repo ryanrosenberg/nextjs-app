@@ -58,49 +58,6 @@
     display: none !important;
 }
 
-.buzzpointNav {
-    /* border-bottom: 2px solid var(--line-color); */
-
-    padding: 12px 8px;
-    margin-bottom: 20px;
-
-    background-color: var(--light-background);
-}
-
-.buzzpointNavFlex {
-    display: flex;
-    column-gap: 10px;
-    align-items: center;
-}
-
-
-.buzzpointNavTournament {
-    border-right: 2px solid black;
-    padding-right: 8px;
-}
-
-.buzzpointNavTournament > .buzzpointNavLink {
-    font-size: 24px;
-}
-
-.buzzpointNavLink {
-    font-size: 20px;
-    padding-right: 8px;
-}
-
-.buzzpointNavLinkCurrent {
-    color: var(--line-color);
-}
-
-.buzzpointNavMobile {
-    display: flex;
-    flex-direction: column;
-}
-
-.buzzpointNavBars {
-    display: none;
-}
-
 @media (max-width: 1000px) {
     .topNav {
         padding: 0em .5em;
