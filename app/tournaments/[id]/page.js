@@ -26,9 +26,9 @@ export async function getData(params) {
            tournaments.tournament_name,
            naqt_id
            from tournaments 
-           LEFT JOIN sets on tournaments.set_id::varchar = sets.set_id::varchar
-           LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar
-           WHERE tournaments.tournament_id::varchar = ${params.id}
+           LEFT JOIN sets on tournaments.set_id = sets.set_id
+           LEFT JOIN sites on tournaments.site_id = sites.site_id
+           WHERE tournaments.tournament_id = ${params.id}
            `;
 
   const standings_res = sql`
@@ -51,14 +51,14 @@ export async function getData(params) {
   sum(bonus_pts)/sum(bonuses_heard)::numeric as PPB,
   max(a_value) as \"A-Value\" 
   from team_games
-  LEFT JOIN teams on team_games.team_id::varchar = teams.team_id::varchar
-  LEFT JOIN schools on teams.school_id::varchar = schools.school_id::varchar
-  LEFT JOIN tournaments on team_games.tournament_id::varchar = tournaments.tournament_id::varchar
-  LEFT JOIN tournament_results on team_games.tournament_id::varchar = tournament_results.tournament_id::varchar
-  and team_games.team_id::varchar= tournament_results.team_id::varchar
-  LEFT JOIN sets on tournaments.set_id::varchar = sets.set_id::varchar
-  LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar
-  WHERE team_games.tournament_id::varchar = ${params.id}
+  LEFT JOIN teams on team_games.team_id = teams.team_id
+  LEFT JOIN schools on teams.school_id = schools.school_id
+  LEFT JOIN tournaments on team_games.tournament_id = tournaments.tournament_id
+  LEFT JOIN tournament_results on team_games.tournament_id = tournament_results.tournament_id
+  and team_games.team_id= tournament_results.team_id
+  LEFT JOIN sets on tournaments.set_id = sets.set_id
+  LEFT JOIN sites on tournaments.site_id = sites.site_id
+  WHERE team_games.tournament_id = ${params.id}
   GROUP BY 1, 2, 3, 4, 5
   ORDER BY Rank
           `;
@@ -83,13 +83,13 @@ export async function getData(params) {
        (sum(coalesce(powers, 0)) + sum(tens))/sum(coalesce(tuh, 20))::numeric as \"TU%\",
        avg(pts) as rawPPG from
        player_games
-       LEFT JOIN teams on player_games.team_id::varchar = teams.team_id::varchar
+       LEFT JOIN teams on player_games.team_id = teams.team_id
        LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
-       LEFT JOIN sets on tournaments.set_id::varchar = sets.set_id::varchar
-       LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar
-       LEFT JOIN players on player_games.player_id::varchar = players.player_id::varchar
-       LEFT JOIN people on players.person_id::varchar = people.person_id::varchar
-       WHERE player_games.tournament_id::varchar = ${params.id}
+       LEFT JOIN sets on tournaments.set_id = sets.set_id
+       LEFT JOIN sites on tournaments.site_id = sites.site_id
+       LEFT JOIN players on player_games.player_id = players.player_id
+       LEFT JOIN people on players.person_id = people.person_id
+       WHERE player_games.tournament_id = ${params.id}
        GROUP BY 1, 2, 3, 4
        ORDER BY rawPPG desc) e
           `;

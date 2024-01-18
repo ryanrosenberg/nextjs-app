@@ -25,9 +25,9 @@ export async function getData(params) {
   SELECT 
            date, tournaments.tournament_name, naqt_id
            from tournaments 
-           LEFT JOIN sets on tournaments.set_id::varchar = sets.set_id::varchar
-           LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar
-           WHERE tournaments.tournament_id::varchar = ${params.id}
+           LEFT JOIN sets on tournaments.set_id = sets.set_id
+           LEFT JOIN sites on tournaments.site_id = sites.site_id
+           WHERE tournaments.tournament_id = ${params.id}
            `;
   const team_detail_team_res = await sql`
   SELECT
@@ -42,9 +42,9 @@ export async function getData(params) {
   bonuses_heard as BHrd, bonus_pts as BPts,
   bonus_pts/NULLIF(bonuses_heard, 0)::numeric as PPB
   from team_games
-  LEFT JOIN teams on team_games.team_id::varchar = teams.team_id::varchar
-  LEFT JOIN (select team_id, team as opponent_team from teams) a on team_games.opponent_id::varchar = a.team_id::varchar
-  where team_games.tournament_id::varchar = ${params.id}
+  LEFT JOIN teams on team_games.team_id = teams.team_id
+  LEFT JOIN (select team_id, team as opponent_team from teams) a on team_games.opponent_id = a.team_id
+  where team_games.tournament_id = ${params.id}
   order by Team, Round
           `;
 
@@ -64,11 +64,11 @@ export async function getData(params) {
   sum(pts) as Pts,
   avg(pts) as PPG from 
   player_games
-  LEFT JOIN teams on player_games.team_id::varchar = teams.team_id::varchar
-  LEFT JOIN tournaments on player_games.tournament_id::varchar = tournaments.tournament_id::varchar
-  LEFT JOIN players on player_games.player_id::varchar = players.player_id::varchar
-  LEFT JOIN people on players.person_id::varchar = people.person_id::varchar
-  where player_games.tournament_id::varchar = ${params.id}
+  LEFT JOIN teams on player_games.team_id = teams.team_id
+  LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
+  LEFT JOIN players on player_games.player_id = players.player_id
+  LEFT JOIN people on players.person_id = people.person_id
+  where player_games.tournament_id = ${params.id}
   GROUP BY 1, 2
   order by Team, Player
           `;

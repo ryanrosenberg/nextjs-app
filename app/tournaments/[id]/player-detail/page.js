@@ -24,9 +24,9 @@ export async function getData(params) {
   SELECT 
            date, tournaments.tournament_name, naqt_id
            from tournaments 
-           LEFT JOIN sets on tournaments.set_id::varchar = sets.set_id::varchar
-           LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar
-           WHERE tournaments.tournament_id::varchar = ${params.id}
+           LEFT JOIN sets on tournaments.set_id = sets.set_id
+           LEFT JOIN sites on tournaments.site_id = sites.site_id
+           WHERE tournaments.tournament_id = ${params.id}
            `;
 
   const players_res = await sql`
@@ -49,13 +49,13 @@ export async function getData(params) {
                 (sum(coalesce(powers, 0)) + sum(tens))/sum(coalesce(tuh, 20))::numeric as \"TU%\",
                 avg(pts) as rawPPG from
                 player_games
-                LEFT JOIN teams on player_games.team_id::varchar = teams.team_id::varchar
+                LEFT JOIN teams on player_games.team_id = teams.team_id
                 LEFT JOIN tournaments on player_games.tournament_id = tournaments.tournament_id
-                LEFT JOIN sets on tournaments.set_id::varchar = sets.set_id::varchar
-                LEFT JOIN sites on tournaments.site_id::varchar = sites.site_id::varchar
-                LEFT JOIN players on player_games.player_id::varchar = players.player_id::varchar
-                LEFT JOIN people on players.person_id::varchar = people.person_id::varchar
-                WHERE player_games.tournament_id::varchar = ${params.id}
+                LEFT JOIN sets on tournaments.set_id = sets.set_id
+                LEFT JOIN sites on tournaments.site_id = sites.site_id
+                LEFT JOIN players on player_games.player_id = players.player_id
+                LEFT JOIN people on players.person_id = people.person_id
+                WHERE player_games.tournament_id = ${params.id}
                 GROUP BY 1, 2, 3, 4
                 ORDER BY rawPPG desc) e
                    `;
@@ -69,14 +69,14 @@ export async function getData(params) {
   coalesce(player_games.tuh, 20) as TUH,
   player_games.powers as \"15\", player_games.tens as \"10\", player_games.negs as \"-5\", pts as Pts
   from player_games
-  LEFT JOIN team_games on player_games.game_id::varchar = team_games.game_id::varchar
-  and player_games.team_id::varchar = team_games.team_id::varchar
-  LEFT JOIN (select team_id, team as opponent_team from teams) a on team_games.opponent_id::varchar = a.team_id::varchar
-  LEFT JOIN players on player_games.player_id::varchar = players.player_id::varchar
-  LEFT JOIN people on players.person_id::varchar = people.person_id::varchar
-  LEFT JOIN teams on player_games.team_id::varchar = teams.team_id::varchar
-  left join games on player_games.game_id::varchar = games.game_id::varchar
-  WHERE player_games.tournament_id::varchar = ${params.id}
+  LEFT JOIN team_games on player_games.game_id = team_games.game_id
+  and player_games.team_id = team_games.team_id
+  LEFT JOIN (select team_id, team as opponent_team from teams) a on team_games.opponent_id = a.team_id
+  LEFT JOIN players on player_games.player_id = players.player_id
+  LEFT JOIN people on players.person_id = people.person_id
+  LEFT JOIN teams on player_games.team_id = teams.team_id
+  left join games on player_games.game_id = games.game_id
+  WHERE player_games.tournament_id = ${params.id}
              order by team, player, Round
           `;
   const all = {
