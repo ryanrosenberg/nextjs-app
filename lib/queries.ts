@@ -610,7 +610,7 @@ WITH raw_buzzes AS (
                 ) rn) as row_num
         FROM	raw_buzzes b1
     )
-SELECT  buzzpoints_team.name,
+SELECT  teams.team as name,
         buzzpoints_team.slug,
         buzzpoints_tournament.slug as tournament_slug,
         sum(CASE WHEN buzzpoints_buzz.value > 10 THEN 1 ELSE 0 END) as powers,
@@ -631,9 +631,11 @@ SELECT  buzzpoints_team.name,
     LEFT JOIN	buzz_ranks first ON buzzpoints_buzz.tossup_id = first.tossup_id AND buzzpoints_buzz.buzz_position = first.buzz_position AND first.row_num = 1 AND buzzpoints_buzz.value > 0
     LEFT JOIN   buzz_ranks top_three ON buzzpoints_buzz.tossup_id = top_three.tossup_id AND buzzpoints_buzz.buzz_position = top_three.buzz_position AND top_three.row_num <= 3 AND buzzpoints_buzz.value > 0
     LEFT JOIN	buzzpoints_buzz neg ON buzzpoints_buzz.game_id = neg.game_id AND buzzpoints_buzz.tossup_id = neg.tossup_id AND buzzpoints_buzz.value > 0 AND neg.value < 0
+    LEFT JOIN   buzzpoints_team_lookup on buzzpoints_team.id = buzzpoints_team_lookup.id
+    LEFT JOIN   teams on buzzpoints_team_lookup.cqs_team_id = teams.team_id
     WHERE	buzzpoints_tournament.id = $2
     AND	exclude_from_individual = 0
-    group by buzzpoints_team.name, buzzpoints_team.slug, buzzpoints_tournament.slug
+    group by teams.team, buzzpoints_team.slug, buzzpoints_tournament.slug
     order by points desc
 `;
 
