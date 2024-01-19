@@ -61,7 +61,7 @@ async function getData(params) {
   date as Date,
   \"set\" as \"Set\", 
   tournaments.tournament_id,
-  case when buzzpoints_tournament_lookup.slug is null then null else 'Link' end as link,
+  case when buzzpoints_tournament_lookup.slug is null then null else 'Detailed Stats' end as link,
   site as Site,
   teams.school as School, 
   schools.slug as school_slug, 
@@ -93,8 +93,9 @@ async function getData(params) {
   INNER JOIN players on player_games.player_id = players.player_id
   LEFT JOIN people on players.person_id = people.person_id
   LEFT JOIN buzzpoints_team_lookup on teams.team_id = buzzpoints_team_lookup.cqs_team_id
+                                   and buzzpoints_tournament_lookup.id = buzzpoints_team_lookup.tournament_id
   LEFT JOIN buzzpoints_player_lookup on people.person_id = buzzpoints_player_lookup.person_id
-  and buzzpoints_tournament_lookup.id = buzzpoints_team_lookup.tournament_id
+                                    and buzzpoints_tournament_lookup.id = buzzpoints_player_lookup.tournament_id
   WHERE people.slug = ${params.id}
   GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
   ORDER BY 2 desc`;
