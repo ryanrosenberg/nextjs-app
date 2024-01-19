@@ -56,7 +56,9 @@ export default function Tournament({ result }) {
             <></>
           )}
           <Suspense>
-            <TournamentNavRow id={tournament_id} />
+            {data.Buzzpoints.length > 0 ?
+              <TournamentNavRow id={tournament_id} buzzpoints_slug={data.Buzzpoints[0].slug} /> :
+              <TournamentNavRow id={tournament_id} />}
             <h2 id="standings">Standings</h2>
             <StandingsTable
               id={tournament_id}

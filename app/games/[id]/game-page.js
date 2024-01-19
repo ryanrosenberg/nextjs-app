@@ -5,11 +5,13 @@ import { useMemo } from "react";
 import _ from "lodash";
 import NormalTable from "../../../components/normal_table";
 import styles from "./games.module.css";
-import Scoresheet from "../../../components/scoresheet";
+import BuzzpointScoresheet from "../../../components/buzzpoint_scoresheet"
 import { slugify, sanitize } from "../../../lib/utils";
 
 export default function Game({ result }) {
   const data = result.props.result;
+  console.log(data.Players.map(i => i.player));
+  console.log(data.Buzzes.map(i => i.player));
   data.Players.map((item) => {
     item.team_slug = slugify(sanitize(item.team));
     item.player_slug = slugify(sanitize(item.player));
@@ -89,6 +91,15 @@ export default function Game({ result }) {
             );
           })}
         </div>
+        <br/>
+        {
+          data.Buzzes.length > 0 ?
+          <BuzzpointScoresheet 
+          buzzes={data.Buzzes} 
+          bonuses={data.Bonuses} 
+          packet={data.Packet}
+          players={data.Players} /> : ""
+        }
       </div>
     </div>
   );

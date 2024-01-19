@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export async function getData(params) {
+async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   const champs_res = await sql`SELECT 
   sets.year as Season, 

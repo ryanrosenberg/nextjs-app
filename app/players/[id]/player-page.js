@@ -10,12 +10,13 @@ import GroupedPaginatedTable from "../../../components/grouped_paginated_table.j
 
 export default function Player({ result }) {
   const data = result.props.result;
-  
+
   data.Tournaments.map((item) => {
     item.date = new Date(item.date).toLocaleDateString("en-US");
-    item.team_slug = slugify(sanitize(item.team))
+    item.team_slug = slugify(sanitize(item.team));
     return item;
   });
+
   const yearsColumns = useMemo(
     () => [
       {
@@ -28,7 +29,7 @@ export default function Player({ result }) {
         accessor: "school",
         align: "left",
         border: "right",
-        linkTemplate: "/schools/{{school_slug}}"
+        linkTemplate: "/schools/{{school_slug}}",
       },
       {
         Header: "Ts",
@@ -55,7 +56,7 @@ export default function Player({ result }) {
       {
         Header: "15/G",
         accessor: "15/G",
-        format: formatDecimal
+        format: formatDecimal,
       },
       {
         Header: "10/G",
@@ -87,20 +88,20 @@ export default function Player({ result }) {
       Header: "Set",
       accessor: "Set",
       align: "left",
-      linkTemplate: "/sets/{{set_slug}}"
+      linkTemplate: "/sets/{{set_slug}}",
     },
     {
       Header: "Site",
       accessor: "site",
       align: "left",
       border: "right",
-      linkTemplate: "/tournaments/{{tournament_id}}"
+      linkTemplate: "/tournaments/{{tournament_id}}",
     },
     {
       Header: "School",
       accessor: "school",
       align: "left",
-      linkTemplate: "/schools/{{school_slug}}"
+      linkTemplate: "/schools/{{school_slug}}",
     },
     {
       Header: "Team",
@@ -135,7 +136,7 @@ export default function Player({ result }) {
     {
       Header: "15/G",
       accessor: "15/G",
-      format: formatDecimal
+      format: formatDecimal,
     },
     {
       Header: "10/G",
@@ -162,6 +163,62 @@ export default function Player({ result }) {
     {
       Header: "PPG",
       accessor: "ppg",
+      border: "right",
+      format: formatDecimal,
+    },
+    {
+      Header: "Detailed Stats",
+      accessor: "link",
+      linkTemplate: "/buzzpoints/tournament/{{buzzpoint_slug}}/player/{{buzzpoint_player}}"
+    },
+  ]);
+
+  const buzzpointColumns = useMemo(() => [
+    {
+      Header: "Tournament",
+      accessor: "tournament_name",
+      align: "left",
+      border: "right",
+      linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}",
+    },
+    {
+      Header: "G",
+      accessor: "games",
+      border: "right",
+    },
+    {
+      Header: "Literature",
+      accessor: "literature",
+      format: formatDecimal,
+    },
+    {
+      Header: "History",
+      accessor: "history",
+      format: formatDecimal,
+    },
+    {
+      Header: "Science",
+      accessor: "science",
+      format: formatDecimal,
+    },
+    {
+      Header: "Arts",
+      accessor: "arts",
+      format: formatDecimal,
+    },
+    {
+      Header: "Beliefs",
+      accessor: "beliefs",
+      format: formatDecimal,
+    },
+    {
+      Header: "Thought",
+      accessor: "thought",
+      format: formatDecimal,
+    },
+    {
+      Header: "Other",
+      accessor: "other",
       format: formatDecimal,
     },
   ]);
@@ -172,7 +229,7 @@ export default function Player({ result }) {
       accessor: "Set",
       align: "left",
       border: "right",
-      linkTemplate: "/sets/{{set_slug}}"
+      linkTemplate: "/sets/{{set_slug}}",
     },
     {
       Header: "Categories",
@@ -218,6 +275,21 @@ export default function Player({ result }) {
             grouping_column="year"
             itemsPerPage={10}
           />
+          {data.Buzzpoints.length > 0 && (
+            <div>
+              <hr />
+              <h2 id="buzzpoints">Category Stats</h2>
+              <GroupedTable
+                columns={buzzpointColumns}
+                data={data.Buzzpoints}
+                grouping_column="year"
+              />
+              <br/>
+              Category values are points per game. They are broken for
+              tournaments that are not in the main database; those tournaments
+              will be added soon.
+            </div>
+          )}
           {data.Editing.length > 0 && (
             <div>
               <hr />

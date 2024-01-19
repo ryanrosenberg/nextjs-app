@@ -182,6 +182,7 @@ nav#toc>ul {
 .page-subtitle {
   font-size: 1.5em;
   font-style: italic;
+  padding-top: 4px;
 }
 
 .page-subtitle a {
@@ -389,4 +390,108 @@ tbody:last-child {
     overflow-x: scroll;
     font-size: 12px;
   }
+}
+
+.row-hover:hover {
+  background-color: #e3e3e3;
+}
+
+@media (min-width: 768px) {
+
+  /* making the buzzpoint data a scrollable box */
+  .buzzes {
+    overflow-y: auto;
+    max-height: 95vh;
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+rt {
+  font-size: 0.8rem;
+  font-family: 'Times New Roman', Times, serif;
+  color: #424242;
+}
+
+rt .get {
+  color: #0173d1;
+}
+
+rt .neg {
+  color: #E20808;
+}
+
+rt .value {
+  padding: 0px 2px;
+}
+
+ruby {
+  display: inline-flex;
+  flex-direction: column-reverse;
+  vertical-align: bottom;
+  align-items: center;
+  padding: 0px 3px 0px 0px;
+}
+
+rt {
+  display: inline;
+  line-height: 1.5;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.buzzpoint-word {
+  cursor: pointer;
+  border-radius: 0px;
+  border-bottom: 2px solid var(--accent-color);
+  padding: 0px 1px 1px 1px;
+}
+
+.highlighted-word {
+  background-color: #DEEDFF;
+  /* box-shadow: 5px 5px 10px #b3b3b3; */
+  transition: all 200ms ease-out;
+  border-radius: 0px;
+}
+
+.pronunciation-guide {
+  color: rgb(119, 119, 119)
+}
+
+.compact {
+  font-size: .8rem;
+  line-height: 1.1rem;
+}
+
+.chart-hover-word {
+  padding: 5px;
+  border-radius: 5px;
+  background-color: lightgray;
+  box-shadow: 5px 5px 10px #b3b3b3;
+}
+
+.average-buzz-line-word {
+  display: inline;
+  border-left: dashed;
+  border-color: var(--accent-color);
+  padding-left: 6px;
+}
+
+.average-buzz-line {
+  float: right;
+  border-left: dashed;
+  border-color: var(--accent-color);
+  padding-left: 6px;
+}
+
+rt {
+  z-index: 1000;
 }

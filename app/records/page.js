@@ -2,7 +2,7 @@ import Records from "./records-page";
 import { neon } from '@neondatabase/serverless';
 import { cache } from 'react'
 
-export async function getData() {
+async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   // Most Wins -- School
   const summary1 = sql`

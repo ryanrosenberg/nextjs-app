@@ -4,7 +4,7 @@ const sql = neon(process.env.DATABASE_URL);
 
 export const dynamicParams = false;
 
-export async function getData() {
+async function getData() {
   const data = await sql`
   SELECT 
   sets."set",
