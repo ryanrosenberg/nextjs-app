@@ -28,7 +28,7 @@ async function getData(params) {
     LEFT JOIN sites on tournaments.site_id = sites.site_id
     GROUP BY 1, 2, 3
     ORDER BY Date desc
-    LIMIT 10 WITH TIES) tournaments
+    FETCH FIRST 10 ROWS WITH TIES) tournaments
     LEFT JOIN
     (
         SELECT 
@@ -46,7 +46,7 @@ async function getData(params) {
         where rank = 1
         GROUP BY 1, 2, 3
         ORDER BY Date desc
-        LIMIT 10 WITH TIES
+        FETCH FIRST 10 ROWS WITH TIES
     ) results
     on tournaments.tournament_id = results.tournament_id
            `;
