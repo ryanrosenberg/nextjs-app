@@ -1,9 +1,10 @@
 import Records from "./records-page";
 import { neon } from '@neondatabase/serverless';
-import { cache } from 'react'
+import { cache } from 'react';
 
 async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
+  
   // Most Wins -- School
   const summary1 = sql`
   SELECT 
@@ -911,7 +912,7 @@ GROUP BY 1, 2, 3, 4, 5, 6
 ORDER BY Teams desc
 LIMIT 10`;
   
-  const all = await Promise.all([
+  const all = await sql.transaction([
     summary1,
     summary2,
     summary3,
@@ -949,7 +950,10 @@ LIMIT 10`;
     summary35,
     summary36,
     summary37,
-  ])
+  ],
+  {
+    readOnly: true
+  })
   return {
     props: {
       result: all
