@@ -913,7 +913,7 @@ GROUP BY 1, 2, 3, 4, 5, 6
 ORDER BY Teams desc
 LIMIT 10`;
   
-  const all = await sql.transaction([
+  const b1 = await sql.transaction([
     summary1,
     summary2,
     summary3,
@@ -926,7 +926,12 @@ LIMIT 10`;
     summary10,
     summary11,
     summary12,
-    summary13,
+    summary13],
+    {
+      readOnly: true
+    })
+
+  const b2 = await sql.transaction([  
     summary14,
     summary15,
     summary16,
@@ -938,7 +943,12 @@ LIMIT 10`;
     summary22,
     summary23,
     summary24,
-    summary25,
+    summary25],
+    {
+      readOnly: true
+    })
+
+  const b3 = await sql.transaction([  
     summary26,
     summary27,
     summary28,
@@ -957,7 +967,7 @@ LIMIT 10`;
   })
   return {
     props: {
-      result: all
+      result: b1.concat(b2, b3)
     },
   };
 }

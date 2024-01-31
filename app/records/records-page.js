@@ -638,6 +638,7 @@ export default function Records({ result }) {
                     Header: "PP20TUH",
                     accessor: "pp20tuh",
                     linkTemplate: "/games/{{game_id}}",
+                    format: formatDecimal
                   },
                 ]}
                 data={data[15]}
