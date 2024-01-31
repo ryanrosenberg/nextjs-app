@@ -5,21 +5,22 @@ import { sql, getCategoriesForTournamentQuery, getPlayerCategoryLeaderboard, get
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-    const tournaments = await sql(getTournamentsQuery) as Tournament[];
-    const paths = [];
-    for (const tournament of tournaments) {
-        const categories = await sql(getCategoriesForTournamentQuery, [tournament.id]) as any[];
-        for (const { category_slug } of categories) {
-            if (category_slug) {
-                paths.push({
-                    slug: tournament.slug,
-                    category: category_slug
-                });
-            }
-        }
-    }
+    return [];
+    // const tournaments = await sql(getTournamentsQuery) as Tournament[];
+    // const paths = [];
+    // for (const tournament of tournaments) {
+    //     const categories = await sql(getCategoriesForTournamentQuery, [tournament.id]) as any[];
+    //     for (const { category_slug } of categories) {
+    //         if (category_slug) {
+    //             paths.push({
+    //                 slug: tournament.slug,
+    //                 category: category_slug
+    //             });
+    //         }
+    //     }
+    // }
 
-    return paths;
+    // return paths;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {

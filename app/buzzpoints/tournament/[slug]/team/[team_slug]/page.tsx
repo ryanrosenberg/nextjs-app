@@ -5,20 +5,21 @@ import { Metadata } from "next";
 import { BonusCategory, Team, Tournament } from "../../../../../../types";
 
 export async function generateStaticParams() {
-    const tournaments = await sql(getTournamentsQuery) as Tournament[];
-    const paths = [];
+    return [];
+    // const tournaments = await sql(getTournamentsQuery) as Tournament[];
+    // const paths = [];
 
-    for (let { id, slug } of tournaments) {
-        const teams = await sql(getTeamsByTournamentQuery, [id]) as Team[];
-        for (const { slug: team_slug } of teams) {
-            paths.push({
-                slug,
-                team_slug
-            });
-        }
-    }
+    // for (let { id, slug } of tournaments) {
+    //     const teams = await sql(getTeamsByTournamentQuery, [id]) as Team[];
+    //     for (const { slug: team_slug } of teams) {
+    //         paths.push({
+    //             slug,
+    //             team_slug
+    //         });
+    //     }
+    // }
 
-    return paths;
+    // return paths;
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
