@@ -16,6 +16,7 @@ export type QuestionSet = {
     name: string;
     slug: string;
     difficulty: string;
+    first_mirror: string;
     edition: string;
     edition_count: number;
 }

@@ -5,7 +5,7 @@ import { QuestionSet } from "../../../types";
 
 export default async function QuestionSetHome() {
   const questionSets: QuestionSet[] = await sql(getQuestionSetsQuery) as QuestionSet[];
-
+  
   return (
     <Layout>
       <h3 className="text-2xl font-bold my-5">Recent Question Sets</h3>

@@ -11,6 +11,15 @@ type QuestionSetSummaryProps = {
 }
 
 export default function QuestionSetSummary({ questionSets, detailPage }: QuestionSetSummaryProps) {
+    questionSets.map((item) => {
+        item.first_mirror = new Date(item.first_mirror).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return item;
+      })
+    
     const columns = [
         {
             accessor: "name",

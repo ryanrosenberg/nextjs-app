@@ -4,6 +4,20 @@ import NormalTable from "../../../components/normal_table";
 export default async function Home() {
   const tournaments = await sql(getTournamentsQuery);
   
+  tournaments.map((item) => {
+    item.start_date = new Date(item.start_date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    item.end_date = new Date(item.end_date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    return item;
+  })
+  
   const columns = [
     {
       accessor: "name",
