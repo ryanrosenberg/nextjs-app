@@ -2,6 +2,7 @@ import Records from "./records-page";
 import { neon } from '@neondatabase/serverless';
 import { cache } from 'react';
 
+
 async function getData(params) {
   const sql = neon(process.env.DATABASE_URL);
   
