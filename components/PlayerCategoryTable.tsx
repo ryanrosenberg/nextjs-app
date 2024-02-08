@@ -14,7 +14,7 @@ export default function PlayerCategoryTable({ categories }: PlayerCategoryTableP
             accessor: "category",
             Header: "Category",
             border: "right",
-            linkTemplate: "/buzzpoints/2023-acf-winter-columbia/category-tossup/{{category_slug}}"
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/category-tossup/{{category_slug}}"
         },
         {
             accessor: "powers",

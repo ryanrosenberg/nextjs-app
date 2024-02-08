@@ -270,6 +270,7 @@ WITH raw_buzzes AS (
         FROM	raw_buzzes b1
     )
     SELECT	buzzpoints_player.name,
+            buzzpoints_tournament.slug as tournament_slug,
             teams.team as team,
             category_main as category,
             category_main_slug as category_slug,
@@ -298,7 +299,7 @@ WITH raw_buzzes AS (
     WHERE	buzzpoints_round.tournament_id = $2
         AND buzzpoints_player.slug = $3
         AND	exclude_from_individual = 0
-    group by buzzpoints_player.name, category_main, teams.team, category_main_slug
+    group by buzzpoints_tournament.slug, buzzpoints_player.name, category_main, teams.team, category_main_slug
     ORDER BY points desc
 `;
  
