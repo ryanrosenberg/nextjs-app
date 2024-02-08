@@ -1,10 +1,16 @@
-'use client'
+"use client";
 
 import NestedSideNav from "../../components/nested_side_nav";
 import NormalTable from "../../components/normal_table";
 import PaginatedTable from "../../components/paginated_table";
 import styles from "./records.module.css";
-import { formatComma, formatDecimal, formatPercent, formatPercent3, slugify } from "../../lib/utils";
+import {
+  formatComma,
+  formatDecimal,
+  formatPercent,
+  formatPercent3,
+  slugify,
+} from "../../lib/utils";
 
 export default function Records({ result }) {
   const data = result.props.result;
@@ -76,7 +82,7 @@ export default function Records({ result }) {
                     accessor: "School",
                     align: "left",
                     border: "right",
-                    linkTemplate: "/schools/{{slug}}"
+                    linkTemplate: "/schools/{{slug}}",
                   },
                   {
                     Header: "Tournaments",
@@ -86,7 +92,7 @@ export default function Records({ result }) {
                   {
                     Header: "Wins",
                     accessor: "wins",
-                    format: formatComma
+                    format: formatComma,
                   },
                 ]}
                 data={data[0]}
@@ -106,13 +112,13 @@ export default function Records({ result }) {
                     Header: "Tournaments",
                     accessor: "tournaments",
                     border: "right",
-                    format: formatComma
+                    format: formatComma,
                   },
                   {
                     Header: "Win%",
                     accessor: "Win%",
                     format: formatPercent,
-                    digits: 2
+                    digits: 2,
                   },
                 ]}
                 data={data[1]}
@@ -138,7 +144,7 @@ export default function Records({ result }) {
                   {
                     Header: "Wins",
                     accessor: "wins",
-                    format: formatComma
+                    format: formatComma,
                   },
                 ]}
                 data={data[2]}
@@ -313,7 +319,7 @@ export default function Records({ result }) {
                     accessor: "tournament",
                     align: "left",
                     border: "right",
-                    linkTemplate: "/tournaments/{{tournament_id}}"
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                   {
                     Header: "Team",
@@ -337,7 +343,7 @@ export default function Records({ result }) {
                     Header: "stdev",
                     accessor: "sd",
                     format: formatDecimal,
-                    digits: 2
+                    digits: 2,
                   },
                   {
                     Header: "z-score",
@@ -441,25 +447,25 @@ export default function Records({ result }) {
                     Header: "PPB",
                     accessor: "ppb",
                     format: formatDecimal,
-                    digits: 2
+                    digits: 2,
                   },
                   {
                     Header: "mean",
                     accessor: "mean",
                     format: formatDecimal,
-                    digits: 2
+                    digits: 2,
                   },
                   {
                     Header: "stdev",
                     accessor: "sd",
                     format: formatDecimal,
-                    digits: 2
+                    digits: 2,
                   },
                   {
                     Header: "z-score",
                     accessor: "z",
                     format: formatDecimal,
-                    digits: 2
+                    digits: 2,
                   },
                 ]}
                 data={data[11]}
@@ -638,7 +644,7 @@ export default function Records({ result }) {
                     Header: "PP20TUH",
                     accessor: "pp20tuh",
                     linkTemplate: "/games/{{game_id}}",
-                    format: formatDecimal
+                    format: formatDecimal,
                   },
                 ]}
                 data={data[15]}
@@ -715,8 +721,6 @@ export default function Records({ result }) {
                 footer={"Min. 8 bonuses heard"}
               />
             </div>
-          </div>
-          <div className={styles.row}>
             <div>
               <p className={styles.tableHeader}>Grails</p>
               <PaginatedTable
@@ -1023,11 +1027,13 @@ export default function Records({ result }) {
                     Header: "PP20TUH",
                     accessor: "pp20tuh",
                     format: formatDecimal,
-                    digits: 2
+                    digits: 2,
                   },
                 ]}
                 data={data[26]}
-                footer={"PP20TUH = points per 20 tossups heard, min. 3 tournaments played"}
+                footer={
+                  "PP20TUH = points per 20 tossups heard, min. 3 tournaments played"
+                }
               />
             </div>
           </div>
@@ -1068,7 +1074,7 @@ export default function Records({ result }) {
                     Header: "Win%",
                     accessor: "Win%",
                     format: formatPercent,
-                    digits: 2
+                    digits: 2,
                   },
                 ]}
                 data={data[27]}
@@ -1121,7 +1127,8 @@ export default function Records({ result }) {
                     Header: "PP20TUH",
                     accessor: "pp20tuh",
                     format: formatDecimal,
-                    linkTemplate: "/tournaments/{{tournament_id}}/player-detail",
+                    linkTemplate:
+                      "/tournaments/{{tournament_id}}/player-detail",
                   },
                 ]}
                 data={data[28]}
@@ -1170,7 +1177,8 @@ export default function Records({ result }) {
                     Header: "PP20TUH",
                     accessor: "pp20tuh",
                     format: formatDecimal,
-                    linkTemplate: "/tournaments/{{tournament_id}}/player-detail",
+                    linkTemplate:
+                      "/tournaments/{{tournament_id}}/player-detail",
                   },
                 ]}
                 data={data[29]}
@@ -1178,8 +1186,7 @@ export default function Records({ result }) {
               />
             </div>
           </div>
-          <div className={styles.row}>
-          </div>
+          <div className={styles.row}></div>
           <h3 id="player-records-game-records">Game Records</h3>
           <hr className={styles.hr} />
           <div className={styles.row}>
@@ -1275,7 +1282,7 @@ export default function Records({ result }) {
                   {
                     Header: "Pts",
                     accessor: "pts",
-                    linkTemplate: "/games/{{game_id}}"
+                    linkTemplate: "/games/{{game_id}}",
                   },
                 ]}
                 data={data[32]}
@@ -1349,7 +1356,7 @@ export default function Records({ result }) {
                     accessor: "school",
                     align: "left",
                     border: "right",
-                    linkTemplate: "/schools/{{slug}}"
+                    linkTemplate: "/schools/{{slug}}",
                   },
                   {
                     Header: "Tournaments",
@@ -1380,12 +1387,12 @@ export default function Records({ result }) {
                     accessor: "host",
                     align: "left",
                     border: "right",
-                    linkTemplate: "/schools/{{slug}}"
+                    linkTemplate: "/schools/{{slug}}",
                   },
                   {
                     Header: "Teams",
                     accessor: "teams",
-                    linkTemplate: "/tournaments/{{tournament_id}}"
+                    linkTemplate: "/tournaments/{{tournament_id}}",
                   },
                 ]}
                 data={data[36]}
