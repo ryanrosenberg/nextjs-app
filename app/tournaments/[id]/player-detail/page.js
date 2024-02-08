@@ -62,7 +62,7 @@ async function getData(params) {
   const player_detail_res = await sql`
   SELECT
   coalesce(fname|| ' ' || lname, player_games.player) as player, team,
-  CAST(REPLACE(games.round, 'Round ', '') as int) as Round,
+  CAST(REPLACE(player_games.round, 'Round ', '') as int) as Round,
   opponent_team as Opponent,
   player_games.game_num, player_games.game_id,
   case result when 1 then 'W' when 0 then 'L' else 'T' end as Result,
