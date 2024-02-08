@@ -648,62 +648,6 @@ export default function Records({ result }) {
           </div>
           <div className={styles.row}>
             <div>
-              <p className={styles.tableHeader}>Most Negs in a Game</p>
-              <NormalTable
-                columns={[
-                  {
-                    Header: "Season",
-                    accessor: "season",
-                    align: "left",
-                  },
-                  {
-                    Header: "Tournament",
-                    accessor: "tournament",
-                    align: "left",
-                    border: "right",
-                    linkTemplate: "/tournaments/{{tournament_id}}",
-                  },
-                  {
-                    Header: "Team",
-                    accessor: "team",
-                    align: "left",
-                    border: "right",
-                  },
-                  {
-                    Header: "Result",
-                    accessor: "result",
-                    align: "center",
-                    border: "right",
-                    linkTemplate: "/games/{{game_id}}",
-                  },
-                  {
-                    Header: "TUH",
-                    accessor: "tuh",
-                    border: "right",
-                  },
-                  {
-                    Header: "15",
-                    accessor: "15",
-                  },
-                  {
-                    Header: "10",
-                    accessor: "10",
-                  },
-                  {
-                    Header: "-5",
-                    accessor: "-5",
-                    border: "right",
-                  },
-                  {
-                    Header: "Pts",
-                    accessor: "pts",
-                    linkTemplate: "/games/{{game_id}}",
-                  },
-                ]}
-                data={data[16]}
-              />
-            </div>
-            <div>
               <p className={styles.tableHeader}>Highest PPB in a Game</p>
               <NormalTable
                 columns={[
@@ -1235,55 +1179,6 @@ export default function Records({ result }) {
             </div>
           </div>
           <div className={styles.row}>
-            <div>
-              <p className={styles.tableHeader}>
-                Most Negs per 20 TUH in a Tournament
-              </p>
-              <NormalTable
-                columns={[
-                  {
-                    Header: "Season",
-                    accessor: "season",
-                  },
-                  {
-                    Header: "Tournament",
-                    accessor: "tournament",
-                    align: "left",
-                    border: "right",
-                    linkTemplate: "/tournaments/{{tournament_id}}",
-                  },
-                  {
-                    Header: "Team",
-                    accessor: "team",
-                    align: "left",
-                  },
-                  {
-                    Header: "Player",
-                    accessor: "player",
-                    align: "left",
-                    border: "right",
-                    linkTemplate: "/players/{{player_slug}}",
-                  },
-                  {
-                    Header: "GP",
-                    accessor: "gp",
-                  },
-                  {
-                    Header: "-5",
-                    accessor: "-5",
-                    border: "right",
-                  },
-                  {
-                    Header: "-5P20TUH",
-                    accessor: "-5P20TUH",
-                    format: formatDecimal,
-                    linkTemplate: "/tournaments/{{tournament_id}}/player-detail",
-                  },
-                ]}
-                data={data[30]}
-                footer={"Min. 5 games played"}
-              />
-            </div>
           </div>
           <h3 id="player-records-game-records">Game Records</h3>
           <hr className={styles.hr} />
@@ -1440,55 +1335,6 @@ export default function Records({ result }) {
                   },
                 ]}
                 data={data[33]}
-              />
-            </div>
-            <div>
-              <p className={styles.tableHeader}>Most Negs in a Game</p>
-              <NormalTable
-                columns={[
-                  {
-                    Header: "Season",
-                    accessor: "season",
-                  },
-                  {
-                    Header: "Tournament",
-                    accessor: "tournament",
-                    align: "left",
-                    border: "right",
-                    linkTemplate: "/tournaments/{{tournament_id}}",
-                  },
-                  {
-                    Header: "Team",
-                    accessor: "team",
-                    align: "left",
-                  },
-                  {
-                    Header: "Player",
-                    accessor: "player",
-                    align: "left",
-                    border: "right",
-                    linkTemplate: "/players/{{player_slug}}",
-                  },
-                  {
-                    Header: "TUH",
-                    accessor: "tuh",
-                    border: "right",
-                  },
-                  {
-                    Header: "15",
-                    accessor: "15",
-                  },
-                  {
-                    Header: "10",
-                    accessor: "10",
-                  },
-                  {
-                    Header: "-5",
-                    accessor: "-5",
-                    linkTemplate: "/games/{{game_id}}",
-                  },
-                ]}
-                data={data[34]}
               />
             </div>
           </div>
