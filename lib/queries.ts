@@ -250,6 +250,25 @@ export const getTossupCategoryStatsQuery = `
     GROUP BY buzzpoints_question.category_main, buzzpoints_question.category_main_slug, buzzpoints_tournament.slug
 `;
 
+export const getPlayerBuzzesQuery = `
+SELECT 
+           buzzpoints_buzz.buzz_position, 
+           buzzpoints_buzz.value, 
+           buzzpoints_tossup.answer_primary as answer,
+           buzzpoints_question.category_main as category
+           from buzzpoints_buzz
+           left join buzzpoints_player on buzzpoints_buzz.player_id = buzzpoints_player.id
+           left join buzzpoints_player_lookup on buzzpoints_buzz.player_id = buzzpoints_player_lookup.id
+           left join buzzpoints_game on buzzpoints_buzz.game_id = buzzpoints_game.id
+           left join buzzpoints_round on buzzpoints_game.round_id = buzzpoints_round.id
+           left join buzzpoints_tournament_lookup on buzzpoints_round.tournament_id = buzzpoints_tournament_lookup.id
+           left join buzzpoints_tossup on buzzpoints_buzz.tossup_id = buzzpoints_tossup.id
+           left join buzzpoints_question on buzzpoints_tossup.question_id = buzzpoints_question.id
+           WHERE buzzpoints_player.slug = $2
+           AND buzzpoints_round.tournament_id = $1
+           ORDER BY buzz_position
+`;
+
 export const getPlayerCategoryStatsQuery = `
 WITH raw_buzzes AS (
     SELECT 	DISTINCT tossup_id,
