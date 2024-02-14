@@ -14,7 +14,8 @@ export default function PlayerBuzzTable(buzzes) {
         {
             accessor: "answer",
             Header: "Answer",
-            border: "right"
+            border: "right",
+            linkTemplate: "/buzzpoints/tournament/{{tournament_slug}}/tossup/{{round}}/{{question_number}}"
         },
         {
             accessor: "value",

@@ -252,18 +252,26 @@ export const getTossupCategoryStatsQuery = `
 
 export const getPlayerBuzzesQuery = `
 SELECT 
+           buzzpoints_tournament.slug as tournament_slug,
            buzzpoints_buzz.buzz_position, 
            buzzpoints_buzz.value, 
            buzzpoints_tossup.answer_primary as answer,
-           buzzpoints_question.category_main as category
+           buzzpoints_question.category_main as category,
+           category_main_slug as category_slug,
+           buzzpoints_packet_question.question_number,
+           buzzpoints_round.number AS round
            from buzzpoints_buzz
            left join buzzpoints_player on buzzpoints_buzz.player_id = buzzpoints_player.id
            left join buzzpoints_player_lookup on buzzpoints_buzz.player_id = buzzpoints_player_lookup.id
            left join buzzpoints_game on buzzpoints_buzz.game_id = buzzpoints_game.id
            left join buzzpoints_round on buzzpoints_game.round_id = buzzpoints_round.id
            left join buzzpoints_tournament_lookup on buzzpoints_round.tournament_id = buzzpoints_tournament_lookup.id
+           left join buzzpoints_tournament on buzzpoints_round.tournament_id = buzzpoints_tournament.id
            left join buzzpoints_tossup on buzzpoints_buzz.tossup_id = buzzpoints_tossup.id
            left join buzzpoints_question on buzzpoints_tossup.question_id = buzzpoints_question.id
+           left join buzzpoints_packet ON buzzpoints_round.packet_id = buzzpoints_packet.id
+           left join buzzpoints_packet_question ON buzzpoints_packet.id = buzzpoints_packet_question.packet_id
+           and buzzpoints_tossup.question_id = buzzpoints_packet_question.question_id
            WHERE buzzpoints_player.slug = $2
            AND buzzpoints_round.tournament_id = $1
            ORDER BY buzz_position
