@@ -73,9 +73,10 @@ export default async function PlayerPage({
         {tossupPlayerCategoryStats[0]?.team || "N/A"}
       </h3>
       <br />
+      <h2>Categories</h2>
       <PlayerCategoryTable categories={tossupPlayerCategoryStats} />
       <br />
-      <br />
+      <h2>Buzzes</h2>
       <PlayerBuzzTable buzzes={tossupPlayerBuzzes} />
     </Layout>
   );
