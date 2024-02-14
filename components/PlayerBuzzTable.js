@@ -3,7 +3,7 @@
 import PaginatedTable from './paginated_table'
 
 export default function PlayerBuzzTable(buzzes) {
-    console.log(buzzes);
+    
     const columns = [
         {
             accessor: "category",
