@@ -22,6 +22,18 @@ export default function Home({ result }) {
     {
       Header: "DI ICT",
       accessor: "DI ICT",
+      align: "left",
+      border: "right"
+    },
+    {
+      Header: "Undergrad",
+      accessor: "Undergrad",
+      align: "left",
+      border: "right"
+    },
+    {
+      Header: "BSQC",
+      accessor: "BSQC",
       align: "left"
     }
 ]);
