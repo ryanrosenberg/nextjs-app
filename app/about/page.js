@@ -41,10 +41,10 @@ export default function About() {
         </p>
         <h3 className={styles.header}>Future plans</h3>
         <p className={styles.paragraph}>
-          An immediate priority is streamlining data ingestion so more tournaments can be added (both future tournaments and filling in more past tournaments). Eventually, I'd like the site to at least host stats from all available closed collegiate tournaments, and perhaps all open tournaments.
+          An immediate priority is streamlining data ingestion so more detailed stats can be added (both future tournaments and filling in more past tournaments). Eventually, I'd like the site to at least host traditional stats from all available closed collegiate tournaments and open tournaments, as well as extant detailed stats.
           <br></br>
           <br></br>
-          This site is designed to be extensible: it can easily be configured to host additional data, such as detailed stats or player/team strength metrics. If you'd like to work on adding these, please contact me at <a href="mailto:ryanr345@gmail.com">ryanr345@gmail.com</a>.
+          This site is designed to be extensible: it can easily be configured to host additional data, such as player/team strength metrics. If you'd like to work on adding these, please contact me at <a href="mailto:ryanr345@gmail.com">ryanr345@gmail.com</a>.
         </p>
       </div>
     </>
