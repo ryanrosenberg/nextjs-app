@@ -51,7 +51,7 @@ export default function TossupDisplay({
           <div className="mb-2">
             {!!navOptions.previous && (
               <Link
-                href={`/buzzpoints/${tournament.slug}/tossup/${navOptions.previous.round}/${navOptions.previous.number}`}
+                href={`/buzzpoints/tournament/${tournament.slug}/tossup/${navOptions.previous.round}/${navOptions.previous.number}`}
                 className="underline"
               >
                 Previous tossup
@@ -60,7 +60,7 @@ export default function TossupDisplay({
             {!!navOptions.previous && !!navOptions.next && " - "}
             {!!navOptions.next && (
               <Link
-                href={`/buzzpoints/${tournament.slug}/tossup/${navOptions.next.round}/${navOptions.next.number}`}
+                href={`/buzzpoints/tournament/${tournament.slug}/tossup/${navOptions.next.round}/${navOptions.next.number}`}
                 className="underline"
               >
                 Next tossup
