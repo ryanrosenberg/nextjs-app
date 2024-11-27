@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 export default function Map({ school_markers, host_markers }) {
-  const host_ids = _.map(host_markers, "school_id");
+  const host_ids = _.map(_.filter(host_markers, (o) => o.last_host >= 2023), "school_id");
   
   const filtered_school_markers = _.filter(
     school_markers,
@@ -10,12 +10,12 @@ export default function Map({ school_markers, host_markers }) {
       return !host_ids.includes(site_marker.school_id);
     }
   );
-
+  
   return (
     <MapContainer
       center={[
-        _.filter(host_markers, (o) => o.last_host >= 2021)[0]["lat"],
-        _.filter(host_markers, (o) => o.last_host >= 2021)[0]["lon"],
+        _.filter(host_markers, (o) => o.last_host >= 2023)[0]["lat"],
+        _.filter(host_markers, (o) => o.last_host >= 2023)[0]["lon"],
       ]}
       zoom={6}
       style={{ height: "100%", width: "100%" }}
@@ -33,22 +33,22 @@ export default function Map({ school_markers, host_markers }) {
             center={[marker["lat"], marker["lon"]]}
             color="black"
             fillColor="#C41400"
-            fillOpacity={marker.last_active >= 2021 ? 0.8 : 0.1}
-            opacity={marker.last_active >= 2021 ? 1 : 0.1}
+            fillOpacity={marker.last_active >= 2023 ? 0.8 : 0.1}
+            opacity={marker.last_active >= 2023 ? 1 : 0.1}
             weight={2}
           >
             <Tooltip>{marker.school}</Tooltip>
           </CircleMarker>
         );
       })}
-      {host_markers.map((marker) => {
+      {_.filter(host_markers, (o) => o.last_host >= 2023).map((marker) => {
         return (
           <CircleMarker
             center={[marker["lat"], marker["lon"]]}
             color="black"
             fillColor="#001aff"
-            fillOpacity={marker.last_host >= 2021 ? 0.8 : 0.1}
-            opacity={marker.last_host >= 2021 ? 1 : 0.1}
+            fillOpacity={marker.last_host >= 2023 ? 0.8 : 0.1}
+            opacity={marker.last_host >= 2023 ? 1 : 0.1}
             weight={2}
           >
             <Tooltip>{marker.site}</Tooltip>

@@ -281,7 +281,7 @@ export default function Circuit({ result }) {
           <p style={{ fontSize: "1.2em", textAlign: "left" }}>
             Blue markers represent schools that have hosted tournaments. Faded
             markers represent inactive schools (i.e. have not played/hosted
-            since 2021.)
+            since 2023.)
           </p>
           <hr />
           <h2 id="schools">Schools</h2>
