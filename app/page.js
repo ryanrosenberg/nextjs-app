@@ -78,9 +78,38 @@ sum(bonus_pts)/sum(bonuses_heard)::numeric as PPB
   GROUP BY 1,2,3
   ORDER BY W desc`;
 
+  const games = await sql`
+  SELECT 
+  count(distinct game_id) as games
+  from team_games`;
+
+  const tournaments = await sql`
+  SELECT 
+  count(distinct tournament_id) as tournaments
+  from team_games`;
+
+  const schools = await sql`
+  SELECT 
+  count(distinct school_id) as schools
+  from team_games`;
+
+  const players = await sql`
+  SELECT 
+  count(distinct coalesce(slug, player_games.player_id::text)) as players
+  from player_games
+  LEFT JOIN players on player_games.player_id = players.player_id
+  LEFT JOIN people on players.person_id = people.person_id
+  `;
+  console.log(players);
+    
+
   const all = {
     teamsThisYear: tty_res,
     recentTournaments: rt_res,
+    games: games[0].games,
+    tournaments: tournaments[0].tournaments,
+    schools: schools[0].schools,
+    players: players[0].players
   };
   // console.log(all);
   return {

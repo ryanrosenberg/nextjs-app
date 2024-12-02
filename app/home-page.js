@@ -18,6 +18,10 @@ export default function Home({ result }) {
           <RecentTournaments data={data.recentTournaments} />
         </div>
       </div>
+      <hr></hr>
+      <p style={{ color: "gray", fontSize: "20px" }}>
+        This site contains data on {Intl.NumberFormat('en-US').format(data.games)} games from {Intl.NumberFormat('en-US').format(data.tournaments)} tournaments involving {Intl.NumberFormat('en-US').format(data.schools)} schools and {Intl.NumberFormat('en-US').format(data.players)} players.
+      </p>
     </>
   );
 }
