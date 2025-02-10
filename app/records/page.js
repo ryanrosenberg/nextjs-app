@@ -54,7 +54,7 @@ LIMIT 10`;
   where teams.school_id is not null
   and sets.difficulty <> 'easy'
   GROUP BY 1, 2
-  ORDER BY 3 desc
+  ORDER BY Wins desc
   LIMIT 10`;
   // Most ACF Nationals and DI ICT Titles -- School
   const summary4 = sql`
