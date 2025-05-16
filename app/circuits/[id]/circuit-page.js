@@ -12,7 +12,7 @@ import styles from "./circuits.module.css";
 
 export default function Circuit({ result }) {
   const data = result.props.result;
-  
+  console.log(data.Schools.filter((item) => item.lat));
   data.Tournaments.map((item) => {
     item.date = new Date(item.date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -274,7 +274,7 @@ export default function Circuit({ result }) {
           <h1 className="page-title">{data.Tournaments[0]["circuit"]}</h1>
           <div id="map">
             <MapWithNoSSR
-              school_markers={data.Schools}
+              school_markers={data.Schools.filter((item) => item.lat)}
               host_markers={data.Sites}
             />
           </div>
