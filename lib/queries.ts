@@ -169,14 +169,20 @@ export const getTeamsByTournamentQuery = `
     ORDER BY buzzpoints_team.name`;
 
 export const getTournamentsQuery = `
-    SELECT  id,
-            name,
-            slug,
-            location,
-            level,
-            start_date,
-            end_date
-    FROM    buzzpoints_tournament
+    SELECT  bt.id,
+            s.year,
+            coalesce(t.tournament_name, bt.name) as name,
+            s.set as set_name,
+            bt.slug,
+            coalesce(si.site, bt.location) as location,
+            s.difficulty as level,
+            t.date as start_date,
+            bt.end_date
+    FROM    buzzpoints_tournament bt
+    LEFT JOIN buzzpoints_tournament_lookup btl ON bt.id = btl.id
+    LEFT JOIN tournaments t ON btl.cqs_tournament_id = t.tournament_id
+    LEFT JOIN sets s ON t.set_id = s.set_id
+    LEFT JOIN sites si ON t.site_id = si.site_id
     ORDER BY start_date desc`;
 
 export const getTournamentBySlugQuery = `
@@ -1116,7 +1122,8 @@ buzzpoints_question_set.slug
 `;
 
 export const getBonusSummaryBySite = `
-SELECT	buzzpoints_tournament.id as tournament_id,
+SELECT	
+buzzpoints_tournament.id as tournament_id,
 buzzpoints_tournament.name as tournament_name,
 buzzpoints_tournament.slug as tournament_slug,
 buzzpoints_question_set_edition.name as edition,
