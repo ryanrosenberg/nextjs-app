@@ -1,9 +1,20 @@
 import { sql, getTournamentsQuery } from "../../../lib/queries";
 import NormalTable from "../../../components/normal_table";
+import _ from "lodash";
+import { keys } from "radash";
 
 export default async function Home() {
   const tournaments = await sql(getTournamentsQuery);
-  
+  let tournaments_by_year = Object.groupBy(
+    tournaments.filter(
+      (tournament) => (tournament.start_date)
+    ),
+    (tournament) => tournament.year
+  )
+
+  console.log(tournaments_by_year);
+
+
   tournaments.map((item) => {
     item.start_date = new Date(item.start_date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -17,7 +28,7 @@ export default async function Home() {
     });
     return item;
   })
-  
+
   const columns = [
     {
       accessor: "name",
@@ -42,11 +53,22 @@ export default async function Home() {
 
   return (
     <>
-      <h3>Recent Tournaments with Detailed Stats</h3>
-      <NormalTable
-        columns={columns}
-        data={tournaments}
-         />
+      <h2>Tournaments with Detailed Stats</h2>
+      {
+        Object.keys(tournaments_by_year).map(
+          (key) => (
+            <div>
+              <h3>{key}</h3>
+              <NormalTable
+                columns={columns}
+                data={tournaments_by_year[key]}
+              />
+            </div>
+
+          )
+        )
+      }
+
     </>
   );
 }
