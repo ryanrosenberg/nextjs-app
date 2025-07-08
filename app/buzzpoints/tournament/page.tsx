@@ -12,8 +12,6 @@ export default async function Home() {
     (tournament) => tournament.year
   )
 
-  console.log(tournaments_by_year);
-
 
   tournaments.map((item) => {
     item.start_date = new Date(item.start_date).toLocaleDateString("en-US", {
