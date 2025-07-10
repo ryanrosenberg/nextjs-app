@@ -7,9 +7,9 @@ import { Metadata } from "next";
 
 export const runtime = 'edge'; 
 
-export async function generateStaticParams() {
-    return [];
-}
+// export async function generateStaticParams() {
+//     return [];
+// }
 
 export async function generateMetadata({ params }: { params: { slug:string, bonusSlug:string }}): Promise<Metadata> {
     const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]);
