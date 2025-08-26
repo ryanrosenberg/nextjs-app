@@ -10,7 +10,8 @@ export async function generateStaticParams() {
   return data;
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   return {
     title: `20${params.id} | College Quizbowl Stats`,
   };
@@ -108,7 +109,8 @@ async function getData(params) {
     },
   };
 }
-export default async function Page({ params }) {
+export default async function Page(props) {
+  const params = await props.params;
   const pageData = await getData(params);
 
   return <Season result={pageData} />;

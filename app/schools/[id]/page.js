@@ -15,7 +15,8 @@ export async function generateStaticParams() {
   return schools;
 }
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props0) {
+  const params = await props0.params;
   const pageData = await getData(params);
   return {
     title: `${pageData.props.result.Summary[0]["school"]} | College Quizbowl Stats`,
@@ -196,7 +197,8 @@ async function getData(params) {
   };
 }
 
-export default async function Page({ params }) {
+export default async function Page(props) {
+  const params = await props.params;
   // Fetch data directly in a Server Component
   const pageData = await getData(params);
   // Forward fetched data to your Client Component

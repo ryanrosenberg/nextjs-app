@@ -22,11 +22,12 @@ export async function generateStaticParams() {
   return questionSets.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]);
 
   return {
@@ -37,11 +38,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function QuestionSet({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function QuestionSet(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+) {
+  const params = await props.params;
   const [questionSet] = (await sql(getQuestionSetBySlugQuery, [
     params.slug,
   ])) as QuestionSet[];

@@ -28,11 +28,12 @@ export async function generateStaticParams() {
   // return paths;
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   let [tournament] = (await sql(getTournamentBySlugQuery, [
     params.slug,
   ])) as Tournament[];
@@ -43,11 +44,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function PlayerPage({
-  params,
-}: {
-  params: { slug: string; player_slug: string };
-}) {
+export default async function PlayerPage(
+  props: {
+    params: Promise<{ slug: string; player_slug: string }>;
+  }
+) {
+  const params = await props.params;
   const [tournament] = (await sql(getTournamentBySlugQuery, [
     params.slug,
   ])) as Tournament[];

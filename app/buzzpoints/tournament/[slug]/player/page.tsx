@@ -10,7 +10,8 @@ export async function generateStaticParams() {
     return tournaments.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const params = await props.params;
     let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
@@ -19,7 +20,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function PlayerPage({ params }: { params: { slug: string } }) {
+export default async function PlayerPage(props: { params: Promise<{ slug: string }> }) {
+    const params = await props.params;
     const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
     const players = await sql(getPlayerLeaderboard, [tournament!.id, tournament!.id]) as Tossup[];
 

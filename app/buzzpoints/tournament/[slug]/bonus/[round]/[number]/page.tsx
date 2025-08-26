@@ -9,17 +9,19 @@ export const generateStaticParams = () => {
     return [];
 }
 
-export async function generateMetadata({ params }: { params: { slug:string, round:string, number:string }}): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug:string, round:string, number:string }>}): Promise<Metadata> {
+    const params = await props.params;
     const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
     const bonusParts = await sql(getBonusPartsQuery, [tournament.id, params.round, params.number]) as BonusPart[];
-    
+
     return {
         title: `${removeTags(shortenAnswerline(bonusParts[0].answer))} - ${tournament.name} - Buzzpoints App`,
         description: `Bonus data for ${tournament!.name}`,
     };
 }
 
-export default async function BonusPage({ params }: { params: { slug:string, round:string, number:string }}) {
+export default async function BonusPage(props: { params: Promise<{ slug:string, round:string, number:string }>}) {
+    const params = await props.params;
     const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
     const parts = await sql(getBonusPartsQuery, [tournament.id, params.round, params.number]) as BonusPart[];
     const directs = await sql(getDirectsByBonusQuery,[parts[0].id, tournament.id]) as BonusDirect[];

@@ -11,17 +11,19 @@ export async function generateStaticParams() {
     return [];
 }
 
-export async function generateMetadata({ params }: { params: { slug:string, bonusSlug:string }}): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug:string, bonusSlug:string }>}): Promise<Metadata> {
+    const params = await props.params;
     const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]);
     const bonusParts = await sql(getBonusPartsBySlugQuery, [questionSet.id, params.bonusSlug]) as BonusPart[];
-    
+
     return {
         title: `${removeTags(shortenAnswerline(bonusParts[0].answer))} - ${questionSet.name} - Buzzpoints App`,
         description: `Bonus data for ${questionSet!.name}`,
     };
 }
 
-export default async function BonusPage({ params }: { params: { slug:string, bonusSlug:string }}) {
+export default async function BonusPage(props: { params: Promise<{ slug:string, bonusSlug:string }>}) {
+    const params = await props.params;
     const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
     const parts = await sql(getBonusPartsBySlugQuery, [questionSet.id, params.bonusSlug]) as BonusPart[];
     const directs = await sql(getDirectsByBonusQuery, [parts[0].id, null]) as BonusDirect[];

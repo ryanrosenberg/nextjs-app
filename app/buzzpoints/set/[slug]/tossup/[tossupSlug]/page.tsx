@@ -14,7 +14,8 @@ export async function generateStaticParams() {
     return [];
 }
 
-export async function generateMetadata({ params }: { params: { slug:string, tossupSlug:string }}): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug:string, tossupSlug:string }>}): Promise<Metadata> {
+    const params = await props.params;
     const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
     const [tossup] = await sql(getTossupForSetDetailQuery, [questionSet.id, params.tossupSlug]) as Tossup[];
 
@@ -24,7 +25,8 @@ export async function generateMetadata({ params }: { params: { slug:string, toss
     };
 }
 
-export default async function TossupPage({ params }: { params: { slug:string, tossupSlug:string }}) {
+export default async function TossupPage(props: { params: Promise<{ slug:string, tossupSlug:string }>}) {
+    const params = await props.params;
     const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
     const [tossup] = await sql(getTossupForSetDetailQuery, [questionSet.id, params.tossupSlug]) as Tossup[];
     const buzzes = await sql(getAllBuzzesByTossupQuery, [tossup.id]) as Buzz[];

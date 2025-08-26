@@ -9,7 +9,10 @@ export const generateStaticParams = () => {
     return [];
 }
 
-export async function generateMetadata({ params }: { params: { slug: string, round: string, number: string } }): Promise<Metadata> {
+export async function generateMetadata(
+    props: { params: Promise<{ slug: string, round: string, number: string }> }
+): Promise<Metadata> {
+    const params = await props.params;
     const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
     const [tossup] = await sql(getTossupForDetailQuery, [tournament.id, params.round, params.number]);
 
@@ -19,7 +22,10 @@ export async function generateMetadata({ params }: { params: { slug: string, rou
     };
 }
 
-export default async function TossupPage({ params }: { params: { slug: string, round: string, number: string } }) {
+export default async function TossupPage(
+    props: { params: Promise<{ slug: string, round: string, number: string }> }
+) {
+    const params = await props.params;
     const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
     const [tossup] = await sql(getTossupForDetailQuery, [tournament.id, params.round, params.number]) as Tossup[];
     const buzzes = await sql(getBuzzesByTossupQuery, [tossup.id, tournament.id]) as Buzz[];

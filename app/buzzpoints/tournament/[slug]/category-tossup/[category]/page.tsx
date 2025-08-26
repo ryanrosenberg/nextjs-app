@@ -23,7 +23,8 @@ export async function generateStaticParams() {
     // return paths;
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const params = await props.params;
     let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
@@ -32,7 +33,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function CategoryTossupPage({ params }: { params: { slug: string, category: string } }) {
+export default async function CategoryTossupPage(props: { params: Promise<{ slug: string, category: string }> }) {
+    const params = await props.params;
     const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
     const players = await sql(getPlayerCategoryLeaderboard, [tournament!.id, tournament!.id, params.category]) as Tossup[];
 

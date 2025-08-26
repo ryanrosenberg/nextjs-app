@@ -6,7 +6,8 @@ export async function generateStaticParams() {
 }
 
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata(props0) {
+  const params = await props0.params;
   const pageData = await getData(params);
   const data = pageData.props.result
   return {
@@ -132,7 +133,8 @@ LEFT JOIN people on players.person_id = people.person_id
   };
 }
 
-export default async function Page({ params }) {
+export default async function Page(props) {
+  const params = await props.params;
   // Fetch data directly in a Server Component
   const pageData = await getData(params);
   // Forward fetched data to your Client Component

@@ -13,7 +13,8 @@ export async function generateStaticParams() {
     return tournaments.map(({ slug }) => ({ slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const params = await props.params;
     let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
@@ -22,7 +23,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function Tournament({ params }: { params: { slug: string } }) {
+export default async function Tournament(props: { params: Promise<{ slug: string }> }) {
+    const params = await props.params;
     const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[] as Tournament[];
     const [questionSet] = await sql(getQuestionSetQuery, [tournament.question_set_edition_id]) as QuestionSet[];
     const tossupCategoryStats = await sql(getTossupCategoryStatsQuery, [tournament.id]) as TossupCategory[];
@@ -32,7 +34,7 @@ export default async function Tournament({ params }: { params: { slug: string } 
         month: "long",
         day: "numeric",
     });
-    
+
 
     return (
         <Layout tournament={tournament}>
