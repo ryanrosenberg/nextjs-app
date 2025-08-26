@@ -9,7 +9,7 @@ import {
   getTossupCategoryStatsForSetQuery,
 } from "../../../../lib/queries";
 import { Metadata } from "next";
-import { BonusCategory, QuestionSet, TossupCategory } from "../../../../types";
+import { BonusCategory, type QuestionSet, TossupCategory } from "../../../../types";
 import BonusCategoryTable from "../../../../components/BonusCategoryTable";
 import QuestionSetSummary from "../../../../components/QuestionSetSummary";
 import styles from "../../buzzpoints.module.css";
@@ -28,12 +28,12 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]);
+  const [qSet] = await sql(getQuestionSetBySlugQuery, [params.slug]);
 
   return {
-    title: `${questionSet.name} - Buzzpoints App`,
+    title: `${qSet.name} - Buzzpoints App`,
     description: `Category conversion data for question set ${
-      questionSet!.name
+      qSet!.name
     }`,
   };
 }
@@ -44,25 +44,25 @@ export default async function QuestionSet(
   }
 ) {
   const params = await props.params;
-  const [questionSet] = (await sql(getQuestionSetBySlugQuery, [
+  const [qSet] = (await sql(getQuestionSetBySlugQuery, [
     params.slug,
   ])) as QuestionSet[];
   const tossupCategoryStats = (await sql(getTossupCategoryStatsForSetQuery, [
-    questionSet.id,
+    qSet.id,
   ])) as TossupCategory[];
   const bonusCategoryStats = (await sql(getBonusCategoryStatsForSetQuery, [
-    questionSet.id,
+    qSet.id,
   ])) as BonusCategory[];
 
   return (
-    <Layout questionSet={questionSet}>
-      <QuestionSetSummary questionSets={[questionSet]} detailPage={true} />
+    <Layout questionSet={qSet}>
+      <QuestionSetSummary questionSets={[qSet]} detailPage={true} />
       <div className={styles.tournamentFlex}>
         <div className="md:basis-1/2">
           <h2>Tossups</h2>
           <p className="mb-2">
             <Link
-              href={`/buzzpoints/set/${questionSet.slug}/tossup`}
+              href={`/buzzpoints/set/${qSet.slug}/tossup`}
               className="underline"
             >
               View all tossups
@@ -77,7 +77,7 @@ export default async function QuestionSet(
           <h2>Bonuses</h2>
           <p className="mb-2">
             <Link
-              href={`/buzzpoints/set/${questionSet.slug}/bonus`}
+              href={`/buzzpoints/set/${qSet.slug}/bonus`}
               className="underline"
             >
               View all bonuses

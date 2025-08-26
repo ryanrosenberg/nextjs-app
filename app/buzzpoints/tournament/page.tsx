@@ -1,7 +1,6 @@
 import { sql, getTournamentsQuery } from "../../../lib/queries";
 import NormalTable from "../../../components/normal_table";
 import _ from "lodash";
-import { keys } from "radash";
 
 export default async function Home() {
   const tournaments = await sql(getTournamentsQuery);

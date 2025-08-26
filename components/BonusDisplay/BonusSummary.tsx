@@ -1,6 +1,6 @@
 "use client";
 
-import { BonusSummary, Tournament } from "../../types";
+import { type BonusSummary, Tournament } from "../../types";
 import { formatDecimal, formatPercent } from "../../lib/utils";
 import NormalTable from "../normal_table";
 

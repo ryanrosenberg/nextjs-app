@@ -1,4 +1,4 @@
-import { TossupSummary, Tournament } from "../../types";
+import { type TossupSummary, Tournament } from "../../types";
 import { formatDecimal, formatPercent } from "../../lib/utils";
 import NormalTable from "../normal_table";
 

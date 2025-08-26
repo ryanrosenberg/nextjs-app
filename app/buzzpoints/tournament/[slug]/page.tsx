@@ -3,7 +3,7 @@ import TossupCategoryTable from "../../../../components/TossupCategoryTable";
 import Layout from "../../../../components/Layout";
 import { sql, getBonusCategoryStatsQuery, getQuestionSetQuery, getTossupCategoryStatsQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../lib/queries";
 import { Metadata } from "next";
-import { BonusCategory, QuestionSet, TossupCategory, Tournament } from "../../../../types";
+import { BonusCategory, QuestionSet, TossupCategory, type Tournament } from "../../../../types";
 import BonusCategoryTable from "../../../../components/BonusCategoryTable";
 import styles from "../../buzzpoints.module.css"
 
