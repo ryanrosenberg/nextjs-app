@@ -55,7 +55,7 @@ export default async function Home() {
       {
         Object.keys(tournaments_by_year).map(
           (key) => (
-            <div>
+            <div key = {key}>
               <h3>{key}</h3>
               <NormalTable
                 columns={columns}
