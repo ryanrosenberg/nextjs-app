@@ -63,9 +63,9 @@ const Headings = ({ headings, activeId }) => (
         </a>
         {heading.items.length > 0 && (
           <ul>
-            {heading.items.map((child) => (
+            {heading.items.map((child, k) => (
               <li
-                key={child.id}
+                key={k}
                 className={child.id == activeId ? styles.activeLink : ""}
               >
                 <a
@@ -81,9 +81,9 @@ const Headings = ({ headings, activeId }) => (
                 </a>
                 {child.items.length > 0 && (
                   <ul>
-                    {child.items.map((grandchild) => (
+                    {child.items.map((grandchild, l) => (
                       <li
-                        key={grandchild.id}
+                        key={l}
                         className={
                           grandchild.id == activeId ? styles.activeLink : ""
                         }
@@ -118,7 +118,6 @@ export default function NestedSideNav() {
   const [activeId, setActiveId] = useState();
   const { nestedHeadings } = useHeadingsData();
   useIntersectionObserver(setActiveId);
-  
 
   return (
     <nav className={styles.sidenav}>

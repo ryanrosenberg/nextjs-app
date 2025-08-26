@@ -9,10 +9,11 @@ import NestedSideNav from "../../../components/nested_side_nav";
 import dynamic from "next/dynamic";
 import { slugify, sanitize, formatPercent, formatComma, formatDecimal } from "../../../lib/utils";
 import styles from "./circuits.module.css";
+import Map from "./leaflet-map";
 
 export default function Circuit({ result }) {
   const data = result.props.result;
-  console.log(data.Schools.filter((item) => item.lat));
+  
   data.Tournaments.map((item) => {
     item.date = new Date(item.date).toLocaleDateString("en-US", {
       year: "numeric",
@@ -260,10 +261,6 @@ export default function Circuit({ result }) {
     }
   ]);
 
-  const MapWithNoSSR = dynamic(() => import("./leaflet-map"), {
-    ssr: false,
-  });
-
   return (
     <>
       <div className="main-container">
@@ -273,7 +270,7 @@ export default function Circuit({ result }) {
         <div className="main-content">
           <h1 className="page-title">{data.Tournaments[0]["circuit"]}</h1>
           <div id="map">
-            <MapWithNoSSR
+            <Map
               school_markers={data.Schools.filter((item) => item.lat)}
               host_markers={data.Sites}
             />

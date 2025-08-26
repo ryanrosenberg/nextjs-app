@@ -5,7 +5,7 @@ export const useHeadingsData = () => {
 
   useEffect(() => {
     const headingElements = Array.from(document.querySelectorAll("h2, h3, h4"));
-
+    
     const newNestedHeadings = getNestedHeadings(headingElements);
     setNestedHeadings(newNestedHeadings);
   }, []);

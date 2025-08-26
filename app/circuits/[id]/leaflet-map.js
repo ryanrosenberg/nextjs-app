@@ -1,5 +1,8 @@
+'use client'
+
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import _ from "lodash";
 
 export default function Map({ school_markers, host_markers }) {
   const host_ids = _.map(_.filter(host_markers, (o) => o.last_host >= 2023), "school_id");
@@ -27,9 +30,10 @@ export default function Map({ school_markers, host_markers }) {
         &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
         &copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>'
       />
-      {filtered_school_markers.map((marker) => {
+      {filtered_school_markers.map((marker, k) => {
         return (
           <CircleMarker
+            key = {k}
             center={[marker["lat"], marker["lon"]]}
             color="black"
             fillColor="#C41400"
@@ -58,64 +62,3 @@ export default function Map({ school_markers, host_markers }) {
     </MapContainer>
   );
 }
-
-// import { React } from "react";
-// import { Map } from "pigeon-maps";
-// import map_styles from "./map.module.css";
-
-// function stamenTonerLite(x, y, z, dpr = 1) {
-//   return `https://stamen-tiles.a.ssl.fastly.net/toner-lite/${z}/${x}/${y}${
-//     dpr >= 2 ? "@2x" : ""
-//   }.png`;
-// }
-
-// const CircleMarker = ({ left, top, style, children }) => (
-//   <div
-//     style={{
-//       position: "absolute",
-//       left: left - 15,
-//       top: top - 30,
-//       width: 20,
-//       height: 20,
-//       borderRadius: "100%",
-//       border: "2px solid black",
-//       background: "#265CFF",
-//       ...(style || {}),
-//     }}
-//   >
-//     {children}
-//   </div>
-// );
-
-// const MarkerPopup = ({ left, top, style, children }) => (
-//   <div
-//     className={map_styles.markerPopup}
-//     style={{
-//       position: "absolute",
-//       left: left,
-//       top: top,
-//       ...(style || {}),
-//     }}
-//   >
-//     {children}
-//   </div>
-// );
-// export default function MyMap({ markers }) {
-//   return (
-//     <Map
-//       provider={stamenTonerLite}
-//       dprs={[1, 2]}
-//       width={800}
-//       defaultCenter={[markers[0]["lat"], markers[0]["lon"]]}
-//       defaultZoom={5}
-//     >
-//       {markers.map((marker) => {
-//         return (
-//           <CircleMarker anchor={[marker["lat"], marker["lon"]]}>
-//             <MarkerPopup>{marker["School"]}</MarkerPopup>
-//           </CircleMarker>
-//         );
-//       })}
-//     </Map>
-//   );
-// }
