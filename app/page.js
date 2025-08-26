@@ -100,7 +100,6 @@ sum(bonus_pts)/sum(bonuses_heard)::numeric as PPB
   LEFT JOIN players on player_games.player_id = players.player_id
   LEFT JOIN people on players.person_id = people.person_id
   `;
-  console.log(players);
     
 
   const all = {
