@@ -4,14 +4,14 @@ import { neon } from '@neondatabase/serverless';
 export async function generateStaticParams() {
   const sql = neon(process.env.DATABASE_URL);
   const schools = await sql`
-  SELECT slug from 
+  SELECT distinct slug from 
   team_games
   left join teams on team_games.team_id = teams.team_id
   left join schools on teams.school_id = schools.school_id
               where slug is not null
               and school_name is not null
            `;
-
+  
   return schools;
 }
 
