@@ -1122,8 +1122,11 @@ buzzpoints_question_set.slug
 `;
 
 export const getBonusSummaryBySite = `
-SELECT	
-buzzpoints_tournament.id as tournament_id,
+WITH other_bonus_ids as (
+  SELECT meta_bonus_id FROM buzzpoints_bonus_match WHERE buzzpoints_bonus_match.bonus_id = $1
+)
+SELECT 
+           buzzpoints_tournament.id as tournament_id,
 buzzpoints_tournament.name as tournament_name,
 buzzpoints_tournament.slug as tournament_slug,
 buzzpoints_question_set_edition.name as edition,
@@ -1132,31 +1135,22 @@ buzzpoints_packet_question.question_number,
 buzzpoints_question_set.slug as set_slug,
 buzzpoints_question.slug as question_slug,
 'Y' as exact_match,
-COUNT(DISTINCT easy_part_direct.id) AS heard,
-CAST(SUM(easy_part_direct.value + medium_part_direct.value + hard_part_direct.value) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id) AS ppb,
-ROUND(CAST(SUM(CASE WHEN easy_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS easy_conversion,
-ROUND(CAST(SUM(CASE WHEN medium_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS medium_conversion,
-ROUND(CAST(SUM(CASE WHEN hard_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS hard_conversion
-FROM	buzzpoints_bonus
+COUNT(DISTINCT directs.id)/3 AS heard,
+AVG(directs.value)*3.00 AS ppb,
+ROUND(CAST(SUM(CASE WHEN directs.value > 0 and parts.difficulty_modifier = 'e' THEN 1.00 ELSE 0 END) AS NUMERIC)*3.00 / COUNT(DISTINCT directs.id), 3) AS easy_conversion,
+ROUND(CAST(SUM(CASE WHEN directs.value > 0 and parts.difficulty_modifier = 'm' THEN 1.00 ELSE 0 END) AS NUMERIC)*3.00 / COUNT(DISTINCT directs.id), 3) AS medium_conversion,
+ROUND(CAST(SUM(CASE WHEN directs.value > 0 and parts.difficulty_modifier = 'h' THEN 1.00 ELSE 0 END) AS NUMERIC)*3.00 / COUNT(DISTINCT directs.id), 3) AS hard_conversion
+           FROM	buzzpoints_bonus
 JOIN	buzzpoints_question ON buzzpoints_bonus.question_id = buzzpoints_question.id
 JOIN	buzzpoints_packet_question ON buzzpoints_question.id = buzzpoints_packet_question.question_id
 JOIN	buzzpoints_round ON buzzpoints_packet_question.packet_id = buzzpoints_round.packet_id
 JOIN	buzzpoints_tournament ON tournament_id = buzzpoints_tournament.id
 JOIN	buzzpoints_question_set_edition ON buzzpoints_tournament.question_set_edition_id = buzzpoints_question_set_edition.id
-JOIN    buzzpoints_question_set ON buzzpoints_question_set_edition.question_set_id = buzzpoints_question_set.id
+JOIN  buzzpoints_question_set ON buzzpoints_question_set_edition.question_set_id = buzzpoints_question_set.id
 JOIN	buzzpoints_game ON buzzpoints_game.round_id = buzzpoints_round.id
-JOIN    buzzpoints_bonus_part easy_part on buzzpoints_bonus.id = easy_part.bonus_id
-    AND easy_part.difficulty_modifier = 'e'
-JOIN    buzzpoints_bonus_part medium_part on buzzpoints_bonus.id = medium_part.bonus_id
-    AND medium_part.difficulty_modifier = 'm'
-JOIN    buzzpoints_bonus_part hard_part on buzzpoints_bonus.id = hard_part.bonus_id
-    AND hard_part.difficulty_modifier = 'h'
-JOIN    buzzpoints_bonus_part_direct easy_part_direct ON easy_part.id = easy_part_direct.bonus_part_id
-    AND	buzzpoints_game.id = easy_part_direct.game_id
-JOIN    buzzpoints_bonus_part_direct medium_part_direct ON medium_part.id = medium_part_direct.bonus_part_id
-    AND	buzzpoints_game.id = medium_part_direct.game_id
-JOIN    buzzpoints_bonus_part_direct hard_part_direct ON hard_part.id = hard_part_direct.bonus_part_id
-    AND	buzzpoints_game.id = hard_part_direct.game_id
+JOIN    buzzpoints_bonus_part parts on buzzpoints_bonus.id = parts.bonus_id
+JOIN    buzzpoints_bonus_part_direct directs ON parts.id = directs.bonus_part_id
+    AND	buzzpoints_game.id = directs.game_id
 WHERE	buzzpoints_bonus.id = $1
 GROUP BY 
         buzzpoints_tournament.id, 
@@ -1168,50 +1162,39 @@ GROUP BY
         buzzpoints_question.slug,
         buzzpoints_question_set.slug
 UNION ALL
-SELECT	buzzpoints_tournament.id as tournament_id,
-        buzzpoints_tournament.name as tournament_name,
-		buzzpoints_tournament.slug as tournament_slug,
-		buzzpoints_question_set_edition.name as edition,
-		buzzpoints_round.number as round_number,
-		buzzpoints_packet_question.question_number,
-        buzzpoints_question_set.slug as set_slug,
-        buzzpoints_question.slug as question_slug,
-		'N' as exact_match,
-        COUNT(DISTINCT easy_part_direct.id) AS heard,
-        CAST(SUM(easy_part_direct.value + medium_part_direct.value + hard_part_direct.value) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id) AS ppb,
-        ROUND(CAST(SUM(CASE WHEN easy_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS easy_conversion,
-        ROUND(CAST(SUM(CASE WHEN medium_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS medium_conversion,
-        ROUND(CAST(SUM(CASE WHEN hard_part_direct.value > 0 THEN 1 ELSE 0 END) AS NUMERIC) / COUNT(DISTINCT easy_part_direct.id), 3) AS hard_conversion
+           SELECT 
+           buzzpoints_tournament.id as tournament_id,
+buzzpoints_tournament.name as tournament_name,
+buzzpoints_tournament.slug as tournament_slug,
+buzzpoints_question_set_edition.name as edition,
+buzzpoints_round.number as round_number,
+buzzpoints_packet_question.question_number,
+buzzpoints_question_set.slug as set_slug,
+buzzpoints_question.slug as question_slug,
+'N' as exact_match,
+COUNT(DISTINCT directs.id)/3 AS heard,
+AVG(directs.value)*3.00 AS ppb,
+ROUND(CAST(SUM(CASE WHEN directs.value > 0 and parts.difficulty_modifier = 'e' THEN 1.00 ELSE 0 END) AS NUMERIC)*3.00 / COUNT(DISTINCT directs.id), 3) AS easy_conversion,
+ROUND(CAST(SUM(CASE WHEN directs.value > 0 and parts.difficulty_modifier = 'm' THEN 1.00 ELSE 0 END) AS NUMERIC)*3.00 / COUNT(DISTINCT directs.id), 3) AS medium_conversion,
+ROUND(CAST(SUM(CASE WHEN directs.value > 0 and parts.difficulty_modifier = 'h' THEN 1.00 ELSE 0 END) AS NUMERIC)*3.00 / COUNT(DISTINCT directs.id), 3) AS hard_conversion
 FROM	buzzpoints_bonus
 JOIN	buzzpoints_question ON buzzpoints_bonus.question_id = buzzpoints_question.id
 JOIN	buzzpoints_packet_question ON buzzpoints_question.id = buzzpoints_packet_question.question_id
 JOIN	buzzpoints_round ON buzzpoints_packet_question.packet_id = buzzpoints_round.packet_id
 JOIN	buzzpoints_tournament ON tournament_id = buzzpoints_tournament.id
 JOIN	buzzpoints_question_set_edition ON buzzpoints_tournament.question_set_edition_id = buzzpoints_question_set_edition.id
-JOIN    buzzpoints_question_set ON buzzpoints_question_set_edition.question_set_id = buzzpoints_question_set.id
+JOIN  buzzpoints_question_set ON buzzpoints_question_set_edition.question_set_id = buzzpoints_question_set.id
 JOIN	buzzpoints_game ON buzzpoints_game.round_id = buzzpoints_round.id
-JOIN    buzzpoints_bonus_part easy_part on buzzpoints_bonus.id = easy_part.bonus_id
-    AND easy_part.difficulty_modifier = 'e'
-JOIN    buzzpoints_bonus_part medium_part on buzzpoints_bonus.id = medium_part.bonus_id
-    AND medium_part.difficulty_modifier = 'm'
-JOIN    buzzpoints_bonus_part hard_part on buzzpoints_bonus.id = hard_part.bonus_id
-    AND hard_part.difficulty_modifier = 'h'
-JOIN    buzzpoints_bonus_part_direct easy_part_direct ON easy_part.id = easy_part_direct.bonus_part_id
-    AND	buzzpoints_game.id = easy_part_direct.game_id
-JOIN    buzzpoints_bonus_part_direct medium_part_direct ON medium_part.id = medium_part_direct.bonus_part_id
-    AND	buzzpoints_game.id = medium_part_direct.game_id
-JOIN    buzzpoints_bonus_part_direct hard_part_direct ON hard_part.id = hard_part_direct.bonus_part_id
-    AND	buzzpoints_game.id = hard_part_direct.game_id
+JOIN    buzzpoints_bonus_part parts on buzzpoints_bonus.id = parts.bonus_id
+JOIN    buzzpoints_bonus_part_direct directs ON parts.id = directs.bonus_part_id
+    AND	buzzpoints_game.id = directs.game_id
+JOIN    (
+    SELECT * FROM buzzpoints_bonus_match 
+    JOIN other_bonus_ids o 
+    ON buzzpoints_bonus_match.meta_bonus_id = o.meta_bonus_id
+) match 
+ON buzzpoints_bonus.id = match.bonus_id
 WHERE	buzzpoints_bonus.id <> $1
-    AND buzzpoints_question_set_edition.question_set_id = $2
-    AND (
-        SELECT  COUNT(buzzpoints_bonus_part.id)
-        FROM    buzzpoints_bonus_part
-        JOIN    buzzpoints_bonus_part bonus_part_2 ON bonus_part_2.bonus_id = $1
-            AND (buzzpoints_bonus_part.answer_primary = bonus_part_2.answer_primary 
-            OR  buzzpoints_bonus_part.part_sanitized = bonus_part_2.part_sanitized)
-        WHERE   buzzpoints_bonus_part.bonus_id = buzzpoints_bonus.id
-    ) > 1
 GROUP BY 
 buzzpoints_tournament.id, 
 buzzpoints_tournament.name,

@@ -11,7 +11,7 @@ export default function BonusText({ parts }: BonusTextProps) {
       <div dangerouslySetInnerHTML={{ __html: parts[0].leadin }} />
       {parts.map(({ id, value, difficulty_modifier, answer, part }) => {
         return (
-          <div key={id}>
+          <div key={`${id}-${part}`}>
             <div>
               {`[${value}${difficulty_modifier}] `}
               <span dangerouslySetInnerHTML={{ __html: part }}></span>
