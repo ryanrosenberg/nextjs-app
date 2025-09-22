@@ -27,7 +27,7 @@ export default async function BonusPage(props: { params: Promise<{ slug:string, 
     const directs = await sql(getDirectsByBonusQuery,[parts[0].id, tournament.id]) as BonusDirect[];
     const tournamentRounds = await sql(getRoundsForTournamentQuery, [tournament.id]) as Round[];
     const navOptions = getNavOptions(parseInt(params.round), parseInt(params.number), tournamentRounds);
-    const bonusSummary = await sql(getBonusSummaryBySite, [parts[0].id, tournament.question_set_id]) as BonusSummary[];
+    const bonusSummary = await sql(getBonusSummaryBySite, [parts[0].id]) as BonusSummary[];
     return (
         <Layout tournament={tournament}>
             <BonusDisplay 
