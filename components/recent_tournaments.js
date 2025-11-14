@@ -3,13 +3,15 @@ import GroupedTable from "./grouped_table";
 import { useMemo } from "react";
 
 export default function RecentTournaments({ data }) {
+  console.log(data);
+  
   data.map((item) => {
     item.date = new Date(item.date).toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
-    item.team_slug = slugify(sanitize(item.champion));
+    item.team_slug = item.champion ? slugify(sanitize(item.champion)) : '';
     return item;
   });
   const columns = useMemo(() => [
