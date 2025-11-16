@@ -13,8 +13,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: { params: Promise<{ slug:string, bonusSlug:string }>}): Promise<Metadata> {
     const params = await props.params;
-    const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]);
-    const bonusParts = await sql(getBonusPartsBySlugQuery, [questionSet.id, params.bonusSlug]) as BonusPart[];
+    const [questionSet] = await sql.query(getQuestionSetBySlugQuery, [params.slug]);
+    const bonusParts = await sql.query(getBonusPartsBySlugQuery, [questionSet.id, params.bonusSlug]) as BonusPart[];
 
     return {
         title: `${removeTags(shortenAnswerline(bonusParts[0].answer))} - ${questionSet.name} - Buzzpoints App`,
@@ -25,11 +25,11 @@ export async function generateMetadata(props: { params: Promise<{ slug:string, b
 export default async function BonusPage(props: { params: Promise<{ slug:string, bonusSlug:string }>}) {
     const params = await props.params;
     
-    const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
-    const parts = await sql(getBonusPartsBySlugQuery, [questionSet.id, params.bonusSlug]) as BonusPart[];
+    const [questionSet] = await sql.query(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
+    const parts = await sql.query(getBonusPartsBySlugQuery, [questionSet.id, params.bonusSlug]) as BonusPart[];
 
-    const directs = await sql(getDirectsByBonusQuery, [parts[0].id, null]) as BonusDirect[];
-    const bonusSummary = await sql(getBonusSummaryBySite, [parts[0].id]) as BonusSummary[];
+    const directs = await sql.query(getDirectsByBonusQuery, [parts[0].id, null]) as BonusDirect[];
+    const bonusSummary = await sql.query(getBonusSummaryBySite, [parts[0].id]) as BonusSummary[];
     return (
         <Layout questionSet={questionSet}>
             <BonusDisplay 

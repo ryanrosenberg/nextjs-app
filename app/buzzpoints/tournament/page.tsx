@@ -3,7 +3,7 @@ import NormalTable from "../../../components/normal_table";
 import _ from "lodash";
 
 export default async function Home() {
-  const tournaments = await sql(getTournamentsQuery);
+  const tournaments = await sql.query(getTournamentsQuery);
   let tournaments_by_year = Object.groupBy(
     tournaments.filter(
       (tournament) => (tournament.start_date)

@@ -16,8 +16,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: { params: Promise<{ slug:string, tossupSlug:string }>}): Promise<Metadata> {
     const params = await props.params;
-    const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
-    const [tossup] = await sql(getTossupForSetDetailQuery, [questionSet.id, params.tossupSlug]) as Tossup[];
+    const [questionSet] = await sql.query(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
+    const [tossup] = await sql.query(getTossupForSetDetailQuery, [questionSet.id, params.tossupSlug]) as Tossup[];
 
     return {
         title: `${tossup.answer_primary} - ${questionSet.name} - Buzzpoints App`,
@@ -27,10 +27,10 @@ export async function generateMetadata(props: { params: Promise<{ slug:string, t
 
 export default async function TossupPage(props: { params: Promise<{ slug:string, tossupSlug:string }>}) {
     const params = await props.params;
-    const [questionSet] = await sql(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
-    const [tossup] = await sql(getTossupForSetDetailQuery, [questionSet.id, params.tossupSlug]) as Tossup[];
-    const buzzes = await sql(getAllBuzzesByTossupQuery, [tossup.id]) as Buzz[];
-    const tossupSummary = await sql(getTossupSummaryBySite,[
+    const [questionSet] = await sql.query(getQuestionSetBySlugQuery, [params.slug]) as QuestionSet[];
+    const [tossup] = await sql.query(getTossupForSetDetailQuery, [questionSet.id, params.tossupSlug]) as Tossup[];
+    const buzzes = await sql.query(getAllBuzzesByTossupQuery, [tossup.id]) as Buzz[];
+    const tossupSummary = await sql.query(getTossupSummaryBySite,[
         tossup.id, 
         questionSet.id, 
         tossup.metadata, 

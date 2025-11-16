@@ -15,7 +15,7 @@ import QuestionSetSummary from "../../../../components/QuestionSetSummary";
 import styles from "../../buzzpoints.module.css";
 
 export async function generateStaticParams() {
-  const questionSets: QuestionSet[] = (await sql(
+  const questionSets: QuestionSet[] = (await sql.query(
     getQuestionSetsQuery
   )) as QuestionSet[];
 
@@ -28,7 +28,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const [qSet] = await sql(getQuestionSetBySlugQuery, [params.slug]);
+  const [qSet] = await sql.query(getQuestionSetBySlugQuery, [params.slug]);
 
   return {
     title: `${qSet.name} - Buzzpoints App`,
@@ -44,13 +44,13 @@ export default async function QuestionSet(
   }
 ) {
   const params = await props.params;
-  const [qSet] = (await sql(getQuestionSetBySlugQuery, [
+  const [qSet] = (await sql.query(getQuestionSetBySlugQuery, [
     params.slug,
   ])) as QuestionSet[];
-  const tossupCategoryStats = (await sql(getTossupCategoryStatsForSetQuery, [
+  const tossupCategoryStats = (await sql.query(getTossupCategoryStatsForSetQuery, [
     qSet.id,
   ])) as TossupCategory[];
-  const bonusCategoryStats = (await sql(getBonusCategoryStatsForSetQuery, [
+  const bonusCategoryStats = (await sql.query(getBonusCategoryStatsForSetQuery, [
     qSet.id,
   ])) as BonusCategory[];
 

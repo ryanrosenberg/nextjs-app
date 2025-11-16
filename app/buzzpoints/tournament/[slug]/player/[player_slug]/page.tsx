@@ -12,7 +12,7 @@ import PlayerBuzzTable from "../../../../../../components/PlayerBuzzTable";
 
 export async function generateStaticParams() {
   return [];
-  // const tournaments = await sql(getTournamentsQuery) as Tournament[];
+  // const tournaments = await sql.query(getTournamentsQuery) as Tournament[];
   // const paths = [];
 
   // for (let { id, slug } of tournaments) {
@@ -34,7 +34,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  let [tournament] = (await sql(getTournamentBySlugQuery, [
+  let [tournament] = (await sql.query(getTournamentBySlugQuery, [
     params.slug,
   ])) as Tournament[];
 
@@ -50,15 +50,15 @@ export default async function PlayerPage(
   }
 ) {
   const params = await props.params;
-  const [tournament] = (await sql(getTournamentBySlugQuery, [
+  const [tournament] = (await sql.query(getTournamentBySlugQuery, [
     params.slug,
   ])) as Tournament[];
-  const tossupPlayerCategoryStats = (await sql(getPlayerCategoryStatsQuery, [
+  const tossupPlayerCategoryStats = (await sql.query(getPlayerCategoryStatsQuery, [
     tournament.id,
     tournament.id,
     params.player_slug,
   ])) as TossupConversion[];
-  const tossupPlayerBuzzes = await sql(getPlayerBuzzesQuery, [
+  const tossupPlayerBuzzes = await sql.query(getPlayerBuzzesQuery, [
     tournament.id,
     params.player_slug,
   ]);

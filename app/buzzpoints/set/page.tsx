@@ -4,7 +4,7 @@ import QuestionSetSummary from "../../../components/QuestionSetSummary";
 import { QuestionSet } from "../../../types";
 
 export default async function QuestionSetHome() {
-  const questionSets: QuestionSet[] = await sql(getQuestionSetsQuery) as QuestionSet[];
+  const questionSets: QuestionSet[] = await sql.query(getQuestionSetsQuery) as QuestionSet[];
   
   return (
     <Layout>

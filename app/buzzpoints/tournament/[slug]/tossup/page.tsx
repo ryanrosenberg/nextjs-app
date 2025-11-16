@@ -5,14 +5,14 @@ import { sql, getTossupsByTournamentQuery, getTournamentBySlugQuery, getTourname
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
-    const tournaments = await sql(getTournamentsQuery) as Tournament[];
+    const tournaments = await sql.query(getTournamentsQuery) as Tournament[];
 
     return tournaments.map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const params = await props.params;
-    let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    let [tournament] = await sql.query(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
         title: `${tournament.name} Tossups - Buzzpoints App`,
@@ -22,8 +22,8 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
 
 export default async function TossupPage(props: { params: Promise<{ slug: string }> }) {
     const params = await props.params;
-    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
-    const tossups = await sql(getTossupsByTournamentQuery, [tournament!.id]) as Tossup[];
+    const [tournament] = await sql.query(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    const tossups = await sql.query(getTossupsByTournamentQuery, [tournament!.id]) as Tossup[];
 
     return <Layout tournament={tournament}>
         <TossupTable tossups={tossups} />

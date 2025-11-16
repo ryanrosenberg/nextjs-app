@@ -8,14 +8,14 @@ import BonusCategoryTable from "../../../../components/BonusCategoryTable";
 import styles from "../../buzzpoints.module.css"
 
 export async function generateStaticParams() {
-    const tournaments = await sql(getTournamentsQuery) as Tournament[];
+    const tournaments = await sql.query(getTournamentsQuery) as Tournament[];
 
     return tournaments.map(({ slug }) => ({ slug }));
 }
 
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const params = await props.params;
-    let [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[];
+    let [tournament] = await sql.query(getTournamentBySlugQuery, [params.slug]) as Tournament[];
 
     return {
         title: `${tournament.name} - Buzzpoints App`,
@@ -25,10 +25,10 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
 
 export default async function Tournament(props: { params: Promise<{ slug: string }> }) {
     const params = await props.params;
-    const [tournament] = await sql(getTournamentBySlugQuery, [params.slug]) as Tournament[] as Tournament[];
-    const [questionSet] = await sql(getQuestionSetQuery, [tournament.question_set_edition_id]) as QuestionSet[];
-    const tossupCategoryStats = await sql(getTossupCategoryStatsQuery, [tournament.id]) as TossupCategory[];
-    const bonusCategoryStats = await sql(getBonusCategoryStatsQuery, [tournament.id]) as BonusCategory[];
+    const [tournament] = await sql.query(getTournamentBySlugQuery, [params.slug]) as Tournament[] as Tournament[];
+    const [questionSet] = await sql.query(getQuestionSetQuery, [tournament.question_set_edition_id]) as QuestionSet[];
+    const tossupCategoryStats = await sql.query(getTossupCategoryStatsQuery, [tournament.id]) as TossupCategory[];
+    const bonusCategoryStats = await sql.query(getBonusCategoryStatsQuery, [tournament.id]) as BonusCategory[];
     const startDate = new Date(tournament.start_date).toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
