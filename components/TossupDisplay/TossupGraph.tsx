@@ -38,7 +38,7 @@ export default function TossupGraph({ buzzes, onHoverPositionChange }: TossupGra
                     data={chartData}
                     onMouseMove={(state) => {
                         if (onHoverPositionChange) {
-                            let xAxisPayload = state?.activePayload ? state.activePayload[1] : null;
+                            let xAxisPayload = state?.activeCoordinate ? state.activeCoordinate[1] : null;
                             
                             onHoverPositionChange(xAxisPayload?.payload?.buzz_position ?? null);
                         }
