@@ -48,6 +48,7 @@ export default function Map({ school_markers, host_markers }) {
       {_.filter(host_markers, (o) => o.last_host >= 2023).map((marker) => {
         return (
           <CircleMarker
+            key = {marker["site"]}
             center={[marker["lat"], marker["lon"]]}
             color="black"
             fillColor="#001aff"

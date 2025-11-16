@@ -7,12 +7,14 @@ import PaginatedTable from "../../../components/paginated_table";
 import NormalTable from "../../../components/normal_table"
 import NestedSideNav from "../../../components/nested_side_nav";
 import dynamic from "next/dynamic";
-import { slugify, sanitize, formatPercent, formatComma, formatDecimal } from "../../../lib/utils";
+import { formatPercent, formatComma, formatDecimal } from "../../../lib/utils";
 import styles from "./circuits.module.css";
-import Map from "./leaflet-map";
 
 export default function Circuit({ result }) {
   const data = result.props.result;
+  const DynamicMap = dynamic(() => import('./leaflet-map'), {
+    ssr: false, // This ensures the component is only rendered on the client side
+  });
   
   data.Tournaments.map((item) => {
     item.date = new Date(item.date).toLocaleDateString("en-US", {
@@ -270,7 +272,7 @@ export default function Circuit({ result }) {
         <div className="main-content">
           <h1 className="page-title">{data.Tournaments[0]["circuit"]}</h1>
           <div id="map">
-            <Map
+            <DynamicMap
               school_markers={data.Schools.filter((item) => item.lat)}
               host_markers={data.Sites}
             />
