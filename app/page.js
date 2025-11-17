@@ -73,7 +73,7 @@ sum(bonus_pts)/sum(bonuses_heard)::numeric as PPB
   left join schools on teams.school_id = schools.school_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
   left join sets on tournaments.set_id = sets.set_id
-  where sets.year = '24-25'
+  where sets.year = '25-26'
   and teams.school_id is not null
   GROUP BY 1,2,3
   ORDER BY W desc`;
