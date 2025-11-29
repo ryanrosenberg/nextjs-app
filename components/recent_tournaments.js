@@ -3,7 +3,7 @@ import GroupedTable from "./grouped_table";
 import { useMemo } from "react";
 
 export default function RecentTournaments({ data }) {
-  console.log(data);
+  // console.log(data);
   
   data.map((item) => {
     item.date = new Date(item.date).toLocaleDateString("en-US", {
