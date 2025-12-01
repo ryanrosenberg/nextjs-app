@@ -8,7 +8,6 @@ import {
   formatComma,
   formatDecimal,
   formatPercent,
-  formatPercent3,
   slugify,
 } from "../../lib/utils";
 

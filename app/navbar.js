@@ -41,32 +41,50 @@ export default function Navbar() {
           <SearchBar />
         </li>
         <li>
-          <Link className={styles.navbarLink} href="/circuits/">
+          <Link className={styles.navbarLink} href="/circuits/"
+            onClick={() => {
+              setIsNavExpanded(!isNavExpanded);
+            }}>
             Circuits
           </Link>
         </li>
         <li>
-          <Link className={styles.navbarLink} href="/seasons/">
+          <Link className={styles.navbarLink} href="/seasons/"
+            onClick={() => {
+              setIsNavExpanded(!isNavExpanded);
+            }}>
             Seasons
           </Link>
         </li>
         <li>
-          <Link className={styles.navbarLink} href="/sets/">
+          <Link className={styles.navbarLink} href="/sets/"
+            onClick={() => {
+              setIsNavExpanded(!isNavExpanded);
+            }}>
             Sets
           </Link>
         </li>
         <li>
-          <Link className={styles.navbarLink} href="/records/">
+          <Link className={styles.navbarLink} href="/records/"
+            onClick={() => {
+              setIsNavExpanded(!isNavExpanded);
+            }}>
             Records
           </Link>
         </li>
         <li>
-          <Link className={styles.navbarLink} href="/buzzpoints/">
+          <Link className={styles.navbarLink} href="/buzzpoints/"
+            onClick={() => {
+              setIsNavExpanded(!isNavExpanded);
+            }}>
             Detailed Stats
           </Link>
         </li>
         <li>
-          <Link className={styles.navbarLink} href="/about/">
+          <Link className={styles.navbarLink} href="/about/"
+            onClick={() => {
+              setIsNavExpanded(!isNavExpanded);
+            }}>
             About
           </Link>
         </li>
