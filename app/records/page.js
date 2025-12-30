@@ -360,7 +360,7 @@ LIMIT 10`;
   game_id, 
   string_agg(team, ' vs. ') as Teams, 
   string_agg(total_pts::text, ' - ') as Score, 
-  coalesce(max(tuh), 20) as TUH,
+  case when \"set\" like '%I ICT' then coalesce(max(tuh), 24) else coalesce(max(tuh), 20) end as TUH,
   sum(total_pts) as Pts
   from team_games
   left join teams on team_games.team_id = teams.team_id
@@ -382,8 +382,11 @@ LIMIT 10`;
   string_agg(team, ' vs. ') as Teams, 
   string_agg(cast(total_pts as text), ' - ') as Score, 
   sum(total_pts) as Pts,
-  coalesce(max(tuh), 20) as TUH,
-  sum(total_pts::numeric)*20/coalesce(avg(tuh), 20) as PP20TUH
+  case when \"set\" like '%I ICT' then coalesce(max(tuh), 24) else coalesce(max(tuh), 20) end as TUH,
+  case when \"set\" like '%I ICT' 
+  then sum(total_pts)*20/coalesce(avg(tuh), 24)
+  else sum(total_pts)*20/coalesce(avg(tuh), 20) 
+  end as PP20TUH
   from team_games
   left join teams on team_games.team_id = teams.team_id
   left join tournaments on team_games.tournament_id = tournaments.tournament_id
