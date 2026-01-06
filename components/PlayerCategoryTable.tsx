@@ -68,12 +68,14 @@ export default function PlayerCategoryTable({ categories }: PlayerCategoryTableP
         {
             accessor: "bpa",
             Header: "BPA",
-            format: formatDecimal
+            format: formatDecimal,
+            Tooltip: "Buzz Point AUC, the % of words in a question that the player prevented from being read by getting the tossup"
         },
         {
             accessor: "pvf",
             Header: "PVF",
-            format: formatDecimal
+            format: formatDecimal,
+            Tooltip: "Percent Versus Field, the % of rooms the player would have beaten to these tossups"
         }
     ];
 
