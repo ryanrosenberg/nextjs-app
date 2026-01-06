@@ -62,7 +62,18 @@ export default function PlayerCategoryTable({ categories }: PlayerCategoryTableP
         {
             accessor: "top_three_buzzes",
             Header: "Top 3 Buzzes",
+            border: "right",
             defaultDescending: true
+        },
+        {
+            accessor: "bpa",
+            Header: "BPA",
+            format: formatDecimal
+        },
+        {
+            accessor: "pvf",
+            Header: "PVF",
+            format: formatDecimal
         }
     ];
 

@@ -173,7 +173,7 @@ export const getTournamentsQuery = `
             s.year,
             coalesce(t.tournament_name, bt.name) as name,
             s.set as set_name,
-            bt.slug,
+            btl.slug,
             coalesce(si.site, bt.location) as location,
             s.difficulty as level,
             t.date as start_date,
@@ -315,6 +315,8 @@ WITH raw_buzzes AS (
             avg(CASE WHEN buzzpoints_buzz.value > 0 THEN buzzpoints_buzz.buzz_position ELSE NULL END) average_buzz,
             sum(CASE WHEN first.tossup_id is not null THEN 1 ELSE 0 END) as first_buzzes,
             sum(CASE WHEN top_three.tossup_id is not null THEN 1 ELSE 0 END) as top_three_buzzes,
+            buzzpoints_bpa_category.bpa,
+            buzzpoints_bpa_category.pvf,
             sum(CASE WHEN neg.tossup_id is not null THEN 1 ELSE 0 END) bouncebacks
     FROM	buzzpoints_tournament
     JOIN	buzzpoints_round ON buzzpoints_round.tournament_id = buzzpoints_tournament.id
@@ -324,7 +326,11 @@ WITH raw_buzzes AS (
     JOIN	buzzpoints_team ON buzzpoints_team.id = buzzpoints_player.team_id
     JOIN    buzzpoints_tossup ON buzzpoints_tossup.id = buzzpoints_buzz.tossup_id
     JOIN    buzzpoints_question ON buzzpoints_tossup.question_id = buzzpoints_question.id    
-    LEFT JOIN   buzzpoints_team_lookup on buzzpoints_team.id = buzzpoints_team_lookup.id
+    LEFT JOIN   buzzpoints_team_lookup on buzzpoints_team.id = buzzpoints_team_lookup.id  
+    LEFT JOIN   buzzpoints_player_lookup on buzzpoints_player.id = buzzpoints_player_lookup.id
+    LEFT JOIN   buzzpoints_bpa_category on buzzpoints_player_lookup.person_id = buzzpoints_bpa_category.person_id
+        AND     buzzpoints_tournament.id = buzzpoints_bpa_category.tournament_id
+        AND     buzzpoints_question.category_main_slug = buzzpoints_bpa_category.category
     LEFT JOIN   teams on buzzpoints_team_lookup.cqs_team_id = teams.team_id
     LEFT JOIN	buzz_ranks first ON buzzpoints_buzz.tossup_id = first.tossup_id AND buzzpoints_buzz.buzz_position = first.buzz_position AND first.row_num = 1 AND buzzpoints_buzz.value > 0
     LEFT JOIN   buzz_ranks top_three ON buzzpoints_buzz.tossup_id = top_three.tossup_id AND buzzpoints_buzz.buzz_position = top_three.buzz_position AND top_three.row_num <= 3 AND buzzpoints_buzz.value > 0
@@ -332,7 +338,9 @@ WITH raw_buzzes AS (
     WHERE	buzzpoints_round.tournament_id = $2
         AND buzzpoints_player.slug = $3
         AND	exclude_from_individual = 0
-    group by buzzpoints_tournament.slug, buzzpoints_player.name, category_main, teams.team, category_main_slug
+    group by buzzpoints_tournament.slug, buzzpoints_player.name, category_main, teams.team, category_main_slug,
+            buzzpoints_bpa_category.bpa,
+            buzzpoints_bpa_category.pvf
     ORDER BY points desc
 `;
  
@@ -496,6 +504,8 @@ WITH raw_buzzes AS (
             sum(CASE WHEN buzzpoints_buzz.value > 10 THEN 15 ELSE CASE WHEN buzzpoints_buzz.value = 10 THEN 10 ELSE CASE WHEN buzzpoints_buzz.value < 0 THEN -5 ELSE 0 END END END) as points,
             min(CASE WHEN buzzpoints_buzz.value > 0 THEN buzzpoints_buzz.buzz_position ELSE NULL END) earliest_buzz,
             avg(CASE WHEN buzzpoints_buzz.value > 0 THEN buzzpoints_buzz.buzz_position ELSE NULL END) average_buzz,
+            buzzpoints_bpa_category.bpa,
+            buzzpoints_bpa_category.pvf,
             sum(CASE WHEN first.tossup_id is not null THEN 1 ELSE 0 END) as first_buzzes,
             sum(CASE WHEN top_three.tossup_id is not null THEN 1 ELSE 0 END) as top_three_buzzes,
             sum(CASE WHEN neg.tossup_id is not null THEN 1 ELSE 0 END) bouncebacks
@@ -507,6 +517,10 @@ WITH raw_buzzes AS (
     JOIN	buzzpoints_team ON buzzpoints_player.team_id = buzzpoints_team.id
     JOIN    buzzpoints_tossup ON buzzpoints_tossup.id = buzzpoints_buzz.tossup_id
     JOIN    buzzpoints_question ON buzzpoints_tossup.question_id = buzzpoints_question.id
+    LEFT JOIN   buzzpoints_player_lookup on buzzpoints_player_lookup.id = buzzpoints_player.id
+    LEFT JOIN   buzzpoints_bpa_category on buzzpoints_player_lookup.person_id = buzzpoints_bpa_category.person_id
+        AND     buzzpoints_tournament.id = buzzpoints_bpa_category.tournament_id
+        AND     buzzpoints_question.category_main_slug = buzzpoints_bpa_category.category
     LEFT JOIN	buzz_ranks first ON buzzpoints_buzz.tossup_id = first.tossup_id AND buzzpoints_buzz.buzz_position = first.buzz_position AND first.row_num = 1 AND buzzpoints_buzz.value > 0
     LEFT JOIN   buzz_ranks top_three ON buzzpoints_buzz.tossup_id = top_three.tossup_id AND buzzpoints_buzz.buzz_position = top_three.buzz_position AND top_three.row_num <= 3 AND buzzpoints_buzz.value > 0
     LEFT JOIN	buzzpoints_buzz neg ON buzzpoints_buzz.game_id = neg.game_id AND buzzpoints_buzz.tossup_id = neg.tossup_id AND buzzpoints_buzz.value > 0 AND neg.value < 0
@@ -520,7 +534,9 @@ WITH raw_buzzes AS (
     buzzpoints_tournament.slug, 
     buzzpoints_question.category_main,
     buzzpoints_team.name,
-    buzzpoints_team.slug
+    buzzpoints_team.slug,
+    buzzpoints_bpa_category.bpa,
+    buzzpoints_bpa_category.pvf
     ORDER BY points desc
 `;
 
@@ -602,6 +618,8 @@ WITH raw_buzzes AS (
             sum(CASE WHEN buzzpoints_buzz.value > 10 THEN 15 ELSE CASE WHEN buzzpoints_buzz.value = 10 THEN 10 ELSE CASE WHEN buzzpoints_buzz.value < 0 THEN -5 ELSE 0 END END END) as points,
             min(CASE WHEN buzzpoints_buzz.value > 0 THEN buzzpoints_buzz.buzz_position ELSE NULL END) earliest_buzz,
             avg(CASE WHEN buzzpoints_buzz.value > 0 THEN buzzpoints_buzz.buzz_position ELSE NULL END) average_buzz,
+            buzzpoints_bpa_overall.bpa,
+            buzzpoints_bpa_overall.pvf,
             sum(CASE WHEN first.tossup_id is not null THEN 1 ELSE 0 END) as first_buzzes,
             sum(CASE WHEN top_three.tossup_id is not null THEN 1 ELSE 0 END) as top_three_buzzes,
             sum(CASE WHEN neg.tossup_id is not null THEN 1 ELSE 0 END) bouncebacks
@@ -611,6 +629,10 @@ WITH raw_buzzes AS (
     JOIN	buzzpoints_buzz ON buzzpoints_buzz.game_id = buzzpoints_game.id
     JOIN	buzzpoints_player ON buzzpoints_buzz.player_id = buzzpoints_player.id
     JOIN	buzzpoints_team ON buzzpoints_player.team_id = buzzpoints_team.id
+    JOIN    buzzpoints_tossup ON buzzpoints_tossup.id = buzzpoints_buzz.tossup_id
+    LEFT JOIN   buzzpoints_player_lookup on buzzpoints_player_lookup.id = buzzpoints_player.id
+    LEFT JOIN   buzzpoints_bpa_overall on buzzpoints_player_lookup.person_id = buzzpoints_bpa_overall.person_id
+          AND   buzzpoints_tournament.id = buzzpoints_bpa_overall.tournament_id
     LEFT JOIN   buzzpoints_team_lookup on buzzpoints_team.id = buzzpoints_team_lookup.id
     LEFT JOIN   teams on buzzpoints_team_lookup.cqs_team_id = teams.team_id
     LEFT JOIN	buzz_ranks first ON buzzpoints_buzz.tossup_id = first.tossup_id AND buzzpoints_buzz.buzz_position = first.buzz_position AND first.row_num = 1 AND buzzpoints_buzz.value > 0
@@ -623,7 +645,9 @@ WITH raw_buzzes AS (
     buzzpoints_player.slug,
     teams.team,
     buzzpoints_team_lookup.slug,
-    buzzpoints_tournament.slug
+    buzzpoints_tournament.slug,
+    buzzpoints_bpa_overall.bpa,
+    buzzpoints_bpa_overall.pvf
     ORDER BY points desc
 `;
 
@@ -657,6 +681,8 @@ SELECT  teams.team as name,
         avg(CASE WHEN buzzpoints_buzz.value > 0 THEN buzzpoints_buzz.buzz_position ELSE NULL END) average_buzz,
         sum(CASE WHEN first.tossup_id is not null THEN 1 ELSE 0 END) as first_buzzes,
         sum(CASE WHEN top_three.tossup_id is not null THEN 1 ELSE 0 END) as top_three_buzzes,
+        buzzpoints_bpa_overall_team.bpa,
+        buzzpoints_bpa_overall_team.pvf,
         sum(CASE WHEN buzzpoints_buzz.value > 10 THEN 15 ELSE CASE WHEN buzzpoints_buzz.value = 10 THEN 10 ELSE CASE WHEN buzzpoints_buzz.value < 0 THEN -5 ELSE 0 END END END) as points
     FROM	buzzpoints_tournament
     JOIN	buzzpoints_round ON buzzpoints_round.tournament_id = buzzpoints_tournament.id
@@ -664,14 +690,19 @@ SELECT  teams.team as name,
     JOIN	buzzpoints_buzz ON buzzpoints_buzz.game_id = buzzpoints_game.id
     JOIN	buzzpoints_player ON buzzpoints_buzz.player_id = buzzpoints_player.id
     JOIN	buzzpoints_team ON buzzpoints_player.team_id = buzzpoints_team.id
+    JOIN    buzzpoints_tossup ON buzzpoints_tossup.id = buzzpoints_buzz.tossup_id
     LEFT JOIN	buzz_ranks first ON buzzpoints_buzz.tossup_id = first.tossup_id AND buzzpoints_buzz.buzz_position = first.buzz_position AND first.row_num = 1 AND buzzpoints_buzz.value > 0
     LEFT JOIN   buzz_ranks top_three ON buzzpoints_buzz.tossup_id = top_three.tossup_id AND buzzpoints_buzz.buzz_position = top_three.buzz_position AND top_three.row_num <= 3 AND buzzpoints_buzz.value > 0
     LEFT JOIN	buzzpoints_buzz neg ON buzzpoints_buzz.game_id = neg.game_id AND buzzpoints_buzz.tossup_id = neg.tossup_id AND buzzpoints_buzz.value > 0 AND neg.value < 0
     LEFT JOIN   buzzpoints_team_lookup on buzzpoints_team.id = buzzpoints_team_lookup.id
+    LEFT JOIN   buzzpoints_bpa_overall_team on buzzpoints_team_lookup.cqs_team_id = buzzpoints_bpa_overall_team.team_id
+          AND   buzzpoints_tournament.id = buzzpoints_bpa_overall_team.tournament_id
     LEFT JOIN   teams on buzzpoints_team_lookup.cqs_team_id = teams.team_id
     WHERE	buzzpoints_tournament.id = $2
     AND	exclude_from_individual = 0
-    group by teams.team, buzzpoints_team_lookup.slug, buzzpoints_tournament.slug
+    group by teams.team, buzzpoints_team_lookup.slug, buzzpoints_tournament.slug,
+        buzzpoints_bpa_overall_team.bpa,
+        buzzpoints_bpa_overall_team.pvf
     order by points desc
 `;
 
@@ -700,7 +731,8 @@ export const getAllBuzzesByTossupQuery = `
 `;
 
 export const getQuestionSetBySlugQuery = `
-SELECT  buzzpoints_question_set.id,
+SELECT
+buzzpoints_question_set.id,
 buzzpoints_question_set.name,
 buzzpoints_question_set.slug,
 buzzpoints_question_set.difficulty,

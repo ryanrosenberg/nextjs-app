@@ -1,6 +1,6 @@
 import BonusCategoryTable from "../../../../../../components/BonusCategoryTable";
 import Layout from "../../../../../../components/Layout";
-import { sql, getTeamsByTournamentQuery, getTeamCategoryStatsQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../../../lib/queries";
+import { sql, getTeamCategoryStatsQuery, getTournamentBySlugQuery, getTournamentsQuery } from "../../../../../../lib/queries";
 import { Metadata } from "next";
 import { BonusCategory, Team, Tournament } from "../../../../../../types";
 

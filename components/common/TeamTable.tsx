@@ -63,13 +63,19 @@ export function TeamTable({ teams }: TeamTableProps) {
         {
             accessor: "top_three_buzzes",
             Header: "Top 3 Buzzes",
+            border: "right",
             defaultDescending: true
         },
-        // {
-        //     accessor: "ppb",
-        //     Header: "PPB",
-        //     format: formatDecimal
-        // }
+        {
+            accessor: "bpa",
+            Header: "BPA",
+            format: formatDecimal
+        },
+        {
+            accessor: "pvf",
+            Header: "PVF",
+            format: formatDecimal
+        }
     ];
 
     return <NormalTable

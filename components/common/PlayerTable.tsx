@@ -69,7 +69,20 @@ export function PlayerTable({ players }: PlayerTableProps) {
         {
             accessor: "top_three_buzzes",
             Header: "Top 3 Buzzes",
-            defaultDescending: true
+            defaultDescending: true,
+            border: "right",
+        },
+        {
+            accessor: "bpa",
+            Header: "BPA",
+            defaultDescending: true,
+            format: formatDecimal
+        },
+        {
+            accessor: "pvf",
+            Header: "PVF",
+            defaultDescending: true,
+            format: formatDecimal
         }
     ];
 
