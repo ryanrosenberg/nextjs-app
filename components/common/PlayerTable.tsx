@@ -76,13 +76,15 @@ export function PlayerTable({ players }: PlayerTableProps) {
             accessor: "bpa",
             Header: "BPA",
             defaultDescending: true,
-            format: formatDecimal
+            format: formatDecimal,
+            Tooltip: "Buzz Point AUC, the % of words in a question that the player prevented from being read by getting the tossup"
         },
         {
             accessor: "pvf",
             Header: "PVF",
             defaultDescending: true,
-            format: formatDecimal
+            format: formatDecimal,
+            Tooltip: "Percent Versus Field, the % of rooms the player would have beaten to these tossups"
         }
     ];
 
