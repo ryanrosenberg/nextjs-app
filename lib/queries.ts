@@ -1146,7 +1146,7 @@ LEFT JOIN buzzpoints_bonus_part_direct medium_part_direct ON medium_part.id = me
     AND	buzzpoints_game.id = medium_part_direct.game_id
 LEFT JOIN buzzpoints_bonus_part_direct hard_part_direct ON hard_part.id = hard_part_direct.bonus_part_id
     AND buzzpoints_game.id = hard_part_direct.game_id
-WHERE   buzzpoints_question_set.id = $1
+WHERE  buzzpoints_question_set.id = $1
 GROUP BY 
 buzzpoints_question.category_main, 
 buzzpoints_question.category_main_slug,
