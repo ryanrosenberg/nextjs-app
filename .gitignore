@@ -32,3 +32,4 @@ errors.txt
 .vercel
 .env
 .env
+.env*.local

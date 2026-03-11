@@ -15,14 +15,15 @@ type TossupText = {
 export default function TossupText({ tossup: { question, answer, metadata }, buzzes, hoverPosition, averageBuzz, buzzpoint, onBuzzpointChange }: TossupText) {
     // keywords--for now just the the powermark--shouldn't render as clickable words
     const keywords = ["(*)"];
+    
     const getWords = (question:string) => {
         let emphasis = false;
         let bold = true;
         let pg = false;
         let powerbreak = false;
-
+        
         let words = question.replaceAll('&nbsp;', ' ').split(' ').reduce((prev, curr) => {
-            let word = removeTags(curr).replace(/^\W*/, '').replace(/\W*$/g, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            let word = removeTags(curr).replace(/^\W*/, '').replace(/\W*$/g, '').replace(/[.*+?^${}()|[\]\\'"]/g, '\\$&');
 
             if (curr.match(`<em>.*${word}`))
                 emphasis = true;
@@ -33,7 +34,7 @@ export default function TossupText({ tossup: { question, answer, metadata }, buz
             else if (curr.match(`</b>.*${word}`))
                 bold = false;
 
-            if (curr.match(/\(“|"/)) {
+            if (curr.match(/\([“"]/)) {
                 pg = true;
             }
 
@@ -90,7 +91,7 @@ export default function TossupText({ tossup: { question, answer, metadata }, buz
     };
 
     let words = getWords(question);
-
+    
     return <>
         <p style={{ marginBottom: '0.1em' }}>
             {words.map((w, i) =>
